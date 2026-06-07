@@ -9,9 +9,9 @@
   <meta property="og:description" content="Aktuelle und ausgewählte Veranstaltungen von Sebastian Friedrich.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="sf-base.css?v=21">
+  <link rel="stylesheet" href="sf-base.css?v=23">
   <style>
-    main { padding-top: var(--nav-h); }
+
     .news-page {
       width: var(--site-width);
       max-width: var(--max-w);
@@ -273,8 +273,40 @@
       line-height: 1;
     }
     .news-lightbox-nav button:disabled { opacity: 0.25; cursor: default; }
+
+    .news-lightbox-info { position: relative; padding-top: 72px; }
+    .news-lightbox-close {
+      position: absolute;
+      top: 32px;
+      right: 28px;
+      margin-bottom: 0;
+    }
+    .news-lightbox-counter {
+      position: absolute;
+      top: 29px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      white-space: nowrap;
+      margin: 0;
+    }
+    .news-lightbox-counter-nav {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--gray-dark);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 1.125rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+    .news-lightbox-counter-nav:disabled { opacity: 0.25; cursor: default; }
     @media (max-width: 760px) {
-      .news-page { width: auto; max-width: none; padding: clamp(72px, 16vw, 96px) clamp(16px, 5vw, 24px) clamp(64px, 12vw, 92px); }
+      .news-page { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); padding-bottom: clamp(64px, 12vw, 92px); }
       .page-title {
         font-size: clamp(4.6rem, 22vw, 6.6rem);
         letter-spacing: -0.06em;
@@ -296,7 +328,9 @@
         border-top: 1px solid var(--gray-mid);
         padding: 16px 20px 24px;
       }
-      .news-lightbox-close { margin-bottom: 10px; }
+      .news-lightbox-close { top: 16px; right: 20px; margin-bottom: 0; }
+      .news-lightbox-counter { top: 14px; }
+      .news-lightbox-info { padding-top: 56px; }
       .news-lightbox-title { font-size: 1.125rem; margin-bottom: 10px; }
     }
   </style>
@@ -326,7 +360,7 @@
   <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
 </div>
 <main class="news-page">
-  <h1 class="page-title">News</h1>
+  <h1 class="page-title" data-i18n="nav.news">News</h1>
   <div class="news-list" id="news-list"><div class="loading">Lädt…</div></div>
 </main>
 
@@ -356,7 +390,7 @@
     <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
 </footer>
-<script src="sf-base.js?v=21"></script>
+<script src="sf-base.js?v=23"></script>
 <script>
 let NEWS_ITEMS = [];
 let NEWS_LIGHTBOX_ID = null;
@@ -398,7 +432,7 @@ function renderLinks(n) {
   return links.length ? `<div class="news-links">${links.join('')}</div>` : '';
 }
 function renderTags(n) {
-  const tags = (n.tags || []).filter(Boolean);
+  const tags = (LANG === 'en' && Array.isArray(n.tags_en) ? n.tags_en : (n.tags || [])).filter(Boolean);
   if (!tags.length) return '';
   return `<div class="news-tags">${tags.map(tag => `<span class="news-tag">${esc(tag)}</span>`).join('')}</div>`;
 }
@@ -474,7 +508,18 @@ function renderNewsLightbox() {
   document.getElementById('news-lightbox-img').src = img.src;
   document.getElementById('news-lightbox-img').alt = desc || textField(n, 'titel');
   document.getElementById('news-lightbox-title').textContent = textField(n, 'titel');
-  document.getElementById('news-lightbox-counter').textContent = `${NEWS_LIGHTBOX_INDEX + 1} / ${images.length}`;
+  const counter = document.getElementById('news-lightbox-counter');
+  if (images.length > 1) {
+    counter.innerHTML = `
+      <button type="button" class="news-lightbox-counter-nav" data-news-counter-prev aria-label="Vorheriges Bild" ${NEWS_LIGHTBOX_INDEX <= 0 ? 'disabled' : ''}>‹</button>
+      <span>${NEWS_LIGHTBOX_INDEX + 1} / ${images.length}</span>
+      <button type="button" class="news-lightbox-counter-nav" data-news-counter-next aria-label="Nächstes Bild" ${NEWS_LIGHTBOX_INDEX >= images.length - 1 ? 'disabled' : ''}>›</button>
+    `;
+    counter.querySelector('[data-news-counter-prev]')?.addEventListener('click', () => nextNewsImage(-1));
+    counter.querySelector('[data-news-counter-next]')?.addEventListener('click', () => nextNewsImage(1));
+  } else {
+    counter.textContent = `${NEWS_LIGHTBOX_INDEX + 1} / ${images.length}`;
+  }
   document.getElementById('news-lightbox-caption').innerHTML = [desc ? `<p>${esc(desc)}</p>` : '', copy ? `<p>${esc(copy)}</p>` : ''].join('');
   document.getElementById('news-lightbox-prev').disabled = NEWS_LIGHTBOX_INDEX <= 0;
   document.getElementById('news-lightbox-next').disabled = NEWS_LIGHTBOX_INDEX >= images.length - 1;

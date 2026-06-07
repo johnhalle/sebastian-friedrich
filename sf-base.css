@@ -1,9 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
    sf-base.css — Sebastian Friedrich Website
-   Gemeinsame Styles für alle Seiten
+   Konsolidierte Fassung, Juni 2026
 ═══════════════════════════════════════════════════════════ */
 
-/* ── FONTS ─────────────────────────────────────────────── */
+
+/* ── 1. FONTS ───────────────────────────────────────────── */
 @font-face {
   font-family: 'Inter';
   src: url('fonts/webfonts/inter-latin-300-normal.woff2') format('woff2');
@@ -23,26 +24,32 @@
   font-display: swap;
 }
 
-/* ── RESET & BASE ───────────────────────────────────────── */
+
+/* ── 2. RESET & BASE ────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --white:       #ffffff;
-  --black:       #111111;
-  --gray-light:  #f5f5f5;
-  --gray-mid:    #e0e0e0;
-  --gray-dark:   #888888;
-  /* Zentrales Desktop-Raster.
-     Alle normalen Seitenkoerper folgen dieser Breite.
-     Desktop: maximal 900 px, zentriert. Darunter 24 px Rand je Seite.
-     Der Katalog-Reader ist als funktionale Ausnahme weiter gefasst. */
-  --max-w:       900px;
-  --site-width:  calc(100vw - 48px);
-  --nav-h:       48px;
-  --gap:         clamp(24px, 4vw, 64px);
+  --white:      #ffffff;
+  --black:      #111111;
+  --gray-light: #f5f5f5;
+  --gray-mid:   #e0e0e0;
+  --gray-dark:  #888888;
+
+  /* Zentrales Seitenraster: max. 900 px, zentriert.
+     Reader-Overlay ist bewusste Ausnahme und darf volle Breite nutzen. */
+  --max-w:      900px;
+  --site-width: calc(100vw - 48px);
+  --nav-h:      48px;
+  --gap:        clamp(24px, 4vw, 64px);
+
+  /* Unterseiten-Kopfzone */
+  --subpage-top:                calc(var(--nav-h) + 56px);
+  --subpage-top-mobile:         calc(var(--nav-h) + 40px);
+  --subpage-content-gap:        clamp(64px, 7vw, 88px);
+  --subpage-content-gap-mobile: clamp(54px, 12vw, 76px);
 }
 
-html { font-size: 16px; scroll-behavior: smooth; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
@@ -50,14 +57,64 @@ body {
   color: var(--black);
   background: var(--white);
   -webkit-font-smoothing: antialiased;
-  margin: 0;
-  padding: 0;
 }
 
 a { color: inherit; text-decoration: none; }
 img { display: block; }
 
-/* ── NAV ────────────────────────────────────────────────── */
+
+/* ── 3. SITE SHELL: Raster ──────────────────────────────── */
+/* Alle großen Seitenkörper folgen derselben Außenkante. */
+.nav-inner,
+#hero,
+.section,
+footer,
+.page-section,
+.essay-wrap,
+.kontakt-inner,
+.news-page,
+.vita-inner,
+.page-header-inner,
+.werke-liste {
+  width: var(--site-width);
+  max-width: var(--max-w);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#newsletter .section.newsletter-inner {
+  width: min(560px, var(--site-width));
+  max-width: 560px;
+}
+
+.werke-slider-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.werke-slider {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+main { padding-top: 0; }
+
+.section {
+  padding: var(--gap) 0;
+}
+
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  margin-bottom: 32px;
+}
+
+
+/* ── 4. NAV ─────────────────────────────────────────────── */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -79,7 +136,7 @@ nav.always-visible {
   border-bottom: 1px solid var(--gray-mid);
 }
 
-/* Nav-Links weiß über dem Hero-Bild */
+/* Weiße Schrift über Hero-Bild */
 nav:not(.scrolled):not(.always-visible) .nav-logo,
 nav:not(.scrolled):not(.always-visible) .nav-links a,
 nav:not(.scrolled):not(.always-visible) .nav-hamburger span {
@@ -92,9 +149,6 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
 }
 
 .nav-inner {
-  width: var(--site-width);
-  max-width: var(--max-w);
-  margin: 0 auto;
   height: 100%;
   display: flex;
   align-items: center;
@@ -114,7 +168,6 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   gap: clamp(16px, 2vw, 32px);
   list-style: none;
 }
-
 .nav-links a {
   font-size: 0.8125rem;
   font-weight: 400;
@@ -133,10 +186,10 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   padding: 3px 10px;
   border-radius: 2px;
   transition: background 0.15s;
+  background: none;
 }
 .nav-lang:hover { background: var(--gray-light); }
 
-/* Hamburger */
 .nav-hamburger {
   display: none;
   flex-direction: column;
@@ -189,6 +242,7 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   border-radius: 2px;
   cursor: pointer;
   margin-top: 8px;
+  background: none;
 }
 
 @media (max-width: 1050px) {
@@ -196,39 +250,36 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   .nav-hamburger { display: flex; }
 }
 
-@media (max-width: 760px) {
-  .nav-inner,
-  .section,
-  footer {
-    width: auto;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: clamp(16px, 5vw, 24px);
-    padding-right: clamp(16px, 5vw, 24px);
-  }
+
+/* ── 5. FOOTER ──────────────────────────────────────────── */
+footer {
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--gray-mid);
 }
 
-/* ── LAYOUT ─────────────────────────────────────────────── */
-main { padding-top: 0; }
-
-.section {
-  width: var(--site-width);
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: var(--gap) 0;
-}
-
-.section-label {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.footer-copy {
+  font-size: 0.75rem;
   color: var(--gray-dark);
-  margin-bottom: 32px;
 }
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.75rem;
+  color: var(--gray-dark);
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--black); }
 
-/* ── BUTTONS ─────────────────────────────────────────────── */
+
+/* ── 6. BUTTONS ─────────────────────────────────────────── */
 .btn {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 0.8125rem;
@@ -244,6 +295,7 @@ main { padding-top: 0; }
   display: inline-block;
 }
 .btn:hover { background: var(--white); color: var(--black); }
+.btn:disabled { opacity: 0.45; cursor: wait; }
 
 .btn-outline {
   background: var(--white);
@@ -251,25 +303,116 @@ main { padding-top: 0; }
 }
 .btn-outline:hover { background: var(--black); color: var(--white); }
 
-.btn-active {
+/* Diskreter Anfrage-Button (outline-Variante via data-Attribut) */
+.btn[data-contact-work] {
+  background: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+  padding: 9px 22px;
+}
+.btn[data-contact-work]:hover,
+.btn[data-contact-work]:focus-visible {
   background: var(--black);
   color: var(--white);
+  outline: none;
 }
 
-/* ── WERK-KARTE ─────────────────────────────────────────── */
+
+/* ── 7. UNTERSEITEN-KOPFZONE ─────────────────────────────── */
+/* Alle Unterseiten haben denselben Abstand vom Nav zum Titel
+   und dieselbe Trennlinie; der Inhalt beginnt überall gleich. */
+
+.page-header,
+.news-page,
+.vita-page,
+.kontakt-page,
+.katalog-page-head {
+  padding-top: var(--subpage-top);
+}
+.katalog-page { padding-top: 0; }
+
+.page-title,
+.vita-title,
+.kontakt-title,
+.katalog-page-title {
+  margin-top: 0;
+}
+
+/* Einheitlicher Abstand nach der Titel-Linie */
+.news-page > .page-title,
+.vita-title,
+.kontakt-title {
+  margin-bottom: var(--subpage-content-gap);
+}
+
+/* Werke: Linie im Header, Liste beginnt mit gleichem Abstand */
+.page-header-werke { padding-bottom: 0; }
+.werke-liste { padding-top: var(--subpage-content-gap); }
+
+/* Katalog */
+.katalog-page-head { padding-bottom: 0; }
+.katalog-page-title { margin-bottom: 0; }
+.katalog-hero { padding-top: var(--subpage-content-gap); }
+
+/* Kontakt */
+.kontakt-intro { margin-top: 0; }
+
+/* Werke-Header: Filter rechts neben Titel */
+@media (min-width: 761px) {
+  .page-header-werke .page-header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 32px;
+    padding-bottom: clamp(24px, 3vw, 40px);
+    border-bottom: 1px solid var(--black);
+  }
+  .page-header-werke .page-title {
+    margin: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  .page-header-werke .filter-bar {
+    justify-content: flex-end;
+    margin: 0 0 0.45em;
+    white-space: nowrap;
+  }
+}
+
+
+/* ── 8. STARTSEITE: HERO ────────────────────────────────── */
+/* Desktop: Hero querformatig beschnitten, Schrift rechts */
+@media (min-width: 761px) {
+  /* Hero-Höhe wird in index.html definiert */
+  #hero .hero-bg {
+    top: 0;
+    bottom: 0;
+    background-position: 50% 42%;
+  }
+  #hero .hero-text {
+    right: clamp(24px, 3.2vw, 40px);
+    text-align: right;
+  }
+  #hero .hero-scroll { bottom: 18px; }
+}
+
+/* Hero-Name zweizeilig */
+.hero-name span { display: block; }
+
+
+/* ── 9. STARTSEITE: SLIDER ──────────────────────────────── */
+/* Desktop */
 .werk-card {
   cursor: pointer;
   display: flex;
   flex-direction: column;
 }
-
 .werk-card-img-wrap {
   height: 380px;
   display: flex;
   align-items: flex-start;
   margin-bottom: 10px;
 }
-
 .werk-card-img {
   width: auto;
   max-width: 320px;
@@ -283,38 +426,168 @@ main { padding-top: 0; }
 .werk-card-titel { font-size: 0.875rem; font-weight: 300; margin-bottom: 2px; }
 .werk-card-meta  { font-size: 0.75rem; color: var(--gray-dark); }
 
-/* ── FOOTER ─────────────────────────────────────────────── */
-footer {
-  width: var(--site-width);
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 24px 0;
+/* Mobile: ein Werk pro Slide, zentriert */
+@media (max-width: 760px) {
+  .werke-slider {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    touch-action: pan-y;
+  }
+  .werke-slider .werk-card {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    width: 100%;
+    padding-left: clamp(10px, 4vw, 18px);
+    padding-right: clamp(10px, 4vw, 18px);
+    scroll-snap-align: none;
+  }
+  .werke-slider .werk-card-img-wrap {
+    width: 100%;
+    justify-content: center;
+  }
+  .werke-slider .werk-card-img { max-width: 100%; }
+}
+
+
+/* ── 10. WERKE-SEITE: LAYOUT ────────────────────────────── */
+/* Wechselndes Links-Rechts-Layout; Größenklassen per data-groesse */
+
+.werk-zeile {
+  display: grid;
+  grid-template-columns: 581px 1fr;
+  gap: 48px;
+  align-items: end;
+}
+.werk-zeile.rechts {
+  grid-template-columns: 1fr 581px;
+}
+.werk-zeile.rechts .werk-zeile-bild { order: 2; justify-content: flex-end; }
+.werk-zeile.rechts .werk-zeile-info { order: 1; }
+
+/* Größenklassen */
+.werk-zeile[data-groesse="l"]              { grid-template-columns: 581px 1fr; }
+.werk-zeile[data-groesse="m"]              { grid-template-columns: 411px 1fr; }
+.werk-zeile[data-groesse="s"]              { grid-template-columns: 290px 1fr; }
+.werk-zeile[data-groesse="xs"]             { grid-template-columns: 194px 1fr; }
+.werk-zeile.rechts[data-groesse="l"]       { grid-template-columns: 1fr 581px; }
+.werk-zeile.rechts[data-groesse="m"]       { grid-template-columns: 1fr 411px; }
+.werk-zeile.rechts[data-groesse="s"]       { grid-template-columns: 1fr 290px; }
+.werk-zeile.rechts[data-groesse="xs"]      { grid-template-columns: 1fr 194px; }
+
+.werk-zeile-bild {
+  cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.werk-zeile-bild img {
+  display: block;
+  width: auto;
+  height: auto;
+  transition: opacity 0.2s;
+}
+.werk-zeile-bild:hover img { opacity: 0.85; }
+
+/* Info-Block: Bild links → Text rechtsbündig außen */
+.werk-zeile-info {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  align-items: flex-end;
+  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+}
+/* Bild rechts → Text linksbündig außen */
+.werk-zeile.rechts .werk-zeile-info {
+  align-items: flex-start;
+  text-align: left;
 }
 
-.footer-copy {
-  font-size: 0.75rem;
-  color: var(--gray-dark);
+.werk-zeile-titel {
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
-
-.footer-links {
-  display: flex;
-  gap: 24px;
+.werk-zeile-meta {
+  margin-top: auto;
+  padding-top: 24px;
+}
+.werk-zeile-meta-list {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
 }
-
-.footer-links a {
-  font-size: 0.75rem;
+.werk-zeile-meta-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8125rem;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--gray-mid);
+}
+.werk-zeile-meta-list li:last-child { border-bottom: none; }
+.werk-zeile-meta-label {
+  font-weight: 500;
   color: var(--gray-dark);
-  transition: color 0.15s;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  padding-top: 1px;
+  flex-shrink: 0;
 }
-.footer-links a:hover { color: var(--black); }
+.werk-zeile-meta-list li span:last-child { text-align: right; }
+.werk-zeile-anfrage { margin-top: 24px; }
 
-/* ── LIGHTBOX ───────────────────────────────────────────── */
+/* Tablet: Bildspalten proportional kleiner */
+@media (max-width: 900px) {
+  .werke-liste {
+    gap: clamp(72px, 10vw, 100px);
+  }
+  .werk-zeile[data-groesse="l"]        { grid-template-columns: 300px 1fr; gap: 28px; }
+  .werk-zeile[data-groesse="m"]        { grid-template-columns: 220px 1fr; gap: 24px; }
+  .werk-zeile[data-groesse="s"]        { grid-template-columns: 160px 1fr; gap: 20px; }
+  .werk-zeile[data-groesse="xs"]       { grid-template-columns: 110px 1fr; gap: 16px; }
+  .werk-zeile.rechts[data-groesse="l"] { grid-template-columns: 1fr 300px; }
+  .werk-zeile.rechts[data-groesse="m"] { grid-template-columns: 1fr 220px; }
+  .werk-zeile.rechts[data-groesse="s"] { grid-template-columns: 1fr 160px; }
+  .werk-zeile.rechts[data-groesse="xs"]{ grid-template-columns: 1fr 110px; }
+}
+
+/* Mobil: gestapelt, zentriert */
+@media (max-width: 680px) {
+  .werk-zeile {
+    display: block;
+    text-align: center;
+  }
+  .werk-zeile-bild {
+    display: block;
+    text-align: center;
+    order: unset;
+    margin-bottom: 28px;
+  }
+  .werk-zeile-bild img {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+  }
+  .werk-zeile-info,
+  .werk-zeile.rechts .werk-zeile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    order: unset;
+    text-align: center;
+    width: 100%;
+  }
+  .werk-zeile-meta-list { align-items: center; }
+  .werk-zeile-meta-list li { justify-content: center; }
+  .werk-zeile-anfrage { text-align: center; }
+}
+
+
+/* ── 11. LIGHTBOX ───────────────────────────────────────── */
 .lightbox {
   display: none;
   position: fixed;
@@ -367,6 +640,7 @@ footer {
 }
 
 .lightbox-info {
+  position: relative;
   width: 280px;
   flex-shrink: 0;
   background: var(--white);
@@ -378,14 +652,16 @@ footer {
   justify-content: space-between;
 }
 
+/* X oben rechts im Info-Panel */
 .lightbox-close {
-  align-self: flex-end;
+  position: absolute;
+  top: 32px;
+  right: 28px;
   background: none;
   border: none;
   font-size: 1.125rem;
   cursor: pointer;
   color: var(--gray-dark);
-  margin-bottom: 28px;
   padding: 0;
   transition: color 0.15s;
   font-family: 'Inter', system-ui, sans-serif;
@@ -393,20 +669,43 @@ footer {
 }
 .lightbox-close:hover { color: var(--black); }
 
+/* Zählung oben mittig mit Pfeilen */
 .lightbox-counter {
+  position: absolute;
+  top: 29px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  white-space: nowrap;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--gray-dark);
-  margin-bottom: 14px;
 }
+.lightbox-counter-nav {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--gray-dark);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.lightbox-counter-nav:hover { color: var(--black); }
+.lightbox-counter-nav:disabled { opacity: 0.25; cursor: default; }
+
 .lightbox-titel {
   font-size: 1.375rem;
   font-weight: 300;
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin-bottom: 24px;
+  margin-top: 56px;
 }
 .lightbox-meta-list { list-style: none; margin-bottom: 28px; flex: 1; }
 .lightbox-meta-list li {
@@ -426,17 +725,30 @@ footer {
   padding-top: 1px;
 }
 
+/* Mobile Lightbox */
 @media (max-width: 768px) {
-  .lightbox { padding: 0; align-items: flex-end; background: var(--white); }
+  .lightbox { padding: 0; align-items: flex-start; background: var(--white); }
   .lightbox-card {
+    position: relative;
     flex-direction: column;
     width: 100vw;
     height: 100dvh;
     overflow: hidden;
   }
+  .lightbox-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 10;
+    background: var(--white);
+    padding: 4px;
+  }
+  .lightbox-counter {
+    top: 14px;
+  }
   .lightbox-img-wrap {
     flex: 1 1 0;
-    padding: 12px 16px;
+    padding: 48px 16px 12px;
     min-height: 0;
     background: var(--white);
   }
@@ -446,48 +758,26 @@ footer {
     width: 100%;
     border-left: none;
     border-top: 1px solid var(--gray-mid);
-    padding: 12px 20px 24px;
+    padding: 56px 20px 24px;
     overflow-y: auto;
-    max-height: 44dvh;
+    max-height: 42dvh;
   }
-  .lightbox-close { margin-bottom: 8px; }
-  .lightbox-titel { font-size: 1.125rem; margin-bottom: 10px; }
+  .lightbox-titel { font-size: 1.125rem; margin-bottom: 10px; margin-top: 0; }
   .lightbox-meta-list { margin-bottom: 12px; }
   .lightbox-meta-list li { padding: 3px 0; }
   .lightbox-arrow { display: none; }
 }
 
-/* ── LOADING STATE ──────────────────────────────────────── */
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  color: var(--gray-dark);
-  font-size: 0.875rem;
-}
 
-
-/* ── KONTAKT-FORMULARE ───────────────────────────────────── */
-.contact-form {
-  width: 100%;
-}
+/* ── 12. KONTAKT-FORMULAR & MODAL ───────────────────────── */
+.contact-form { width: 100%; }
 .contact-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px 24px;
 }
-.contact-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.contact-field-full {
-  grid-column: 1 / -1;
-}
-.contact-field-message {
-  min-height: 0;
-}
+.contact-field { display: flex; flex-direction: column; gap: 8px; }
+.contact-field-full { grid-column: 1 / -1; }
 .contact-label {
   font-size: 0.6875rem;
   font-weight: 500;
@@ -515,20 +805,9 @@ footer {
   border-color: var(--black);
   background: #fbfbfb;
 }
-.contact-textarea {
-  min-height: 180px;
-  resize: vertical;
-}
-.contact-form-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.contact-status {
-  font-size: 0.8125rem;
-  color: var(--gray-dark);
-}
+.contact-textarea { min-height: 180px; resize: vertical; }
+.contact-form-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.contact-status { font-size: 0.8125rem; color: var(--gray-dark); }
 .contact-link {
   display: inline-flex;
   gap: 8px;
@@ -552,21 +831,14 @@ footer {
   background: rgba(0,0,0,0.92);
 }
 .contact-modal.open { display: flex; }
-.contact-modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: transparent;
-}
+.contact-modal-backdrop { position: absolute; inset: 0; background: transparent; }
 .contact-modal-card {
   position: relative;
   width: min(1100px, calc(100vw - 112px));
   height: 90dvh;
-  max-height: none;
   overflow: hidden;
   background: var(--white);
   padding: 32px 28px;
-  border: none;
-  box-shadow: none;
   display: flex;
   flex-direction: column;
 }
@@ -587,13 +859,10 @@ footer {
   min-height: 0;
   resize: none;
 }
-.contact-modal .contact-form-actions {
-  flex: 0 0 auto;
-}
+.contact-modal .contact-form-actions { flex: 0 0 auto; }
 .contact-modal-close {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 18px; right: 18px;
   border: none;
   background: transparent;
   color: var(--gray-dark);
@@ -624,350 +893,14 @@ footer {
   .contact-modal-card {
     width: 100vw;
     height: 100dvh;
-    max-height: none;
-    border: none;
-    box-shadow: none;
     padding: 64px 20px 28px;
   }
   .contact-modal-title { margin-right: 0; }
 }
 
-.btn:disabled { opacity: 0.45; cursor: wait; }
 
-
-/* ── ZENTRALES DESKTOP-RASTER / SITE SHELL ────────────────
-   Diese Regel ist absichtlich übergeordnet: Alle großen Seitenkörper
-   folgen derselben linken und rechten Außenkante. */
-@media (min-width: 761px) {
-  .nav-inner,
-  #hero,
-  .section,
-  footer,
-  .page-section,
-  .essay-wrap,
-  .kontakt-inner,
-  .news-page,
-  .vita-inner,
-  .page-header-inner,
-  .werke-liste,
-  .werke-list {
-    width: var(--site-width) !important;
-    max-width: var(--max-w) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .werke-slider-wrap {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  .werke-slider {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  #newsletter .section.newsletter-inner {
-    width: min(560px, var(--site-width)) !important;
-    max-width: 560px !important;
-  }
-}
-
-/* ── MOBILE WIDTH RESET ─────────────────────────────────── */
-@media (max-width: 760px) {
-  .nav-inner,
-  .section,
-  footer {
-    width: auto;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: clamp(16px, 5vw, 24px);
-    padding-right: clamp(16px, 5vw, 24px);
-  }
-}
-
-/* ── V16: Harte zentrale Seitenbreite ─────────────────────
-   Diese Regeln stehen bewusst am Ende und überschreiben ältere Einzelregeln.
-   Ziel: alle Hauptbereiche folgen derselben linken/rechten Außenkante. */
-@media (min-width: 761px) {
-  .nav-inner,
-  #hero,
-  .section,
-  footer,
-  .page-section,
-  .essay-wrap,
-  .kontakt-inner,
-  .news-page,
-  .vita-inner,
-  .page-header-inner,
-  .werke-liste,
-  .werke-list,
-  .book-info {
-    box-sizing: border-box !important;
-    width: var(--site-width) !important;
-    max-width: var(--max-w) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .section,
-  footer,
-  .nav-inner,
-  #hero { padding-left: 0 !important; padding-right: 0 !important; }
-
-  .werke-slider-wrap,
-  .werke-slider {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .slider-btn-prev { left: 10px !important; }
-  .slider-btn-next { right: 10px !important; }
-}
-
-
-/* ── V16: Reader bleibt funktionale Ausnahme ───────────────
-   Header/Book-Info folgen dem 900-px-Raster, die eigentliche
-   Reader-Buehne und das Thumbnail-Band duerfen die volle Breite nutzen. */
-.reader-page .reader-shell {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-.reader-page .viewer-wrap,
-.reader-page .thumbs-wrap {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-
-/* ── V17: Einheitliche Unterseiten-Überschriften ──────────
-   Eine Regel für Werke, News, Katalog, Vita und Kontakt. */
-@media (min-width: 761px) {
-  .page-header {
-    padding-top: calc(var(--nav-h) + 56px) !important;
-    padding-bottom: 44px !important;
-    border-bottom: none !important;
-  }
-  .page-header-inner {
-    display: block !important;
-  }
-  .page-header-inner .filter-bar {
-    margin-top: clamp(22px, 3vw, 34px) !important;
-  }
-  .page-title,
-  .vita-title,
-  .kontakt-title,
-  .katalog-page-title {
-    display: block !important;
-    width: 100% !important;
-    font-size: clamp(5.2rem, 10vw, 7.8rem) !important;
-    font-weight: 300 !important;
-    line-height: 0.9 !important;
-    letter-spacing: -0.07em !important;
-    text-transform: uppercase !important;
-    margin: 0 0 clamp(44px, 6vw, 72px) !important;
-    padding-bottom: clamp(24px, 3vw, 40px) !important;
-    border-bottom: 1px solid var(--black) !important;
-  }
-}
-@media (max-width: 760px) {
-  .page-title,
-  .vita-title,
-  .kontakt-title,
-  .katalog-page-title {
-    display: block !important;
-    width: 100% !important;
-    font-size: clamp(4.6rem, 22vw, 6.6rem) !important;
-    font-weight: 300 !important;
-    line-height: 0.9 !important;
-    letter-spacing: -0.06em !important;
-    text-transform: uppercase !important;
-    margin: 0 0 clamp(54px, 14vw, 80px) !important;
-    padding-bottom: clamp(22px, 5vw, 34px) !important;
-    border-bottom: 1px solid var(--black) !important;
-  }
-}
-
-/* ── V17: Reader zurueck ins Seitenraster ─────────────────
-   Auch die Reader-Buehne und die Thumbnail-Leiste folgen 900 px.
-   Ausnahme aufgehoben: nur der funktionale Buchbereich bleibt innerhalb
-   des dunklen Viewers, nicht viewportbreit. */
-.reader-page .reader-shell {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-}
-.reader-page .book-info,
-.reader-page .viewer-wrap,
-.reader-page .thumbs-wrap {
-  box-sizing: border-box !important;
-  width: var(--site-width) !important;
-  max-width: var(--max-w) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-.reader-page .viewer-wrap {
-  flex: 1 1 auto;
-}
-.reader-page .thumbs-wrap {
-  flex: 0 0 82px;
-}
-@media (max-width: 760px) {
-  .reader-page .book-info,
-  .reader-page .viewer-wrap,
-  .reader-page .thumbs-wrap {
-    width: 100% !important;
-    max-width: none !important;
-  }
-}
-
-/* ── V18: Werke-Header kompakt + Filter rechts ───────────
-   Einheitliche Titelregel bleibt erhalten; nur die Filter werden
-   auf der Werke-Seite in dieselbe Kopfzeile gezogen. */
-@media (min-width: 761px) {
-  .page-header-werke .page-header-inner {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    align-items: end !important;
-    gap: 32px !important;
-    padding-bottom: clamp(24px, 3vw, 40px) !important;
-    border-bottom: 1px solid var(--black) !important;
-  }
-  .page-header-werke .page-title {
-    width: auto !important;
-    margin: 0 !important;
-    padding-bottom: 0 !important;
-    border-bottom: none !important;
-  }
-  .page-header-werke .filter-bar {
-    justify-content: flex-end !important;
-    margin: 0 0 0.45em !important;
-    white-space: nowrap !important;
-  }
-}
-@media (max-width: 760px) {
-  .page-header-werke .filter-bar {
-    margin-top: 22px !important;
-  }
-}
-
-/* ── V18: Mobile Startseiten-Slider kontrolliert ──────────
-   Ein Swipe = ein Werk. Kein halbes Nebenbild, etwas Weissraum
-   um die Bilder. Die eigentliche Steuerung steht in index.html. */
-@media (max-width: 760px) {
-  .werke-slider {
-    overflow-x: hidden !important;
-    scroll-snap-type: none !important;
-    touch-action: pan-y !important;
-  }
-  .werke-slider .werk-card {
-    box-sizing: border-box !important;
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    padding-left: clamp(10px, 4vw, 18px) !important;
-    padding-right: clamp(10px, 4vw, 18px) !important;
-    scroll-snap-align: none !important;
-  }
-  .werke-slider .werk-card-img-wrap {
-    width: 100% !important;
-    justify-content: center !important;
-  }
-  .werke-slider .werk-card-img {
-    max-width: 100% !important;
-  }
-}
-
-
-/* ── V19: Hero-Beschnitt + Werke-Skalierung ───────────────
-   Desktop: Hero oben um ca. 10 % beschnitten; Schrift rechts an den
-   freien Rand geschoben. Werke: alle vier Groessenklassen proportional
-   um ca. 10 % vergroessert. */
-@media (min-width: 761px) {
-  #hero .hero-bg {
-    top: -10% !important;
-    bottom: 0 !important;
-    background-position: 50% 34% !important;
-  }
-  #hero .hero-text {
-    right: clamp(24px, 3.2vw, 40px) !important;
-    text-align: right !important;
-  }
-  .werk-zeile { grid-template-columns: 581px 1fr !important; }
-  .werk-zeile.rechts { grid-template-columns: 1fr 581px !important; }
-  .werk-zeile[data-groesse="l"]  { grid-template-columns: 581px 1fr !important; }
-  .werk-zeile[data-groesse="m"]  { grid-template-columns: 411px 1fr !important; }
-  .werk-zeile[data-groesse="s"]  { grid-template-columns: 290px 1fr !important; }
-  .werk-zeile[data-groesse="xs"] { grid-template-columns: 194px 1fr !important; }
-  .werk-zeile.rechts[data-groesse="l"]  { grid-template-columns: 1fr 581px !important; }
-  .werk-zeile.rechts[data-groesse="m"]  { grid-template-columns: 1fr 411px !important; }
-  .werk-zeile.rechts[data-groesse="s"]  { grid-template-columns: 1fr 290px !important; }
-  .werk-zeile.rechts[data-groesse="xs"] { grid-template-columns: 1fr 194px !important; }
-}
-
-
-/* ── V20: einheitliche Unterseiten-Kopfzone, Hero querformatiger, Reader-Overlay ── */
-:root {
-  --subpage-top: calc(var(--nav-h) + 56px);
-  --subpage-top-mobile: calc(var(--nav-h) + 40px);
-}
-
-@media (min-width: 761px) {
-  .page-header,
-  .news-page,
-  .vita-page,
-  .kontakt-page,
-  .katalog-page-head {
-    padding-top: var(--subpage-top) !important;
-  }
-  .katalog-page { padding-top: 0 !important; }
-  .news-page,
-  .vita-page,
-  .kontakt-page,
-  .katalog-page-head,
-  .page-header {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  .page-title,
-  .vita-title,
-  .kontakt-title,
-  .katalog-page-title {
-    margin-top: 0 !important;
-  }
-}
-
-@media (max-width: 760px) {
-  .page-header,
-  .news-page,
-  .vita-page,
-  .kontakt-page,
-  .katalog-page-head {
-    padding-top: var(--subpage-top-mobile) !important;
-  }
-  .katalog-page { padding-top: 0 !important; }
-}
-
-@media (min-width: 761px) {
-  #hero {
-    min-height: 0 !important;
-    height: clamp(440px, 56vw, 560px) !important;
-    max-height: 560px !important;
-  }
-  #hero .hero-bg {
-    top: 0 !important;
-    bottom: 0 !important;
-    background-position: 50% 42% !important;
-  }
-  #hero .hero-scroll { bottom: 18px !important; }
-}
-
+/* ── 13. READER-OVERLAY ─────────────────────────────────── */
+/* Bewusste Ausnahme vom 900px-Raster: Reader nutzt volle Fläche */
 .reader-modal {
   display: none;
   position: fixed;
@@ -984,105 +917,89 @@ footer {
   background: #24211e;
 }
 .reader-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255,255,255,0.22);
-  background: rgba(0,0,0,0.24);
-  color: rgba(255,255,255,0.9);
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 10000;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(245,245,245,0.96);
+  color: #111;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+  cursor: pointer;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 1.15rem;
   line-height: 1;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.reader-modal-close:hover { background: rgba(255,255,255,0.10); color: #fff; }
+.reader-modal-close:hover,
+.reader-modal-close:focus-visible {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  outline: none;
+}
 body.reader-open { overflow: hidden; }
 
 .reader-page .book-info,
 .reader-page .viewer-wrap,
 .reader-page .thumbs-wrap {
-  width: 100% !important;
-  max-width: none !important;
+  width: 100%;
+  max-width: none;
 }
 
-/* ── V21: Scroll-Nav, Reader-Close, einheitlicher Inhaltsbeginn ─────────
-   - Nav erscheint direkt am Ende des verkürzten Hero.
-   - Reader-Schließen bleibt als sichtbarer, klickbarer Kreis erhalten.
-   - Der Abstand nach der Unterseiten-Trennlinie folgt überall der Vita-Logik. */
-:root {
-  --subpage-content-gap: clamp(64px, 7vw, 88px);
-  --subpage-content-gap-mobile: clamp(54px, 12vw, 76px);
+
+/* ── 14. HILFKLASSEN ─────────────────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--gray-dark);
+  font-size: 0.875rem;
+}
+.no-results {
+  padding: 80px 0;
+  text-align: center;
+  color: var(--gray-dark);
+  font-size: 0.9375rem;
+  font-weight: 300;
 }
 
-@media (min-width: 761px) {
-  /* Einheitlicher Abstand nach der Titel-Linie: News, Vita, Kontakt */
-  .news-page > .page-title,
-  .vita-title,
-  .kontakt-title {
-    margin-bottom: var(--subpage-content-gap) !important;
-  }
 
-  /* Werke: Die Linie sitzt im Header; die Liste beginnt mit demselben Abstand. */
-  .page-header-werke {
-    padding-bottom: 0 !important;
-  }
-  .werke-liste {
-    padding-top: var(--subpage-content-gap) !important;
-  }
-
-  /* Katalog: Titel-Sektion ohne doppelten Abstand, Hero startet wie Vita. */
-  .katalog-page-head {
-    padding-bottom: 0 !important;
-  }
-  .katalog-page-title {
-    margin-bottom: 0 !important;
-  }
-  .katalog-hero {
-    padding-top: var(--subpage-content-gap) !important;
-  }
-
-  /* Kontakt: Formular bleibt in der normalen Seitenfolge, kein Extra-Versatz. */
-  .kontakt-intro {
-    margin-top: 0 !important;
-  }
-}
-
+/* ── 15. MOBILE WIDTH RESET ─────────────────────────────── */
 @media (max-width: 760px) {
+  .nav-inner,
+  .section,
+  footer {
+    width: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: clamp(16px, 5vw, 24px);
+    padding-right: clamp(16px, 5vw, 24px);
+  }
+  .page-header,
+  .news-page,
+  .vita-page,
+  .kontakt-page,
+  .katalog-page-head {
+    padding-top: var(--subpage-top-mobile);
+  }
+  .katalog-page { padding-top: 0; }
   .news-page > .page-title,
   .vita-title,
   .kontakt-title {
-    margin-bottom: var(--subpage-content-gap-mobile) !important;
+    margin-bottom: var(--subpage-content-gap-mobile);
   }
-  .page-header-werke { padding-bottom: 0 !important; }
-  .werke-liste { padding-top: var(--subpage-content-gap-mobile) !important; }
-  .katalog-page-head { padding-bottom: 0 !important; }
-  .katalog-page-title { margin-bottom: 0 !important; }
-  .katalog-hero { padding-top: var(--subpage-content-gap-mobile) !important; }
-}
-
-.reader-modal-close {
-  position: fixed !important;
-  top: 18px !important;
-  right: 18px !important;
-  z-index: 10000 !important;
-  width: 42px !important;
-  height: 42px !important;
-  border-radius: 50% !important;
-  border: 1px solid rgba(0,0,0,0.18) !important;
-  background: rgba(245,245,245,0.96) !important;
-  color: #111 !important;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.22) !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-.reader-modal-close:hover,
-.reader-modal-close:focus-visible {
-  background: #111 !important;
-  color: #fff !important;
-  border-color: #111 !important;
-  outline: none !important;
+  .page-header-werke { padding-bottom: 0; }
+  .werke-liste { padding-top: var(--subpage-content-gap-mobile); }
+  .katalog-page-head { padding-bottom: 0; }
+  .katalog-page-title { margin-bottom: 0; }
+  .katalog-hero { padding-top: var(--subpage-content-gap-mobile); }
+  .page-header-werke .filter-bar { margin-top: 22px; }
 }

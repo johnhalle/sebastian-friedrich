@@ -10,9 +10,9 @@
   <meta property="og:image" content="https://res.cloudinary.com/def9qgwtw/image/upload/v1780737694/001.jpg">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="sf-base.css?v=21">
+  <link rel="stylesheet" href="sf-base.css?v=23">
   <style>
-    main { padding-top: var(--nav-h); }
+
     .page-section {
       width: var(--site-width);
       max-width: var(--max-w);
@@ -195,7 +195,7 @@
     .essay-work-meta-list li span:last-child { text-align: right; }
     @media (max-width: 760px) {
       .page-section, .essay-wrap { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
-      .katalog-page-head { padding-top: clamp(72px, 16vw, 96px); padding-bottom: clamp(44px, 10vw, 64px); }
+      .katalog-page-head { padding-bottom: clamp(44px, 10vw, 64px); }
       .katalog-page-title {
         font-size: clamp(4.6rem, 22vw, 6.6rem);
         letter-spacing: -0.06em;
@@ -241,7 +241,7 @@
   <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
 </div>
 <main class="katalog-page">
-  <section class="page-section katalog-page-head"><h1 class="katalog-page-title">Katalog</h1></section>
+  <section class="page-section katalog-page-head"><h1 class="katalog-page-title" data-i18n="katalog.titel">Katalog</h1></section>
   <section class="page-section katalog-hero" id="katalog-hero"><div class="loading">Lädt…</div></section>
   <article class="essay-wrap" id="essay-wrap"><div class="loading">Lädt…</div></article>
 </main>
@@ -274,7 +274,7 @@
     <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
 </footer>
-<script src="sf-base.js?v=21"></script>
+<script src="sf-base.js?v=23"></script>
 <script>
 
 function openReaderOverlay(url) {
@@ -336,8 +336,8 @@ function renderKatalogPage(data) {
       </ul>
       <p class="katalog-teaser">${esc(teaser)}</p>
       <div class="katalog-actions">
-        <a class="btn" href="reader.html?buch=${encodeURIComponent(k.id)}" data-reader-open>Im Katalog blättern</a>
-        <button class="btn btn-outline" type="button" data-contact-subject="${attr(k.bestellen_betreff)}" data-contact-message="${attr(k.bestellen_nachricht)}">Katalog bestellen</button>
+        <a class="btn" href="reader.html?buch=${encodeURIComponent(k.id)}" data-reader-open>${ui('katalog.reader')}</a>
+        <button class="btn btn-outline" type="button" data-contact-subject="${attr(LANG === 'en' ? (k.bestellen_betreff_en || k.bestellen_betreff) : k.bestellen_betreff)}" data-contact-message="${attr(LANG === 'en' ? (k.bestellen_nachricht_en || k.bestellen_nachricht) : k.bestellen_nachricht)}">${ui('katalog.order')}</button>
       </div>
     </div>`;
   const a = k.aufsatz || {};
@@ -361,13 +361,14 @@ function renderKatalogPage(data) {
         </figcaption>
       </figure>`;
     }
-    return `<p>${esc(block.text)}</p>`;
+    const paragraph = LANG === 'en' ? (block.text_en || block.text) : block.text;
+    return `<p>${esc(paragraph)}</p>`;
   }).join('');
   document.getElementById('essay-wrap').innerHTML = `
     <header class="essay-head">
-      <p class="essay-kicker">Aufsatz</p>
-      <h2 class="essay-title">${esc(a.titel || '')}</h2>
-      <p class="essay-subtitle">${esc(a.untertitel || '')}</p>
+      <p class="essay-kicker">${ui('essay.kicker')}</p>
+      <h2 class="essay-title">${esc(LANG === 'en' ? (a.titel_en || a.titel || '') : (a.titel || ''))}</h2>
+      <p class="essay-subtitle">${esc(LANG === 'en' ? (a.untertitel_en || a.untertitel || '') : (a.untertitel || ''))}</p>
       <p class="essay-authors">${esc((a.autoren || []).join(' · '))}</p>
     </header>
     <div class="essay-body">${blocks}</div>`;

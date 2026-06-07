@@ -11,13 +11,13 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="sf-base.css?v=21">
+  <link rel="stylesheet" href="sf-base.css?v=23">
   <style>
     /* ── HERO ──────────────────────────────────────────────── */
     #hero {
       position: relative;
-      min-height: 105dvh;
-      height: 105dvh;
+      min-height: unset;
+      height: 90dvh;
       width: var(--site-width);
       max-width: var(--max-w);
       margin: 0 auto;
@@ -78,6 +78,7 @@
       color: currentColor;
       margin-bottom: 12px;
     }
+    .hero-name span { display: block; }
 
     .hero-bezeichnung {
       font-size: clamp(0.6875rem, 0.9vw, 0.875rem);
@@ -130,7 +131,7 @@
         text-align: right;
       }
       .hero-name {
-        font-size: clamp(2.75rem, 5.2vw, 4.35rem);
+        font-size: clamp(3.2rem, 7vw, 5.35rem);
       }
     }
 
@@ -275,12 +276,12 @@
         object-position: center bottom;
       }
       .werke-slider-wrap::after {
-        content: 'Nach links wischen';
+        content: '←        →';
         display: block;
         margin-top: 18px;
         text-align: center;
-        font-size: 0.6875rem;
-        letter-spacing: 0.12em;
+        font-size: 1.125rem;
+        letter-spacing: 0.28em;
         text-transform: uppercase;
         color: var(--gray-dark);
       }
@@ -370,6 +371,19 @@
     }
     .newsletter-input:focus { border-color: var(--black); }
     .newsletter-dsgvo { font-size: 0.6875rem; color: var(--gray-dark); }
+
+
+    /* V22: Mobile Startbereich – Label näher an das erste Werk, ohne den Slider zu dominieren */
+    @media (max-width: 760px) {
+      #neueste .werke-header {
+        margin-top: clamp(24px, 7vw, 36px);
+        margin-bottom: 6px;
+      }
+      .werke-slider-wrap::after {
+        font-weight: 300;
+        line-height: 1;
+      }
+    }
   </style>
 </head>
 <body>
@@ -409,7 +423,7 @@
   <section id="hero">
     <div class="hero-bg"></div>
     <div class="hero-text">
-      <h1 class="hero-name">Sebastian Friedrich</h1>
+      <h1 class="hero-name"><span>Sebastian</span><span>Friedrich</span></h1>
       <p class="hero-bezeichnung" data-i18n="hero.maler">Maler</p>
     </div>
     <button class="hero-scroll" onclick="document.getElementById('neueste').scrollIntoView({behavior:'smooth'})" aria-label="Nach unten scrollen">
@@ -492,7 +506,7 @@
   </ul>
 </footer>
 
-<script src="sf-base.js?v=21"></script>
+<script src="sf-base.js?v=23"></script>
 <script>
 /* ── SEITEN-SPEZIFISCH: index.html ── */
 
@@ -616,18 +630,16 @@ function renderNews(data) {
   const titel    = t(n, 'titel');
   const text     = t(n, 'text');
   const zeitraum = t(n, 'zeitraum');
-  const urlLabel = t(n, 'url_label');
-  document.getElementById('news-card-wrap').innerHTML = `
+    document.getElementById('news-card-wrap').innerHTML = `
     <div class="news-card" onclick="window.location='news.html#${n.id}'">
       <div class="news-card-img-wrap">
         ${n.titelbild ? `<img src="${n.titelbild}" alt="${titel}" loading="lazy">` : ''}
       </div>
       <div class="news-card-content">
-        <span class="news-badge">${n.kategorie}</span>
+        <span class="news-badge">${t(n, 'kategorie')}</span>
         <h2 class="news-card-titel">${titel}</h2>
         <p class="news-card-ort">${zeitraum}${n.ort ? ' · ' + n.ort : ''}</p>
         <p class="news-card-text">${text}</p>
-        <a class="link-mehr" href="news.html#${n.id}">${urlLabel || (LANG === 'en' ? 'More' : 'Mehr')}</a>
       </div>
     </div>
   `;
@@ -637,7 +649,7 @@ function renderKatalog(data) {
   const k = data.katalog[0];
   if (!k) return;
   const katalogTitel = t(k, 'titel');
-  const katalogText  = t(k, 'text_de') || k.text_de || '';
+  const katalogText  = LANG === 'en' ? (k.teaser_en || k.text_en || '') : (k.teaser || k.text_de || '');
   const metaLine     = LANG === 'en' ? (k.start_meta_en || `${k.jahr} · Ed. by ${k.herausgeber || 'John Palatini'}`) : (k.start_meta || `${k.jahr} · Hrsg. v. ${k.herausgeber || 'John Palatini'}`);
   document.getElementById('katalog-inner').innerHTML = `
     <div class="katalog-cover">

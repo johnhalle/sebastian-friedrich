@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sebastian Friedrich – Katalogreader</title>
   <meta name="description" content="Online-Reader zum Katalog Sebastian Friedrich: ON STAGE. Malerei.">
-  <link rel="stylesheet" href="sf-base.css?v=21">
+  <link rel="stylesheet" href="sf-base.css?v=23">
   <style>
     body.reader-page { height: 100dvh; overflow: hidden; }
     .reader-shell {
@@ -200,7 +200,7 @@
     <div class="page-counter" id="page-counter"></div>
   </div>
   <div class="viewer-wrap" id="viewerWrap">
-    <div id="status">Lade …</div>
+    <div id="status"></div>
     <div class="book-stage" id="bookStage" style="display:none">
       <div class="book" id="theBook">
         <div class="book-shadow"></div>
@@ -210,13 +210,13 @@
       </div>
     </div>
     <div class="reader-controls">
-      <button class="reader-arrow" id="readerPrev" type="button" aria-label="Vorherige Seite">‹</button>
-      <button class="reader-arrow" id="readerNext" type="button" aria-label="Nächste Seite">›</button>
+      <button class="reader-arrow" id="readerPrev" type="button" aria-label="Vorherige Seite" data-i18n-aria="reader.prev">‹</button>
+      <button class="reader-arrow" id="readerNext" type="button" aria-label="Nächste Seite" data-i18n-aria="reader.next">›</button>
     </div>
   </div>
   <div class="thumbs-wrap" id="thumbsWrap" style="display:none"></div>
 </div>
-<script src="sf-base.js?v=21"></script>
+<script src="sf-base.js?v=23"></script>
 <script>
 let pages = [];
 let current = 0;
@@ -251,7 +251,7 @@ function setImg(img, index) {
   img.style.opacity = imageCache[index] === true ? '1' : '0';
   img.onload = () => { imageCache[index] = true; img.style.opacity = '1'; };
   img.src = pages[index];
-  img.alt = index === 0 ? 'Cover' : `Seite ${index + 1}`;
+  img.alt = index === 0 ? 'Cover' : (LANG === 'en' ? `Page ${index + 1}` : `Seite ${index + 1}`);
 }
 function applySpread(spread) {
   const book = document.getElementById('theBook');
@@ -329,7 +329,10 @@ function showSpread(spread, animate=false) {
 function turn(dir) { showSpread(current + dir, true); }
 function updateCounter() {
   const { left, right } = pagesForSpread(current);
-  let label = current === 0 ? 'Umschlag' : 'Seiten ' + [left, right].filter(x => x != null).map(x => x + 1).join('–') + ' von ' + pages.length;
+  const nums = [left, right].filter(x => x != null).map(x => x + 1).join('–');
+  const label = current === 0
+    ? (LANG === 'en' ? 'Cover' : 'Umschlag')
+    : (LANG === 'en' ? 'Pages ' + nums + ' of ' + pages.length : 'Seiten ' + nums + ' von ' + pages.length);
   document.getElementById('page-counter').textContent = label;
 }
 function updateArrows() {
@@ -350,7 +353,7 @@ function buildThumbs() {
       const img = document.createElement('img');
       img.className = 'thumb';
       img.src = pages[i];
-      img.alt = i === 0 ? 'Cover' : `Seite ${i + 1}`;
+      img.alt = i === 0 ? 'Cover' : (LANG === 'en' ? `Page ${i + 1}` : `Seite ${i + 1}`);
       pair.appendChild(img);
     });
     wrap.appendChild(pair);
@@ -370,25 +373,32 @@ async function measureCover(url) {
     img.src = url;
   });
 }
-function onLangChange() { updateCounter(); }
+function renderBookInfo() {
+  if (!bookData) return;
+  document.getElementById('book-title').textContent = LANG === 'en' ? (bookData.titel_en || bookData.titel) : bookData.titel;
+  document.getElementById('book-meta').textContent = LANG === 'en'
+    ? `${bookData.jahr} · Ed. by ${bookData.herausgeber_en || bookData.herausgeber || 'John Palatini'}`
+    : `${bookData.jahr} · Hrsg. v. ${bookData.herausgeber || 'John Palatini'}`;
+  document.title = `${LANG === 'en' ? (bookData.titel_en || bookData.titel) : bookData.titel} – Reader`;
+}
+function onLangChange() { renderBookInfo(); updateCounter(); }
 async function init() {
   applyI18n();
   initNav(false);
   const params = new URLSearchParams(location.search);
   const bookId = params.get('buch') || 'sebastian-katalog';
+  document.getElementById('status').textContent = LANG === 'en' ? 'Loading …' : 'Lade …';
   const res = await fetch('data.json');
   DATA = await res.json();
   bookData = (DATA.katalog || []).find(k => k.id === bookId) || (DATA.katalog || [])[0];
-  if (!bookData) { document.getElementById('status').textContent = 'Kein Katalog gefunden.'; return; }
-  document.getElementById('book-title').textContent = bookData.titel;
-  document.getElementById('book-meta').textContent = `${bookData.jahr} · Hrsg. v. ${bookData.herausgeber || 'John Palatini'}`;
-  document.title = `${bookData.titel} – Reader`;
+  if (!bookData) { document.getElementById('status').textContent = LANG === 'en' ? 'No catalogue found.' : 'Kein Katalog gefunden.'; return; }
+  renderBookInfo();
   const base = bookData.reader_base_url || '';
   const total = bookData.reader_total_pages || 25;
   pages = Array.from({ length: total }, (_, i) => base + pad(i + 1) + '.jpg');
   imageCache = Array(pages.length).fill(undefined);
   const ok = await measureCover(pages[0]);
-  if (!ok) { document.getElementById('status').textContent = 'Die Reader-Bilder konnten nicht geladen werden.'; return; }
+  if (!ok) { document.getElementById('status').textContent = LANG === 'en' ? 'The reader images could not be loaded.' : 'Die Reader-Bilder konnten nicht geladen werden.'; return; }
   document.getElementById('status').style.display = 'none';
   document.getElementById('bookStage').style.display = 'flex';
   document.getElementById('thumbsWrap').style.display = 'flex';

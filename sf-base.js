@@ -57,6 +57,15 @@ const I18N = {
     'contact.workLabel': 'Werk',
     'contact.workMessage': 'Hallo Sebastian Friedrich,\n\nich interessiere mich für dieses Werk und bitte um weitere Informationen.',
     'contact.error':     'Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.',
+    'thanks.titel':     'Danke',
+    'thanks.text':      'Ihre Nachricht wurde übermittelt.',
+    'thanks.home':      'Zur Startseite',
+    'katalog.titel':    'Katalog',
+    'katalog.reader':   'Im Katalog blättern',
+    'katalog.order':    'Katalog bestellen',
+    'essay.kicker':     'Aufsatz',
+    'reader.prev':      'Vorherige Seite',
+    'reader.next':      'Nächste Seite',
   },
   en: {
     'nav.werke':         'Works',
@@ -110,6 +119,15 @@ const I18N = {
     'contact.workLabel': 'Work',
     'contact.workMessage': 'Hello Sebastian Friedrich,\n\nI am interested in this work and would like to receive further information.',
     'contact.error':     'The message could not be sent. Please try again later.',
+    'thanks.titel':     'Thank you',
+    'thanks.text':      'Your message has been sent.',
+    'thanks.home':      'Back to home',
+    'katalog.titel':    'Catalogue',
+    'katalog.reader':   'Browse catalogue',
+    'katalog.order':    'Order catalogue',
+    'essay.kicker':     'Essay',
+    'reader.prev':      'Previous page',
+    'reader.next':      'Next page',
   }
 };
 
@@ -133,6 +151,9 @@ function applyI18n() {
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = ui(el.dataset.i18nPlaceholder);
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    el.setAttribute('aria-label', ui(el.dataset.i18nAria));
   });
   const langBtn = document.getElementById('nav-lang-btn');
   const overlayBtn = document.getElementById('overlay-lang-btn');
@@ -231,7 +252,8 @@ function alignInfoPanel() {
   }
   const imgRect  = img.getBoundingClientRect();
   const wrapRect = img.closest('.lightbox-img-wrap').getBoundingClientRect();
-  info.style.paddingTop    = (imgRect.top - wrapRect.top) + 'px';
+  const topSpace = Math.max(72, imgRect.top - wrapRect.top);
+  info.style.paddingTop    = topSpace + 'px';
   info.style.paddingBottom = (wrapRect.bottom - imgRect.bottom) + 'px';
 }
 
@@ -245,7 +267,20 @@ function renderLightbox() {
   img.src = w.bild;
   img.alt = `${w.titel}, ${w.jahr}`;
   document.getElementById('lb-titel').textContent = w.titel;
-  document.getElementById('lb-counter').textContent = `${LB_INDEX + 1} / ${LB_CONTEXT.length}`;
+  const lbCounter = document.getElementById('lb-counter');
+  if (LB_CONTEXT.length > 1) {
+    lbCounter.innerHTML = `
+      <button type="button" class="lightbox-counter-nav" data-lb-counter-prev aria-label="Vorheriges Werk" ${LB_INDEX === 0 ? 'disabled' : ''}>‹</button>
+      <span>${LB_INDEX + 1} / ${LB_CONTEXT.length}</span>
+      <button type="button" class="lightbox-counter-nav" data-lb-counter-next aria-label="Nächstes Werk" ${LB_INDEX === LB_CONTEXT.length - 1 ? 'disabled' : ''}>›</button>
+    `;
+    const prevCounter = lbCounter.querySelector('[data-lb-counter-prev]');
+    const nextCounter = lbCounter.querySelector('[data-lb-counter-next]');
+    if (prevCounter) prevCounter.onclick = () => { if (LB_INDEX > 0) { LB_INDEX--; renderLightbox(); } };
+    if (nextCounter) nextCounter.onclick = () => { if (LB_INDEX < LB_CONTEXT.length - 1) { LB_INDEX++; renderLightbox(); } };
+  } else {
+    lbCounter.textContent = `${LB_INDEX + 1} / ${LB_CONTEXT.length}`;
+  }
   document.getElementById('lb-meta').innerHTML = [
     { label: ui('detail.jahr'),   val: w.jahr },
     { label: ui('detail.medium'), val: medium },
