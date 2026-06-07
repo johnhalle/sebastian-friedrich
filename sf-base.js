@@ -204,15 +204,25 @@ function initNav(hasHero) {
     return;
   }
   nav.classList.remove('scrolled');
-  function updateNav() {
-    const hero = document.getElementById('hero');
-    const navHeight = nav.offsetHeight || 48;
-    const threshold = hero ? Math.max(0, hero.offsetHeight - navHeight) : window.innerHeight * 0.9;
-    nav.classList.toggle('scrolled', window.scrollY >= threshold);
+  const hero = document.getElementById('hero');
+  if (hero && 'IntersectionObserver' in window) {
+    // Nav erscheint sobald Hero nicht mehr sichtbar ist
+    const observer = new IntersectionObserver(
+      ([entry]) => { nav.classList.toggle('scrolled', !entry.isIntersecting); },
+      { threshold: 0, rootMargin: '0px 0px -' + (nav.offsetHeight || 48) + 'px 0px' }
+    );
+    observer.observe(hero);
+  } else {
+    // Fallback: einfacher Scroll-Threshold
+    function updateNav() {
+      const h = document.getElementById('hero');
+      const threshold = h ? h.offsetHeight - (nav.offsetHeight || 48) : window.innerHeight * 0.9;
+      nav.classList.toggle('scrolled', window.scrollY >= Math.max(0, threshold));
+    }
+    updateNav();
+    window.addEventListener('scroll', updateNav, { passive: true });
+    window.addEventListener('resize', updateNav, { passive: true });
   }
-  updateNav();
-  window.addEventListener('scroll', updateNav, { passive: true });
-  window.addEventListener('resize', updateNav, { passive: true });
 }
 
 /* ── FOOTER ─────────────────────────────────────────────── */
