@@ -196,31 +196,34 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Nav-Verhalten: hero-Seiten starten unsichtbar, andere Seiten immer sichtbar
+// Nav-Verhalten v24: stabil sichtbar.
+// Hero-Seiten: transparent/hell ueber dem Hero, weiss/schwarz nach dem Hero.
+// Unterseiten: immer weiss/schwarz sichtbar.
 function initNav(hasHero) {
   const nav = document.querySelector('nav');
+  if (!nav) return;
+
+  nav.classList.remove('always-visible', 'over-hero', 'scrolled');
+
   if (!hasHero) {
     nav.classList.add('always-visible');
     return;
   }
-  nav.classList.remove('scrolled');
-  const hero = document.getElementById('hero');
-  if (hero && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      ([entry]) => { nav.classList.toggle('scrolled', !entry.isIntersecting); },
-      { threshold: 0 }
-    );
-    observer.observe(hero);
-  } else {
-    function updateNav() {
-      const h = document.getElementById('hero');
-      const threshold = h ? h.offsetHeight * 0.9 : window.innerHeight * 0.9;
-      nav.classList.toggle('scrolled', window.scrollY >= threshold);
-    }
-    updateNav();
-    window.addEventListener('scroll', updateNav, { passive: true });
-    window.addEventListener('resize', updateNav, { passive: true });
-  }
+
+  const updateNav = () => {
+    const hero = document.getElementById('hero');
+    const threshold = hero
+      ? Math.max(0, hero.offsetTop + hero.offsetHeight - nav.offsetHeight)
+      : Math.max(0, window.innerHeight - nav.offsetHeight);
+    const pastHero = window.scrollY >= threshold;
+
+    nav.classList.toggle('scrolled', pastHero);
+    nav.classList.toggle('over-hero', !pastHero);
+  };
+
+  updateNav();
+  window.addEventListener('scroll', updateNav, { passive: true });
+  window.addEventListener('resize', updateNav, { passive: true });
 }
 
 /* ── FOOTER ─────────────────────────────────────────────── */

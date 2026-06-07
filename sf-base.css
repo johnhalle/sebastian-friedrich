@@ -319,72 +319,9 @@ footer {
 }
 
 
-/* ── 7. UNTERSEITEN-KOPFZONE ─────────────────────────────── */
-/* Alle Unterseiten haben denselben Abstand vom Nav zum Titel
-   und dieselbe Trennlinie; der Inhalt beginnt überall gleich. */
-
-.page-header,
-.news-page,
-.vita-page,
-.kontakt-page,
-.katalog-page-head {
-  padding-top: var(--subpage-top);
-}
-.katalog-page { padding-top: 0; }
-
-.page-title,
-.vita-title,
-.kontakt-title,
-.katalog-page-title {
-  margin-top: 0;
-  /* Skaliert mit Viewport, nie zu groß, nie umbrechend.
-     min(13vw, 10rem): auf 360px = 46.8px, passt für "CATALOGUE" uppercase.
-     overflow-x hidden auf body verhindert horizontales Scrollen. */
-  font-size: min(13vw, 10rem);
-  line-height: 0.92;
-  white-space: nowrap;
-}
-
-/* Einheitlicher Abstand nach der Titel-Linie */
-.news-page > .page-title,
-.vita-title,
-.kontakt-title {
-  margin-bottom: var(--subpage-content-gap);
-}
-
-/* Werke: Linie im Header, Liste beginnt mit gleichem Abstand */
-.page-header-werke { padding-bottom: 0; }
-.werke-liste { padding-top: var(--subpage-content-gap); }
-
-/* Katalog */
-.katalog-page-head { padding-bottom: 0; }
-.katalog-page-title { margin-bottom: 0; }
-.katalog-hero { padding-top: var(--subpage-content-gap); }
-
-/* Kontakt */
-.kontakt-intro { margin-top: 0; }
-
-/* Werke-Header: Filter rechts neben Titel */
-@media (min-width: 761px) {
-  .page-header-werke .page-header-inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 32px;
-    padding-bottom: clamp(24px, 3vw, 40px);
-    border-bottom: 1px solid var(--black);
-  }
-  .page-header-werke .page-title {
-    margin: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-  .page-header-werke .filter-bar {
-    justify-content: flex-end;
-    margin: 0 0 0.45em;
-    white-space: nowrap;
-  }
-}
+/* ── 7. UNTERSEITEN-KOPFZONE ───────────────────────────────
+   Siehe autoritative V24-Regeln am Dateiende.
+*/
 
 
 /* ── 8. STARTSEITE: HERO ────────────────────────────────── */
@@ -981,43 +918,230 @@ body.reader-open { overflow: hidden; }
 }
 
 
-/* ── 15. MOBILE WIDTH RESET ─────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   V24 STABILISIERUNG: Raster, Nav und Unterseitenköpfe
+   Diese Regeln sind absichtlich autoritativ, weil ältere
+   seitenspezifische Titelregeln in den HTML-Dateien existieren.
+═══════════════════════════════════════════════════════════ */
+
+/* Header: immer sichtbar. Auf Hero-Seiten transparent/hell, nach dem Hero weiß/schwarz. */
+nav {
+  opacity: 1 !important;
+  background: var(--white) !important;
+  border-bottom: 1px solid var(--gray-mid) !important;
+}
+nav.over-hero:not(.scrolled) {
+  background: transparent !important;
+  border-bottom: none !important;
+}
+nav.over-hero:not(.scrolled) .nav-logo,
+nav.over-hero:not(.scrolled) .nav-links a,
+nav.over-hero:not(.scrolled) .nav-lang {
+  color: rgba(255,255,255,0.9) !important;
+}
+nav.over-hero:not(.scrolled) .nav-lang {
+  border-color: rgba(255,255,255,0.32) !important;
+  background: transparent !important;
+}
+nav.over-hero:not(.scrolled) .nav-hamburger span {
+  background: rgba(255,255,255,0.9) !important;
+}
+nav.scrolled,
+nav.always-visible {
+  background: var(--white) !important;
+  border-bottom: 1px solid var(--gray-mid) !important;
+}
+nav.scrolled .nav-logo,
+nav.scrolled .nav-links a,
+nav.scrolled .nav-lang,
+nav.always-visible .nav-logo,
+nav.always-visible .nav-links a,
+nav.always-visible .nav-lang {
+  color: var(--black) !important;
+}
+nav.scrolled .nav-hamburger span,
+nav.always-visible .nav-hamburger span {
+  background: var(--black) !important;
+}
+
+
+/* V25: Auf der Landingpage keine Header-Anzeige im Hero.
+   Der Header erscheint erst nach dem Hero als normale weisse Leiste. */
+nav.over-hero:not(.scrolled) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border-bottom: none !important;
+}
+
+/* Einheitliche Unterseiten-Architektur */
+.page-header,
+.news-page,
+.vita-page,
+.kontakt-page,
+.katalog-page-head {
+  padding-top: var(--subpage-top) !important;
+  padding-bottom: 0 !important;
+}
+
+.page-header-inner,
+.news-page,
+.vita-inner,
+.kontakt-inner,
+.katalog-page-head,
+.katalog-hero,
+.werke-liste {
+  width: var(--site-width) !important;
+  max-width: var(--max-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.page-title,
+.vita-title,
+.kontakt-title,
+.katalog-page-title {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 0 clamp(24px, 4vw, 40px) !important;
+  border-bottom: 1px solid var(--black) !important;
+  font-size: min(13vw, 10rem) !important;
+  font-weight: 300 !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.07em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Inhalt beginnt überall wie bei VITA */
+.news-list,
+.vita-grid,
+.kontakt-intro,
+.katalog-hero,
+.werke-liste {
+  margin-top: var(--subpage-content-gap) !important;
+}
+.news-page > .page-title,
+.vita-title,
+.kontakt-title,
+.katalog-page-title {
+  margin-bottom: 0 !important;
+}
+
+/* Werke: Filter darf den Kopf nicht verschieben. */
+@media (min-width: 761px) {
+  .page-header-werke .page-header-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: end !important;
+    gap: 32px !important;
+    border-bottom: 1px solid var(--black) !important;
+    padding-bottom: clamp(24px, 4vw, 40px) !important;
+  }
+  .page-header-werke .page-title {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+  .page-header-werke .filter-bar {
+    margin: 0 0 0.45em !important;
+    justify-content: flex-end !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Mobile: keine Ausbrüche bei langen englischen Titeln. */
 @media (max-width: 760px) {
-  /* Unterseiten-Titel: garantiert einzeilig, skaliert mit Viewport.
-     Basis: "CATALOGUE" (längstes Wort) muss auf 360px passen.
-     Inter 300, uppercase, letter-spacing -0.04em → ~8.5vw je Buchstabe.
-     9 Buchstaben × 8.5vw / 9 ≈ 8.5vw Schriftgröße → passt knapp.
-     Wir nehmen 8vw damit auch letter-spacing Raum hat. */
-
-
   .nav-inner,
   .section,
-  footer {
-    width: auto;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: clamp(16px, 5vw, 24px);
-    padding-right: clamp(16px, 5vw, 24px);
+  footer,
+  .page-header-inner,
+  .news-page,
+  .vita-inner,
+  .kontakt-inner,
+  .katalog-page-head,
+  .katalog-hero,
+  .werke-liste {
+    width: auto !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: clamp(16px, 5vw, 24px) !important;
+    padding-right: clamp(16px, 5vw, 24px) !important;
   }
   .page-header,
   .news-page,
   .vita-page,
   .kontakt-page,
   .katalog-page-head {
-    padding-top: var(--subpage-top-mobile);
+    padding-top: var(--subpage-top-mobile) !important;
   }
-  .katalog-page { padding-top: 0; }
-  .news-page > .page-title,
+  .page-title,
   .vita-title,
-  .kontakt-title {
-    margin-bottom: var(--subpage-content-gap-mobile);
+  .kontakt-title,
+  .katalog-page-title {
+    font-size: clamp(4.05rem, 20vw, 6.6rem) !important;
+    line-height: 0.9 !important;
+    letter-spacing: -0.075em !important;
+    padding-bottom: clamp(22px, 7vw, 36px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
   }
-  .page-header-werke { padding-bottom: 0; }
-  .page-header-werke .page-header-inner { border-bottom: 1px solid var(--black); padding-bottom: 16px; }
-  .werke-liste { padding-top: var(--subpage-content-gap-mobile); }
-  .katalog-page-head { padding-bottom: 0; }
-  .katalog-page-title { margin-bottom: 0; }
-  .katalog-hero { padding-top: var(--subpage-content-gap-mobile); }
-  .page-header-werke .filter-bar { margin-top: 22px; }
+  html[lang="en"] .katalog-page-title {
+    font-size: clamp(3.15rem, 15vw, 5.2rem) !important;
+    letter-spacing: -0.065em !important;
+  }
+  .news-list,
+  .vita-grid,
+  .kontakt-intro,
+  .katalog-hero,
+  .werke-liste {
+    margin-top: var(--subpage-content-gap-mobile) !important;
+  }
+  .page-header-werke .page-header-inner {
+    border-bottom: 1px solid var(--black) !important;
+    padding-bottom: clamp(22px, 7vw, 36px) !important;
+  }
+  .page-header-werke .page-title {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+  .page-header-werke .filter-bar {
+    margin-top: 20px !important;
+  }
+}
+
+/* V24 Nachschärfung: Inhalt beginnt über margin, nicht über alte padding-top-Regeln. */
+.news-list,
+.vita-grid,
+.kontakt-intro,
+.katalog-hero,
+.werke-liste {
+  margin-top: var(--subpage-content-gap) !important;
+  padding-top: 0 !important;
+}
+.katalog-hero { padding-bottom: 0 !important; }
+.werke-liste { padding-bottom: clamp(48px, 8vw, 96px) !important; }
+
+@media (max-width: 760px) {
+  .news-list,
+  .vita-grid,
+  .kontakt-intro,
+  .katalog-hero,
+  .werke-liste {
+    margin-top: var(--subpage-content-gap-mobile) !important;
+    padding-top: 0 !important;
+  }
+  .werke-liste { padding-bottom: clamp(56px, 12vw, 96px) !important; }
+}
+
+@media (max-width: 760px) {
+  html[lang="en"] .vita-title {
+    font-size: clamp(3.15rem, 15vw, 5.2rem) !important;
+    letter-spacing: -0.065em !important;
+  }
 }
