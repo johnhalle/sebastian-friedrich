@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Werke – Sebastian Friedrich</title>
+  <meta name="description" content="Alle Werke von Sebastian Friedrich. Malerei in Öl auf Leinwand und MDF.">
+
+  <link rel="stylesheet" href="sf-base.css?v=21">
+  <style>
+    /* ── SEITEN-HEADER ──────────────────────────────────────── */
+    .page-header {
+      padding-top: calc(var(--nav-h) + clamp(32px, 5vw, 64px));
+      padding-bottom: clamp(24px, 3vw, 40px);
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .page-header-inner {
+      width: var(--site-width);
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .page-title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1px solid var(--gray-mid);
+      padding: 6px 16px;
+      border-radius: 2px;
+      background: var(--white);
+      color: var(--gray-dark);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--black); color: var(--black); }
+    .filter-btn.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    /* ── DESKTOP: LISTE (wechselndes Links-Rechts) ──────────── */
+    .werke-liste {
+      width: var(--site-width);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: clamp(40px, 6vw, 80px) 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(64px, 9vw, 112px);
+    }
+
+    .werk-zeile {
+      display: grid;
+      grid-template-columns: 581px 1fr;
+      gap: 48px;
+      align-items: end;
+    }
+    .werk-zeile.rechts {
+      grid-template-columns: 1fr 581px;
+    }
+    .werk-zeile.rechts .werk-zeile-bild { order: 2; }
+    .werk-zeile.rechts .werk-zeile-info { order: 1; text-align: right; }
+
+    /* Bildspalte je Größengruppe */
+    .werk-zeile[data-groesse="l"]  { grid-template-columns: 581px 1fr; }
+    .werk-zeile[data-groesse="m"]  { grid-template-columns: 411px 1fr; }
+    .werk-zeile[data-groesse="s"]  { grid-template-columns: 290px 1fr; }
+    .werk-zeile[data-groesse="xs"] { grid-template-columns: 194px 1fr; }
+
+    .werk-zeile.rechts[data-groesse="l"]  { grid-template-columns: 1fr 581px; }
+    .werk-zeile.rechts[data-groesse="m"]  { grid-template-columns: 1fr 411px; }
+    .werk-zeile.rechts[data-groesse="s"]  { grid-template-columns: 1fr 290px; }
+    .werk-zeile.rechts[data-groesse="xs"] { grid-template-columns: 1fr 194px; }
+
+    .werk-zeile-bild {
+      cursor: pointer;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+    /* Bild rechts: außenbündig rechts */
+    .werk-zeile.rechts .werk-zeile-bild {
+      justify-content: flex-end;
+    }
+    .werk-zeile-bild img {
+      display: block;
+      width: auto;
+      height: auto;
+      transition: opacity 0.2s;
+    }
+    .werk-zeile-bild:hover img { opacity: 0.85; }
+
+    /* Info-Block: analog Lightbox — Titel oben, Details unten */
+    /* Info-Block: Bild links → Info rechtsbündig außen */
+    .werk-zeile-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      text-align: right;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* Info-Block: Bild rechts → Info linksbündig außen */
+    .werk-zeile.rechts .werk-zeile-info {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .werk-zeile-titel {
+      font-size: clamp(1.25rem, 2.5vw, 2rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0;
+    }
+
+    .werk-zeile-meta {
+      margin-top: auto;
+      padding-top: 24px;
+    }
+
+    .werk-zeile-meta-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      width: 240px;
+    }
+    .werk-zeile-meta-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.8125rem;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .werk-zeile-meta-list li:last-child { border-bottom: none; }
+    .werk-zeile-meta-label {
+      font-weight: 500;
+      color: var(--gray-dark);
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+      padding-top: 1px;
+      flex-shrink: 0;
+    }
+    .werk-zeile-meta-list li span:last-child {
+      text-align: right;
+    }
+
+    .werk-zeile-anfrage {
+      margin-top: 24px;
+    }
+
+    .no-results {
+      padding: 80px 0;
+      text-align: center;
+      color: var(--gray-dark);
+      font-size: 0.9375rem;
+      font-weight: 300;
+    }
+
+    /* ── TABLET/HOCHFORMAT: Größenklassen erhalten, Gap größer ── */
+    @media (max-width: 900px) {
+      .page-header-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
+      .werke-liste {
+        width: auto; max-width: none;
+        padding: clamp(32px, 5vw, 56px) clamp(16px, 3vw, 24px);
+        gap: clamp(72px, 10vw, 100px);
+      }
+      /* Bildspalten proportional skalieren */
+      .werk-zeile[data-groesse="l"]        { grid-template-columns: 330px 1fr; gap: 28px; }
+      .werk-zeile[data-groesse="m"]        { grid-template-columns: 242px 1fr; gap: 24px; }
+      .werk-zeile[data-groesse="s"]        { grid-template-columns: 176px 1fr; gap: 20px; }
+      .werk-zeile[data-groesse="xs"]       { grid-template-columns: 121px 1fr; gap: 16px; }
+      .werk-zeile.rechts[data-groesse="l"] { grid-template-columns: 1fr 330px; }
+      .werk-zeile.rechts[data-groesse="m"] { grid-template-columns: 1fr 242px; }
+      .werk-zeile.rechts[data-groesse="s"] { grid-template-columns: 1fr 176px; }
+      .werk-zeile.rechts[data-groesse="xs"]{ grid-template-columns: 1fr 121px; }
+    }
+
+    /* ── GESTAPELT: Bild oben, Text darunter, zentriert ── */
+    @media (max-width: 680px) {
+      .werk-zeile {
+        display: block !important;
+        text-align: center;
+      }
+      .werk-zeile-bild {
+        display: block;
+        text-align: center;
+        order: unset;
+        margin-bottom: 28px;
+      }
+      .werk-zeile-bild img {
+        display: inline-block;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+      .werk-zeile-info,
+      .werk-zeile.rechts .werk-zeile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;
+        order: unset;
+        text-align: center !important;
+        width: 100%;
+      }
+      .werk-zeile-meta-list { align-items: center; }
+      .werk-zeile-meta-list li { justify-content: center; }
+      .werk-zeile-anfrage { text-align: center; }
+
+      .werk-zeile[data-groesse="l"] .werk-zeile-bild img {
+        max-width: 100% !important;
+      }
+      .werk-zeile[data-groesse="m"] .werk-zeile-bild img {
+        max-width: min(90vw, 396px) !important;
+      }
+      .werk-zeile[data-groesse="s"] .werk-zeile-bild img {
+        max-width: min(81vw, 297px) !important;
+      }
+      .werk-zeile[data-groesse="xs"] .werk-zeile-bild img {
+        max-width: min(64vw, 209px) !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="werke.html" data-i18n="nav.werke" class="active">Werke</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="nav-overlay" id="nav-overlay">
+  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
+  <a href="werke.html" onclick="closeMenu()" data-i18n="nav.werke">Werke</a>
+  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
+  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
+  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
+  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
+  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+</div>
+
+<!-- SEITEN-HEADER -->
+<div class="page-header page-header-werke">
+  <div class="page-header-inner">
+    <h1 class="page-title" data-i18n="werke.titel">Werke</h1>
+    <div class="filter-bar">
+      <button class="filter-btn active" id="filter-alle" onclick="setFilter('alle')" data-i18n="werke.filter.alle">Alle Werke</button>
+      <button class="filter-btn" id="filter-verfuegbar" onclick="setFilter('verfuegbar')" data-i18n="werke.filter.verfuegbar">Verfügbare Werke</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="werke-liste" id="werke-liste"></div>
+</main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-arrow" id="lb-prev" aria-label="Vorheriges Werk">‹</button>
+  <div class="lightbox-card">
+    <div class="lightbox-img-wrap">
+      <img class="lightbox-img" id="lb-img" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <button class="lightbox-close" id="lb-close" aria-label="Schließen">✕</button>
+      <p class="lightbox-counter" id="lb-counter"></p>
+      <h2 class="lightbox-titel" id="lb-titel"></h2>
+      <ul class="lightbox-meta-list" id="lb-meta"></ul>
+      <div id="lb-action"></div>
+    </div>
+  </div>
+  <button class="lightbox-arrow" id="lb-next" aria-label="Nächstes Werk">›</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  <ul class="footer-links">
+    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+    <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</footer>
+
+<script src="sf-base.js?v=21"></script>
+<script>
+/* ── SEITEN-SPEZIFISCH: werke.html ── */
+
+let FILTER = 'alle';
+let ALLE_IDS = [];
+
+function setFilter(f) {
+  FILTER = f;
+  document.getElementById('filter-alle').classList.toggle('active', f === 'alle');
+  document.getElementById('filter-verfuegbar').classList.toggle('active', f === 'verfuegbar');
+  if (DATA) renderAll(DATA);
+  history.replaceState({}, '', f === 'alle' ? 'werke.html' : 'werke.html?filter=verfuegbar');
+}
+
+function sortByJahr(werke) {
+  return [...werke].sort((a, b) => b.jahr - a.jahr);
+}
+
+function buildSortedGrid(werke) {
+  const reihenWerke = sortByJahr(werke.filter(w => w.reihe));
+  const reihenIds   = new Set(reihenWerke.map(w => w.id));
+  const ohneReihe   = sortByJahr(werke.filter(w => !reihenIds.has(w.id)));
+  if (!reihenWerke.length) return ohneReihe;
+  const neustesReihenJahr = reihenWerke[0].jahr;
+  let insertAt = ohneReihe.findIndex(w => w.jahr < neustesReihenJahr);
+  if (insertAt === -1) insertAt = ohneReihe.length;
+  const result = [...ohneReihe];
+  result.splice(insertAt, 0, ...reihenWerke);
+  return result;
+}
+
+/* ── DESKTOP-LISTE ── */
+// Längste-Seite-Pixel je Gruppe
+const GROESSE_PX = { xs: 169, s: 266, m: 387, l: 557 };
+
+function applyImageSize(img, groesse) {
+  const px = GROESSE_PX[groesse] || 220;
+  // Nach dem Laden: Hoch- oder Querformat bestimmen
+  function setSide() {
+    if (img.naturalWidth >= img.naturalHeight) {
+      img.style.maxWidth  = px + 'px';
+      img.style.maxHeight = '';
+    } else {
+      img.style.maxHeight = px + 'px';
+      img.style.maxWidth  = '';
+    }
+  }
+  if (img.complete && img.naturalWidth) {
+    setSide();
+  } else {
+    img.addEventListener('load', setSide, { once: true });
+  }
+}
+
+function werkZeile(w, index, ids) {
+  const seite = index % 2 === 0 ? '' : 'rechts';
+  const groesse = w.groesse || 's';
+  const medium = LANG === 'en' ? (w.medium_en || w.medium) : w.medium;
+
+  const metaItems = [
+    { label: ui('detail.jahr'),   val: w.jahr },
+    { label: ui('detail.medium'), val: medium },
+    { label: ui('detail.masse'),  val: w.masse },
+    ...(w.reihe ? [{ label: 'Reihe', val: w.reihe }] : []),
+  ].filter(m => m.val).map(m =>
+    `<li><span class="werk-zeile-meta-label">${m.label}</span><span>${m.val}</span></li>`
+  ).join('');
+
+  const anfrage = w.verfuegbar
+    ? `<div class="werk-zeile-anfrage"><button type="button" class="btn" data-contact-work="${w.id}">${ui('detail.anfrage')}</button></div>`
+    : '';
+
+  return `
+    <div class="werk-zeile ${seite}" data-groesse="${groesse}">
+      <div class="werk-zeile-bild" data-id="${w.id}">
+        <img src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
+      </div>
+      <div class="werk-zeile-info">
+        <h2 class="werk-zeile-titel">${w.titel}</h2>
+        <div class="werk-zeile-meta">
+          <ul class="werk-zeile-meta-list">${metaItems}</ul>
+          ${anfrage}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderListe(werke) {
+  const liste = document.getElementById('werke-liste');
+  if (!werke.length) {
+    liste.innerHTML = `<p class="no-results">${LANG === 'en' ? 'No works found.' : 'Keine Werke gefunden.'}</p>`;
+    return;
+  }
+  const ids = werke.map(w => w.id);
+  liste.innerHTML = werke.map((w, i) => werkZeile(w, i, ids)).join('');
+  liste.querySelectorAll('.werk-zeile').forEach(zeile => {
+    const img = zeile.querySelector('img');
+    const g   = zeile.dataset.groesse;
+    if (img && g) applyImageSize(img, g);
+    // Lightbox-Klick
+    const bild = zeile.querySelector('.werk-zeile-bild');
+    if (bild) bild.addEventListener('click', () => openDetail(bild.dataset.id, ALLE_IDS));
+  });
+}
+
+function renderAll(data) {
+  const basis = FILTER === 'verfuegbar'
+    ? data.werke.filter(w => w.verfuegbar)
+    : data.werke;
+  const sorted = buildSortedGrid(basis);
+  ALLE_IDS = sorted.map(w => w.id);
+  renderListe(sorted);
+}
+
+function onLangChange() {
+  if (DATA) renderAll(DATA);
+}
+
+async function init() {
+  applyI18n();
+  initNav(false);
+  initLightbox();
+  initContactInteractions();
+
+  const params = new URLSearchParams(location.search);
+  if (params.get('filter') === 'verfuegbar') {
+    FILTER = 'verfuegbar';
+    document.getElementById('filter-alle').classList.remove('active');
+    document.getElementById('filter-verfuegbar').classList.add('active');
+  }
+  const werkId = params.get('werk');
+
+  try {
+    const res = await fetch('data.json');
+    DATA = await res.json();
+    renderAll(DATA);
+    renderFooter(DATA);
+    if (werkId) openDetail(werkId);
+  } catch(e) {
+    console.error('data.json konnte nicht geladen werden:', e);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

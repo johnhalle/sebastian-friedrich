@@ -1,24 +1,40 @@
 {
   "meta": {
     "name": "Sebastian Friedrich",
-    "tagline": "",
+    "tagline": "Sebastian Friedrich malt Bilder, in denen sich Menschen zeigen, ohne sich ganz preiszugeben. Seine Figuren wirken präsent und zugleich zurückgenommen – als seien sie in ihre Räume hineingestellt und wüssten um den Blick, der sie fixiert. So wird Inszenierung bei Friedrich nicht zum Gegenteil von Authentizität, sondern zu ihrer Bedingung: Seine Malerei macht sichtbar, wie \"Echtheit\" heute entsteht – als lesbarer Effekt, als Pose, als sorgfältig komponierte Oberfläche.",
     "tagline_en": "",
     "vita": {
-      "text": "",
-      "text_en": "",
-      "ausbildung": "",
-      "ausbildung_en": ""
+      "text": "Sebastian Friedrich, * 1987, entdeckte früh seine Leidenschaft für die Kunst. Von 2009 bis 2018 studierte er an der Burg Giebichenstein Kunsthochschule Halle (Saale). Seitdem lebt und arbeitet er in Leipzig, wo er seine Arbeit kontinuierlich weiterentwickelt. Seine Werke waren bislang in Einzel- und Gruppenausstellungen unter anderem in der Galerie Irrgang, Galerie Westphal Berlin, Galerie X23, auf der Art Karlsruhe sowie im Halleschen Kunstverein zu sehen.",
+      "text_en": "Sebastian Friedrich, born in 1987, discovered his passion for art at an early age. From 2009 to 2018 he studied at Burg Giebichenstein University of Art and Design Halle. Since then he has lived and worked in Leipzig, where he continues to develop his practice. His works have been shown in solo and group exhibitions including Galerie Irrgang, Galerie Westphal Berlin, Galerie X23, Art Karlsruhe and the Hallescher Kunstverein.",
+      "ausbildung": "2009–2018 Studium an der Burg Giebichenstein Kunsthochschule Halle (Saale)",
+      "ausbildung_en": "2009–2018 Studies at Burg Giebichenstein University of Art and Design Halle",
+      "geboren": "1987",
+      "lebt_arbeitet": "Leipzig",
+      "lebt_arbeitet_en": "Leipzig",
+      "ausstellungen": [
+        "Hallescher Kunstverein",
+        "Art Karlsruhe",
+        "Galerie X23",
+        "Galerie Westphal Berlin",
+        "Galerie Irrgang"
+      ],
+      "ausstellungen_en": [
+        "Hallescher Kunstverein",
+        "Art Karlsruhe",
+        "Galerie X23",
+        "Galerie Westphal Berlin",
+        "Galerie Irrgang"
+      ]
     },
     "kontakt": {
       "email": "",
-      "instagram": "",
+      "instagram": "https://www.instagram.com/sebastiano_friedrich/",
       "newsletter_list_id": ""
     },
     "admin": {
       "passwordHash": ""
     }
   },
-
   "werke": [
     {
       "id": "urania-2022",
@@ -33,7 +49,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/urania-2022.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/urania-2022.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "melpomene-2023",
@@ -48,7 +66,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/melpomene-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/melpomene-2023.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "kalliope-2023",
@@ -63,7 +83,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/kalliope-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/kalliope-2023.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "thalia-2023",
@@ -78,7 +100,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/thalia-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/thalia-2023.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "clio-2023",
@@ -93,7 +117,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/clio-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/clio-2023.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "polyhymnia-2023",
@@ -108,7 +134,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/polyhymnia-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/polyhymnia-2023.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "erato-2024",
@@ -123,7 +151,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/erato-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/erato-2024.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "therpsichore-2024",
@@ -138,7 +168,9 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/therpsichore-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780737299/therpsichore-20.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "euterpe-2024",
@@ -153,14 +185,16 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/euterpe-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/euterpe-2024.jpg",
+      "reihe": "Die neun Musen",
+      "groesse": "s"
     },
     {
       "id": "ot-lotta-auf-sofa-2014",
-      "titel": "o.T. (Lotta auf Sofa)",
+      "titel": "o. T.",
       "jahr": 2014,
-      "masse": "",
-      "medium": "",
+      "masse": "30 × 35 cm",
+      "medium": "Öl auf MDF",
       "medium_en": "",
       "gerahmt": false,
       "serie": null,
@@ -168,7 +202,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/ot-lotta-auf-sofa-2014.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/ot-lotta-auf-sofa-2014.jpg",
+      "groesse": "s"
     },
     {
       "id": "maskiert-2019",
@@ -183,7 +218,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maskiert-2019.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maskiert-2019.jpg",
+      "groesse": "m"
     },
     {
       "id": "die-nachricht-2022",
@@ -198,7 +234,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-nachricht-2022.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-nachricht-2022.jpg",
+      "groesse": "l"
     },
     {
       "id": "girls-3-2022",
@@ -213,7 +250,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-3-2022.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-3-2022.jpg",
+      "groesse": "l"
     },
     {
       "id": "die-naeherin-2025",
@@ -228,7 +266,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-naeherin-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-naeherin-2025.jpg",
+      "groesse": "l"
     },
     {
       "id": "sketching-2024",
@@ -243,7 +282,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/sketching-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/sketching-2024.jpg",
+      "groesse": "l"
     },
     {
       "id": "girls-2018",
@@ -258,7 +298,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2018.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2018.jpg",
+      "groesse": "m"
     },
     {
       "id": "girls-2-2020",
@@ -273,7 +314,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2-2020.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2-2020.jpg",
+      "groesse": "l"
     },
     {
       "id": "medusa-2025",
@@ -288,7 +330,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/medusa-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/medusa-2025.jpg",
+      "groesse": "l"
     },
     {
       "id": "perseus-2025",
@@ -303,7 +346,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/perseus-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/perseus-2025.jpg",
+      "groesse": "l"
     },
     {
       "id": "zwischenphase-2025",
@@ -318,7 +362,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2025.jpg",
+      "groesse": "m"
     },
     {
       "id": "susi-2016",
@@ -333,7 +378,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/susi-2016.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/susi-2016.jpg",
+      "groesse": "s"
     },
     {
       "id": "montag-0830-uhr-2025",
@@ -348,13 +394,14 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/montag-0830-uhr-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/montag-0830-uhr-2025.jpg",
+      "groesse": "l"
     },
     {
       "id": "shams-2025",
       "titel": "Shams",
       "jahr": 2025,
-      "masse": "30 × 40 cm",
+      "masse": "40 × 30 cm",
       "medium": "Öl auf MDF",
       "medium_en": "Oil on MDF",
       "gerahmt": true,
@@ -363,7 +410,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/shams-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/shams-2025.jpg",
+      "groesse": "s"
     },
     {
       "id": "jennif-2015",
@@ -378,7 +426,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/jennif-2015.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/jennif-2015.jpg",
+      "groesse": "s"
     },
     {
       "id": "maedchen-auf-sofa-2014",
@@ -393,7 +442,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maedchen-auf-sofa-2014.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maedchen-auf-sofa-2014.jpg",
+      "groesse": "s"
     },
     {
       "id": "elise-3-2016",
@@ -408,7 +458,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-3-2016.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-3-2016.jpg",
+      "groesse": "s"
     },
     {
       "id": "lotta-2018",
@@ -423,7 +474,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/lotta-2018.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/lotta-2018.jpg",
+      "groesse": "s"
     },
     {
       "id": "senhora-rodriguez-3-2024",
@@ -438,7 +490,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024.jpg",
+      "groesse": "s"
     },
     {
       "id": "senhora-rodriguez-4-2024",
@@ -453,7 +506,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-4-2024.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-4-2024.jpg",
+      "groesse": "s"
     },
     {
       "id": "atelier-1-2025",
@@ -468,7 +522,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-1-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-1-2025.jpg",
+      "groesse": "xs"
     },
     {
       "id": "atelier-2-2025",
@@ -483,7 +538,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-2-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-2-2025.jpg",
+      "groesse": "xs"
     },
     {
       "id": "atelier-3-2025",
@@ -498,7 +554,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-3-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-3-2025.jpg",
+      "groesse": "s"
     },
     {
       "id": "atelier-4-2025",
@@ -513,7 +570,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-4-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-4-2025.jpg",
+      "groesse": "s"
     },
     {
       "id": "nachtschicht-2026",
@@ -528,7 +586,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": true,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2026.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2026.jpg",
+      "groesse": "xs"
     },
     {
       "id": "nachtschicht-2-2026",
@@ -543,7 +602,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": true,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2-2026.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2-2026.jpg",
+      "groesse": "s"
     },
     {
       "id": "weiblicher-ruecken-2025",
@@ -558,7 +618,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/weiblicher-ruecken-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/weiblicher-ruecken-2025.jpg",
+      "groesse": "s"
     },
     {
       "id": "maennlicher-ruecken-2025",
@@ -573,7 +634,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maennlicher-ruecken-2025.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maennlicher-ruecken-2025.jpg",
+      "groesse": "s"
     },
     {
       "id": "zwischenphase-2-2026",
@@ -588,7 +650,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": true,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2-2026.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2-2026.jpg",
+      "groesse": "m"
     },
     {
       "id": "marco-2026",
@@ -603,7 +666,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": true,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/marco-2026.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/marco-2026.jpg",
+      "groesse": "s"
     },
     {
       "id": "maske-2016",
@@ -618,7 +682,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maske-2016.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maske-2016.jpg",
+      "groesse": "s"
     },
     {
       "id": "moana-2023",
@@ -633,7 +698,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/moana-2023.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/moana-2023.jpg",
+      "groesse": "s"
     },
     {
       "id": "fraeulein-schmidt-2016",
@@ -648,7 +714,8 @@
       "verfuegbar": true,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/fraeulein-schmidt-2016.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/fraeulein-schmidt-2016.jpg",
+      "groesse": "s"
     },
     {
       "id": "anna-2011",
@@ -663,7 +730,8 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/anna-2011.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/anna-2011.jpg",
+      "groesse": "xs"
     },
     {
       "id": "elise-1-2016",
@@ -678,24 +746,333 @@
       "verfuegbar": false,
       "preis": null,
       "neu": false,
-      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-1-2016.jpg"
+      "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-1-2016.jpg",
+      "groesse": "s"
     }
   ],
-
   "katalog": [
     {
       "id": "sebastian-katalog",
-      "titel": "Sebastian Friedrich. ON STAGE. Malerei",
-      "titel_en": "Sebastian Friedrich. ON STAGE. Paintings",
-      "jahr": 2024,
-      "text_de": "",
-      "text_en": "",
-      "autoren": ["Christian Drobe", "John Palatini"],
-      "cover": "https://res.cloudinary.com/def9qgwtw/image/upload/001.jpg",
-      "reader_pfad": "https://res.cloudinary.com/def9qgwtw/image/upload/",
-      "pdf": "pdfs/sebastian-katalog.pdf"
+      "titel": "Sebastian Friedrich: ON STAGE. Malerei",
+      "titel_en": "Sebastian Friedrich: ON STAGE. Paintings",
+      "jahr": 2026,
+      "text_de": "Der Katalog ist 2026 erschienen und vermittelt erstmals einen repräsentativen Überblick zum Werk Sebastian Friedrichs.",
+      "text_en": "Published in 2026, the catalogue offers the first representative overview of Sebastian Friedrich's work.",
+      "autoren": [
+        "Christian Drobe",
+        "John Palatini"
+      ],
+      "cover": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780737694/001.jpg",
+      "reader_pfad": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780737694/",
+      "pdf": "",
+      "teaser": "Der Katalog ist 2026 erschienen und vermittelt erstmals einen repräsentativen Überblick zum Werk Sebastian Friedrichs.",
+      "teaser_en": "Published in 2026, the catalogue offers the first representative overview of Sebastian Friedrich's work.",
+      "herausgeber": "John Palatini",
+      "herausgeber_en": "John Palatini",
+      "verlag": "Mitteldeutscher Verlag, Halle (Saale)",
+      "isbn": "978-3-68948-133-9",
+      "reihe": "Hallescher Kunstverein, Band 128",
+      "ausstellung": "ON STAGE. SEBASTIAN FRIEDRICH. MALEREI",
+      "ausstellung_ort": "Opernhaus Halle",
+      "ausstellung_zeitraum": "20.09.2025–10.03.2026",
+      "reader_base_url": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780737694/",
+      "reader_total_pages": 25,
+      "bestellen_betreff": "Katalog bestellen: Sebastian Friedrich: ON STAGE. Malerei",
+      "bestellen_nachricht": "Hallo Sebastian Friedrich,\n\nich möchte den Katalog Sebastian Friedrich: ON STAGE. Malerei bestellen und bitte um weitere Informationen.\n\n",
+      "aufsatz": {
+        "titel": "ON STAGE / BACKSTAGE",
+        "untertitel": "Sebastian Friedrichs Malerei inszenierter Authentizität",
+        "autoren": [
+          "Christian Drobe",
+          "John Palatini"
+        ],
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Sebastian Friedrich malt Menschen, die in seinen Bildern selbstbewusst auftreten – nicht mit großen Gesten, sondern mit einer leisen, wohlkalkulierten Präsenz in sorgsam arrangierten Räumen. Der Blick des Malers hält Distanz, und genau diese Distanz macht die Inszenierung sichtbar. Die Modelle wirken nie so, als gingen sie im gezeigten Moment ganz auf. Vielmehr behaupten sie sich, indem sie etwas zurückzuhalten scheinen. Statt auf dramatische Handlung setzt diese Malerei auf Momente des Dazwischen, in denen wir ein Gesicht, eine Haltung oder einen eher beiläufigen Blick wahrnehmen und zugleich spüren, wie präzise alles komponiert ist. „Mich interessiert der Moment, in dem jemand ganz bei sich zu sein scheint“, sagt Friedrich und beschreibt damit einen Schwebezustand. Dem Verb „scheinen“ kommt dabei eine zentrale Bedeutung zu, denn Friedrich behauptet gerade keine Wahrheiten „hinter“ der Oberfläche. Vielmehr sind die schönen Oberflächen selbst das Thema seiner Malerei."
+          },
+          {
+            "type": "p",
+            "text": "Die Dramaturgie dieses Bandes folgt dieser Beobachtung. Im ersten Kapitel, ON STAGE, versammeln sich Szenen, in denen Menschen privat wirken, ohne es wirklich zu sein. Die Figuren scheinen ganz mit sich beschäftigt – zeichnend, wartend, arbeitend, nachdenklich versunken –, zugleich wirken sie „gestellt“, als wüssten sie um den Blick des Künstlers, der sie fixiert. Oft trägt ein Moment vor oder nach einem Ereignis die Szene. In Die Nachricht geht der Blick der wie für einen Ball gekleideten Figur ins Leere. Was wird sie kurz zuvor gelesen haben – oder wartet sie noch auf eine Nachricht? Sketching macht das Zeichnen zur ostentativen Handlung, wenn sich die Frau auf dem heimischen Sofa einrichtet, das wie gemacht scheint für diese Tätigkeit. Maskiert bezieht sich auf verschiedene Rollen ein und derselben Person, die hier miteinander verschmolzen erscheinen. Im Bild Die Näherin sind schließlich die Arbeit an einer Inszenierung und die inszenatorische Praxis des Selbst miteinander verschränkt. Ein Torso, Werkzeuge, Stoffe, Schnittmuster füllen das Atelier. Möglicherweise ist es ein Kostüm, das die Näherin hier in Handarbeit herstellt. Zugleich ist der Raum ihre Bühne, auf der sie sich durch ihren Körper, ihre auffällige Kleidung, ihren Schmuck, die Requisiten und ihr Tun zeigt."
+          },
+          {
+            "type": "p",
+            "text": "Für die Entwicklung seiner Gemälde verfügt Sebastian Friedrich über einen umfassenden Ausstattungsfundus. Ausgehend von einer ersten Bildidee tritt er in seinem Atelier oder an anderen Orten in einen Dialog mit seinen Modellen, die sich auch mit eigenen Kleidungsstücken und Vorschlägen einbringen. Outfits, Requisiten, Licht und Bildausschnitt werden gemeinsam komponiert und festgelegt. Der Künstler fertigt zunächst Fotografien an, die als Ausgangsmaterial für den malerischen Prozess dienen – einen Prozess, in dem sich das Gemälde merklich von der fotografischen Vorlage lösen kann. Ziel des gesamten Vorgangs ist das Herantasten an einen ästhetischen Kipppunkt: an jenen Moment, in dem die Setzung der Inszenierung spürbar bleibt und zugleich der Eindruck von Unmittelbarkeit entsteht – als könne die Szene „von selbst“ sein."
+          },
+          {
+            "type": "p",
+            "text": "Damit berührt Friedrich ein Paradox der gegenwärtigen digitalen Bildkultur: die Sehnsucht nach Authentizität unter den Bedingungen von Social Media – und damit ihrer Kopplung an Aufmerksamkeit und Klicks. Was hier „echt“ heißen soll, ist selten ein Zustand; es ist eher ein Effekt, eine bestimmte Lesbarkeit. Authentisch wirkt, was ungemacht erscheint: der zufällige Blick, das Unaufgeräumte, der Moment „ganz bei sich“. Doch gerade diese Unmittelbarkeit ist heute eine Form der Inszenierung. Auch die Gegenbewegungen – „no filter“, ungeschminkt, Normcore – produzieren nicht das Jenseits der Darstellung, sondern einen weiteren Darstellungsmodus. In einem System, in dem Sichtbarkeit ökonomisch verwertbar ist, wird Authentizität damit zugleich Stil und Währung. Entscheidend ist dabei, dass diese Herstellung von Authentizität gewissen Codes folgt – und dass diese Codes von Produzenten wie Konsumenten zugleich beherrscht und durchschaut werden. Gerade weil Authentizität über Zeichen lesbar werden muss, kippt sie in Konvention: Die gesuchte individuelle Einzigartigkeit lässt sich kaum erreichen, weil sie sich in den Formen ihrer Darstellung bereits verallgemeinert. Darin liegt eine latente Bedrohlichkeit – zumindest für alle, die Social Media als Ort authentischer Selbstdarstellung missverstehen. Friedrich reagiert auf diese Omnipräsenz medialer Selbstbilder nicht mit Abwehr, sondern mit leiser Zuspitzung: Seine Figuren wirken gerade dort wahrhaftig, wo ihre Theatralität offenkundig ist. Indem die Figuren in seinen Bildern oft wie hineingestellt in ihre Räume wirken, macht die Malerei ein Gefühl von Unfreiheit und Enge spürbar: Nähe erscheint als arrangierte Nähe, Präsenz als etwas, das hergestellt werden muss. Und genau darin liegt die Idee dieser Malerei: Sie sortiert nicht moralisch zwischen „echt“ und „unecht“, sondern zeigt in kleinen Szenen, wie Authentizität performativ erzeugt wird – als Annäherung, die den Punkt des Echten nie einfach besitzt. Der ästhetische Kipppunkt liegt in dieser Schwebe: zwischen sichtbarer Konstruktion und ihrer gleichzeitigen Lesbarkeit als „echt“."
+          },
+          {
+            "type": "p",
+            "text": "Gerade vor diesem Hintergrund lässt sich eine entscheidende Perspektivverschiebung der letzten Jahre gut an einer älteren Auftragsarbeit erkennen. Maske (2016) zeigt ebenfalls eine Inszenierung, folgt jedoch noch deutlich den Intentionen der dargestellten Person. Ein Mann sitzt in einem studienhaften Interieur, umgeben von Bücherstapeln; in der Hand hält er eine japanische Noh-Maske. Sie funktioniert hier nicht als beliebiges Requisit oder kunsthistorisches Zitat, sondern als ernsthafte Repräsentation eines biografischen und professionellen Bezugs: Der Dargestellte ist Ethnologe, seine Faszination für die Kultur Japans ist Teil seiner Identität. In diesem Bild „gibt“ sich jemand zu erkennen – nicht nur, indem er sich so zeigt, wie er gesehen werden will, sondern indem das Bild als Aussage über ihn lesbar wird. In den späteren Werken dieses Bandes ist genau diese Intentionalität weitgehend suspendiert: Die Figuren präsentieren gerade keine eindeutige Selbstauskunft, keine „Botschaft“ über ihr Inneres."
+          },
+          {
+            "type": "figure",
+            "work_id": "maske-2016",
+            "caption": "Maske, 2016, 40 × 27,5 cm, Öl auf MDF"
+          },
+          {
+            "type": "p",
+            "text": "Dass die mit diesem Katalog verknüpfte Ausstellung in der Oper Halle ihren Ort fand, ist daher mehr als ein schöner Zufall. Die Bühne ist hier nicht nur Metapher, sondern ein realer Resonanzraum – ein Haus, in dem Körper, Rollen, Affekte und Erzählungen über Licht, Kostüm, Geste, Musik und Stimme zum Ausdruck gebracht werden. Friedrichs Bilder stehen dieser Logik nahe, ohne Theater zu malen. Sie zeigen keine Aufführung, sondern die Bedingungen des Auftritts: das Bewusstsein, gesehen zu werden; die Konzentration vor der Handlung; ein „Jetzt“, das noch nicht in Bewegung ist und doch bereits Spannung trägt."
+          },
+          {
+            "type": "p",
+            "text": "Von hier aus öffnet sich der zweite Akt: MODERN MYTHS. Der Musen-Zyklus – Urania, Melpomene, Kalliope, Thalia, Clio, Polyhymnia, Erato, Terpsichore, Euterpe – bildet ein geschlossenes Projekt aus kleinformatigen Tafelbildern. Die neun Musen gehören zu jenem ikonografischen Fundus, der seit der Antike immer wieder für verschiedene Kontexte aktiviert wurde: als Allegorien, Idealfiguren, Personifikationen der Künste, als Ordnungssystem des Wissens. Friedrich nimmt diese Namen auf – aber er malt gerade keine Allegorien. Er porträtiert reale Modelle, die in seinem Leipziger Atelier als Musen agieren, mit all den alltäglichen Requisiten, die in den Regalen seines Ateliers stehen. Der Mythos wird damit nicht rekonstruiert, sondern in die Gegenwart überführt: als Rolle, als Pose, als Setzung."
+          },
+          {
+            "type": "p",
+            "text": "Die Namen aus dem Mythos rufen eine maximale Aura auf – nur um im gemalten Bild sofort auf Gegenwart zu treffen. Friedrich setzt der Erwartung einer Muse keinen allegorischen Körper entgegen, sondern einen konkreten: heutige Haltungen, heutige Kleidung, bewusst gewählte Requisiten, neonfarbenes Licht. Die Modelle sind teils langjährige Bekannte und Freundinnen, teils Personen, die Friedrich über Instagram gefunden hat: Influencerinnen, deren Selbstinszenierungspraxis er in seinem Atelier aufnimmt und in Malerei überführt."
+          },
+          {
+            "type": "p",
+            "text": "Dass die Figuren erkennbar verkleidet sind, ist dabei Methode. In Thalia wirkt die Dargestellte – trotz oder gerade wegen der Maske als Erkennungszeichen – wie auf dem Weg zu einem „kinky rave“. Doch die Bewegung bleibt im Bild angehalten: Der Betrachter weiß, dass es eine Inszenierung ist, die nicht in Handlung umschlägt. Genau darin liegt die Spannung: Die Muse erscheint als Gegenwartsfigur, die eine Rolle übernimmt und sie zugleich offenlegt – als Differenz zwischen Rolle und Person."
+          },
+          {
+            "type": "p",
+            "text": "Diese Differenz aktiviert den Blick des Publikums, das oft mehr Kunstgeschichte und Vorstellung davon mitbringt, was eine „Muse“ sein soll, als die Bilder selbst behaupten. Dem Musen-Topos ist spätestens im 20. Jahrhundert ein fester Sinn entzogen worden; er wurde zur Projektionsfläche. Friedrichs erneute Benennungen zeigen, wie solche Zuschreibungen heute funktionieren: als Rollensetzung, die im Moment entsteht und im Bild fixiert wird – und gerade dadurch ihre Gemachtheit nicht verliert. Der Mythos ist keine Verpflichtung, sondern Material: ein Repertoire, das im Atelier in die Gegenwart übersetzt wird."
+          },
+          {
+            "type": "p",
+            "text": "Dass ein Maler des 21. Jahrhunderts die Musen als Sujet einfach wählen kann, ist selbst ein kunsthistorisches Statement. Es scheint kaum noch eine Konvention zu existieren, die verbindlich sagt: Tu dies, lasse das; male so, nicht anders; zitiere korrekt oder zitiere gar nicht. Der Imperativ der Gegenwart lautet vielmehr: Wähle dir dein Thema, wie es dir gemäß ist. Diese Freiheit betrifft nicht nur Motive, sondern auch das Medium und seine Register – und damit Friedrichs Entscheidung für eine figurative Malerei."
+          },
+          {
+            "type": "p",
+            "text": "Figürliche, erkennbar realistische Kunst wurde lange als konservativ verschrien, immer wieder politisch in Dienst genommen und korrumpiert – paradigmatisch im sozialistischen Realismus –, weshalb sie in Teilen der Nachkriegskunst als ästhetisch kompromittiert galt. Und doch kehrt sie beharrlich wieder und erfreut sich ungebrochener Präsenz. Nicht umsonst kursiert in der Gegenwartskunst der Begriff der „zombie figuration“: jene wiederkehrenden Revivals der Figur, die sich jeder endgültigen Verabschiedung entziehen."
+          },
+          {
+            "type": "p",
+            "text": "In diesem Sinn arbeitet Friedrich mit einem souveränen Zugriff auf alles, was ihn umgibt – Gegenwart, Vergangenheit, Popkultur, Mythos, Alltag, Stile – und übersetzt es in seine Tonlage, bis hin zu den Interieurs Jan Vermeers, die er in einem Selbstbildnis aufruft. Friedrich erscheint weniger als Bewahrer einer Tradition denn als Souverän eines Repertoires: Motive werden aufgelegt, gemixt, neu gerahmt und neu aufgeladen. Diese Figur des Künstlers als DJ ist hier keine bloße Pop-Metapher, sondern eine Beschreibung aktueller kultureller Praxis. Entscheidend ist nicht die ohnehin illusionäre Behauptung von Originalität, sondern die Präzision der Setzung."
+          },
+          {
+            "type": "p",
+            "text": "Diese Freiheit des Zugriffs hat kunsthistorische Vorgeschichten, besonders seit der Postmoderne, in der Appropriation zur Methode und zum Symptom wurde. Sherrie Levine verschob Autorenschaft, indem sie Fotografien fotografierte; Sigmar Polke montierte Raster, Stile und Zitate, um Bildwahrheiten zu unterlaufen; David Salle überlagerte Bildsprachen aus Kunstgeschichte, Comic und Werbung; Cindy Sherman spielte Rollenbilder zwischen Film, Mode und Malereigeschichte durch. Bei Jeff Koons wird das kulturelle Bildinventar selbst zur Oberfläche, die zugleich verführt und entlarvt. Wichtig ist: Dieses Verfahren ist nicht bloß ironisch. Es erlaubt, Geschichte als Material zu benutzen, ohne sich ihr zu unterwerfen – und es erlaubt, Gegenwart als Bildkultur ernst zu nehmen, ohne in bloße Illustration zu kippen. Friedrichs Musen stehen in diesem Horizont, aber sie tun es leise: nicht als Theoriegestus, sondern als selbstverständliche Wahl eines Sujets, das funktioniert, weil es im Kopf der Betrachter weiterarbeitet. Das Zitat wird nicht ausgestellt, sondern benutzt."
+          },
+          {
+            "type": "p",
+            "text": "Die Logik von MODERN MYTHS setzt sich in den neueren Bildern Perseus und Medusa fort. Auch hier wird Mythos nicht heroisch erzählt, sondern in zeitgenössische Figurentypen übersetzt. Perseus erscheint mit Schwert – aber im Bademantel: ein Held, schlaftrunken im Alltag gelandet. Medusa begegnet uns hingegen frontal, in einer Adidas-Sportjacke, als käme sie direkt aus einem Szeneviertel herüber: nicht als monströse Fratze, sondern als souveränes Subjekt, als Gegenwartsfigur. Der Hintergrund wirkt wie eine virtuelle Bühne – eine neutrale Fläche, die wie die neonfarbenen Hintergründe der Musen eher Stimmung als konkreter Ort ist. Kunsthistorisch wurde Medusa oft als Schrecken und Pathos gefasst, häufig gebunden an eine männliche Blickordnung und an Gesten der Blickabwehr; Friedrich entzieht dem Motiv den historischen Pomp und ersetzt die Dramatik durch eine nüchterne Präsenz. Man könnte von einer approximativen Pegelverschiebung sprechen: Der Mythos bleibt erkennbar, aber seine Lautstärke, sein Pathos, seine narrative Eindeutigkeit werden heruntergeregelt. In dieser Verschiebung wird Medusa zur zeitgenössischen Ikone: gefährlich, faszinierend, kühl, nicht zu durchschauen – und zugleich ganz im Heute verankert. Nicht der Schrecken dominiert, sondern die Haltung – ein Selbstbewusstsein, das sich nicht erklären muss."
+          },
+          {
+            "type": "p",
+            "text": "Hier schließt sich der Kreis zum Thema der vermeintlichen Authentizität. In einer Kultur, in der Identitäten in digitalen Bildwelten permanent entworfen und überarbeitet werden, wird auch Mythos zur Ressource der Selbstgestaltung. Man lädt sich Attribute auf, testet Rollen, ohne sich endgültig festzuschreiben. Friedrich macht diese Praxis sichtbar, ohne sie zu denunzieren. Seine Figuren wirken nicht „unecht“, weil sie inszeniert sind. Sie wirken wie Menschen, die ihre Rollen kennen, sie aber nicht vollständig kontrollieren – und nicht in ihnen aufgehen. Häufig sind es Frauen, die sich zurechtmachen, als würden sie gleich aufbrechen – und doch im Bildraum verharren, als sei die Bewegung ausgesetzt. Dieses Zögern, dieses Als-ob, erzeugt Nähe: Die Bilder sind nicht kühl, sondern kontrolliert nah; nicht sentimental, sondern aufmerksam für kleine Verschiebungen in Blick, Pose und Oberfläche. Aufrichtigkeit entsteht hier nicht trotz, sondern durch Inszenierung."
+          },
+          {
+            "type": "p",
+            "text": "An dieser Stelle lässt sich auch die Anpassungsfähigkeit der Malerei erkennen, gerade der figurativen, wie sie zuletzt Isabelle Graw beschrieben hat: Figurative Malerei ist beweglich, in verschiedenen Kontexten kombinierbar; sie ist zugleich Objekt, Bild und Ware – immer wieder totgesagt und doch immer wiedergekehrt. Für Friedrich ist diese Flexibilität eine ästhetische Chance. Das Tafelbild wird zum Speicher von Zeit: Es verlangsamt, was digital beschleunigt wird; es macht spürbar, dass „das Bild“ nicht nur Information, sondern Erfahrung sein kann – eine, die sich erst im Schauen entfaltet. Dass Friedrich häufig nach Fotografien arbeitet, gehört in diese Konstellation. Fotografie ist im 21. Jahrhundert nicht nur Hilfsmittel, sondern Grundbedingung von Wahrnehmung: Wir sehen die Welt als unablässigen Strom von Bildern auf unseren Displays, wir speichern sie als Bilder und wir entwerfen uns als Bilder. Wenn Friedrich aus vielen Aufnahmen auswählt und komponiert, übersetzt er nicht einfach „Foto in Malerei“. Er verschiebt das Bildregime: vom schnellen Zugriff zur langsamen Entscheidung, vom Klick zur Schichtung, von der scheinbaren Evidenz zur sichtbar gemachten Konstruktion. Malerei macht nicht „wahrer“ als Fotografie; sie macht die Bedingungen von Wahrheit erfahrbar, indem sie sie in Arbeit übersetzt: in Zeit, in Korrektur, in Entscheidung."
+          },
+          {
+            "type": "p",
+            "text": "Nach den Rollen der Bühne und des Mythos wendet sich das dritte Kapitel, THE FIGURE, dem zu, was Rollen überhaupt erst trägt: Körper, Haltung, Oberfläche. Rückenansichten führen die Figur an eine Grenze: Das Gesicht fehlt, und gerade dadurch werden Haut, Schulter, Nacken, Wirbelsäule zur Erzählung. Der Körper erscheint nicht als neutraler Akt, sondern als Schauplatz des malerischen Repertoires. Figürliche Malerei steht dabei traditionell in einer Ausbildungslinie, die über Körperstudien läuft: eine Praxis des Sehens und Übens, die Wiederholung und Korrektur einschließt, bevor daraus größere Kompositionen entstehen. In dieser Werkgruppe wirkt Friedrichs Malerei besonders konzentriert: weniger Narration, mehr Materialität – wie Farbe aufliegt, wie Licht sich in Haut übersetzt, wie ein Hintergrund eine Figur isoliert oder trägt. Das Kapitel wirkt wie eine Verlangsamung nach den großen Namen des Mythos – und zeigt doch, dass Körper selbst immer schon erzählt sind."
+          },
+          {
+            "type": "p",
+            "text": "Schließlich führt BACKSTAGE die Dramaturgie in die Selbstreflexion. Atelierbilder und Selbstporträts öffnen den Blick hinter die Bühne, ohne die Bühne zu verlassen. Backstage ist nicht der Ort einer Wahrheit „hinter“ der Maske, sondern ein weiterer Raum der Inszenierung – vielleicht der intimste. Denn auch der Blick auf das eigene Tun, auf Werkzeuge, Oberflächen, Requisiten ist eine Form der Selbstbehauptung: Der Künstler zeigt, wie er sich zeigt. Die Atelierbilder markieren diesen Raum als Arbeitsbühne: nicht als romantisches Künstlerklischee, sondern als Ort der Entscheidungen, der Korrekturen, der Wiederholungen. Besonders deutlich wird das in den stillen Bildern einer Nachtschicht: Dosen, Süßigkeiten, kleine Gegenstände – und eine Digitaluhr, die Zeit sichtbar macht und damit Arbeit. BACKSTAGE ist keine Entlarvung, sondern ein zweiter Modus von Präsenz, in dem die künstlerische Arbeit selbst im Vordergrund steht."
+          },
+          {
+            "type": "p",
+            "text": "Friedrichs Malerei kommentiert eine Zeit, in der Rollen, Bilder und Selbstbilder permanent ineinander übergehen. Modern ist sie, weil sie nicht zwischen „echter“ Innerlichkeit und „falscher“ Pose sortiert. Sie zeigt vielmehr, dass Pose ein Medium ist: ein Werkzeug, um sich in der Welt zu orientieren, sich zu schützen, sich zu zeigen, sich zu entwerfen. Zwischen Bühne und Backstage, zwischen Muse und Modell, zwischen Mythos und Alltag verschiebt Friedrich den Akzent von der Frage „Ist das echt?“ zur Frage „Wie wird Echtheit gemacht?“. Und vielleicht liegt darin – gerade im Bewusstsein des Gemachten – eine neue Form von Aufrichtigkeit: eine, die nicht behauptet, jenseits der Inszenierung zu stehen, sondern in ihr die Gegenwart erkennt."
+          }
+        ]
+      },
+      "preis": "20 €",
+      "preis_en": "€20",
+      "start_meta": "2026 · Hrsg. v. John Palatini",
+      "start_meta_en": "2026 · Ed. by John Palatini"
     }
   ],
-
-  "news": []
+  "news": [
+    {
+      "id": "tour-de-franz-offenes-atelier-2026",
+      "datum": "2026-05-30",
+      "jahr": 2026,
+      "kategorie": "Offenes Atelier",
+      "kategorie_en": "Open Studio",
+      "titel": "Tour de Franz",
+      "titel_en": "Tour de Franz",
+      "ort": "Franz-Flemming-Straße, Leipzig",
+      "veranstalter": "Teilnehmende Künstler*innen",
+      "zeitraum": "30.–31. Mai 2026",
+      "zeitraum_en": "30–31 May 2026",
+      "text": "Am 30. und 31. Mai 2026 öffnete die Ateliergemeinschaft in der Franz-Flemming-Straße wieder ihre Türen für ein Wochenende der Kunst, Musik und Kultur. Einmal im Jahr findet dort die Tour de Franz statt, bei der 30 bis 40 Künstler*innen ihre Arbeiten in vier großen ehemaligen Fabrikgebäuden präsentieren.",
+      "text_en": "",
+      "titelbild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/news-2026-offenes-atelier.jpg",
+      "bilder": [
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/news-2026-offenes-atelier.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        }
+      ],
+      "pdf": "",
+      "pdf_label": "",
+      "url": "https://www.franz-flemming.de/",
+      "url_label": "Website Tour de Franz",
+      "url_label_en": "Tour de Franz website",
+      "tags": [
+        "Offenes Atelier",
+        "Leipzig"
+      ]
+    },
+    {
+      "id": "katalogpraesentation-oper-halle-2026",
+      "datum": "2026-03-07",
+      "jahr": 2026,
+      "kategorie": "Präsentation",
+      "kategorie_en": "Presentation",
+      "titel": "Katalogpräsentation „Sebastian Friedrich – ON STAGE. Malerei“",
+      "titel_en": "Catalogue presentation “Sebastian Friedrich – ON STAGE. Paintings”",
+      "ort": "Oper Halle",
+      "veranstalter": "Hallescher Kunstverein e. V.",
+      "zeitraum": "7. März 2026",
+      "zeitraum_en": "7 March 2026",
+      "text": "In der Oper Halle wurde der erste Katalog zu Sebastian Friedrich vorgestellt. Die im Mitteldeutschen Verlag erschienene Publikation versammelt auf 72 Seiten Werke aus rund zehn Jahren und eröffnet einen repräsentativen Einblick in das künstlerische Schaffen des Malers.",
+      "text_en": "",
+      "titelbild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780741224/news-2026-katalog-oper.png",
+      "bilder": [
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780741224/news-2026-katalog-oper.png",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        },
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/news-2026-katalog-oper-2.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        }
+      ],
+      "pdf": "",
+      "pdf_label": "",
+      "url": "https://mitteldeutscherverlag.de/component/virtuemart/friedrich,-sebastian-on-stage-detail?Itemid=208",
+      "url_label": "Zum Verlag",
+      "url_label_en": "Publisher",
+      "tags": [
+        "Katalog",
+        "Oper Halle"
+      ],
+      "internal_url": "katalog.html",
+      "internal_label": "Zum Katalog",
+      "internal_label_en": "Catalogue"
+    },
+    {
+      "id": "ausstellung-on-stage-oper-halle-2025",
+      "datum": "2025-09-20",
+      "jahr": 2025,
+      "kategorie": "Einzelausstellung",
+      "kategorie_en": "Solo exhibition",
+      "titel": "Sebastian Friedrich – ON STAGE. Malerei",
+      "titel_en": "Sebastian Friedrich – ON STAGE. Paintings",
+      "ort": "Oper Halle",
+      "veranstalter": "Hallescher Kunstverein e. V.",
+      "zeitraum": "September 2025 – März 2026",
+      "zeitraum_en": "September 2025 – March 2026",
+      "text": "Die Ausstellung „ON STAGE“ zeigte Malerei des in Wittenberg geborenen und in Leipzig arbeitenden Künstlers Sebastian Friedrich. Im Zentrum standen das Verhältnis von Inszenierung, Selbstbild und Authentizität sowie wichtige Werkgruppen wie die neun Musen, Perseus und Medusa.",
+      "text_en": "",
+      "titelbild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780741220/news-2025-ausstellung-oper-bild-1.jpg",
+      "bilder": [
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780741221/news-2025-ausstellung-oper-plakat.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        },
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780741220/news-2025-ausstellung-oper-bild-1.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        },
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/news-2025-ausstellung-oper-bild-2.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        }
+      ],
+      "pdf": "https://www.hallescher-kunstverein.de/files/cto_layout/img/Ausstellungen/2025%20Sebastian%20Friedrich/Flyer%20Friedruck.pdf",
+      "pdf_label": "Flyer / PDF",
+      "pdf_label_en": "Flyer / PDF",
+      "url": "https://www.hallescher-kunstverein.de/2025-sebastian-friedrich.html",
+      "url_label": "Website Kunstverein",
+      "url_label_en": "Kunstverein website",
+      "tags": [
+        "Gegenwartskunst",
+        "Malerei"
+      ]
+    },
+    {
+      "id": "blurring-ars-avanti-2025",
+      "datum": "2025-02-14",
+      "jahr": 2025,
+      "kategorie": "Gruppenausstellung",
+      "kategorie_en": "Group exhibition",
+      "titel": "Blurring",
+      "titel_en": "Blurring",
+      "ort": "Ars Avanti / Alte Handelsschule, Leipzig",
+      "veranstalter": "Ars Avanti",
+      "zeitraum": "14.–28. Februar 2025",
+      "zeitraum_en": "14–28 February 2025",
+      "text": "Gruppenausstellung mit Diego Palacios, Sebastian Friedrich und Johannes Traub in den Räumen von Ars Avanti in der Alten Handelsschule Leipzig.",
+      "text_en": "",
+      "titelbild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840259/news-2025-blurring.jpg",
+      "bilder": [
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840259/news-2025-blurring.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        }
+      ],
+      "pdf": "",
+      "pdf_label": "",
+      "url": "https://www.ktmagazin.de/blurring-leipzig/",
+      "url_label": "Zum Beitrag",
+      "url_label_en": "Article",
+      "tags": [
+        "Gruppenausstellung",
+        "Leipzig"
+      ]
+    },
+    {
+      "id": "fog-friends-of-the-gallery-x23-2025",
+      "datum": "2025-01-23",
+      "jahr": 2025,
+      "kategorie": "Gruppenausstellung",
+      "kategorie_en": "Group exhibition",
+      "titel": "FOG – Friends of the Gallery",
+      "titel_en": "FOG – Friends of the Gallery",
+      "ort": "X23 Galerie",
+      "veranstalter": "X23 Galerie",
+      "zeitraum": "23. Januar – 21. März 2025",
+      "zeitraum_en": "23 January – 21 March 2025",
+      "text": "Sebastian Friedrich war in der Gruppenausstellung „FOG – Friends of the Gallery“ in der X23 Galerie vertreten.",
+      "text_en": "",
+      "titelbild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/News-2025-Fog-1.jpg",
+      "bilder": [
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840258/News-2025-Fog-1.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        },
+        {
+          "src": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780840260/News-2025-fog-2.jpg",
+          "beschreibung": "",
+          "beschreibung_en": "",
+          "copyright": ""
+        }
+      ],
+      "pdf": "",
+      "pdf_label": "",
+      "url": "https://www.x23.gallery/exhibitions/fog-friends-of-the-gallery-fadb3e4c/?tab=e-n-tab-title-1429834861",
+      "url_label": "Zur Ausstellung",
+      "url_label_en": "Exhibition page",
+      "tags": [
+        "Gruppenausstellung",
+        "X23 Galerie"
+      ]
+    }
+  ]
 }

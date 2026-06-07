@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebastian Friedrich – Malerei</title>
+  <meta name="description" content="Sebastian Friedrich, Maler. Öl auf MDF und Leinwand. Werke, Ausstellungen, Katalog.">
+  <meta property="og:title" content="Sebastian Friedrich – Malerei">
+  <meta property="og:description" content="Sebastian Friedrich malt Menschen, die in seinen Bildern selbstbewusst auftreten.">
+  <meta property="og:image" content="https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2026.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="sf-base.css?v=21">
+  <style>
+    /* ── HERO ──────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 105dvh;
+      height: 105dvh;
+      width: var(--site-width);
+      max-width: var(--max-w);
+      margin: 0 auto;
+      overflow: hidden;
+      background: #c8c4be;
+    }
+
+    .hero-bg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -10%;
+      bottom: 0;
+      background-image: url('https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024_ausschnitt.jpg');
+      background-size: cover;
+      background-position: 50% 34%;
+      background-repeat: no-repeat;
+      background-color: #c8c4be;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to left,
+          rgba(0,0,0,0.50) 0%,
+          rgba(0,0,0,0.34) 24%,
+          rgba(0,0,0,0.10) 48%,
+          transparent 66%
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,0.18) 0%,
+          transparent 22%
+        );
+      pointer-events: none;
+    }
+
+    .hero-text {
+      position: absolute;
+      z-index: 2;
+      top: clamp(118px, 18dvh, 180px);
+      right: clamp(24px, 3.2vw, 40px);
+      left: auto;
+      width: min(430px, 39vw);
+      text-align: right;
+      color: var(--white);
+      text-shadow: 0 2px 18px rgba(0,0,0,0.18);
+    }
+
+    .hero-name {
+      font-size: clamp(3.0rem, 5.0vw, 5.35rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.035em;
+      color: currentColor;
+      margin-bottom: 12px;
+    }
+
+    .hero-bezeichnung {
+      font-size: clamp(0.6875rem, 0.9vw, 0.875rem);
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      margin-left: 0.14em;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: rgba(255,255,255,0.62);
+      transition: color 0.2s;
+      background: none;
+      border: none;
+    }
+    .hero-scroll:hover { color: rgba(255,255,255,1); }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: currentColor;
+      animation: scrollpulse 1.8s ease-in-out infinite;
+    }
+    .hero-scroll-label {
+      font-size: 0.625rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    @keyframes scrollpulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.15); }
+    }
+
+    @media (min-width: 761px) and (max-width: 1120px) {
+      .hero-text {
+        right: clamp(24px, 4vw, 40px);
+        top: clamp(104px, 18dvh, 158px);
+        width: min(380px, 40vw);
+        text-align: right;
+      }
+      .hero-name {
+        font-size: clamp(2.75rem, 5.2vw, 4.35rem);
+      }
+    }
+
+    @media (orientation: portrait) and (min-width: 761px) {
+      .hero-bg { background-position: 48% 34%; }
+      .hero-text {
+        right: clamp(24px, 4vw, 40px);
+        width: min(360px, 42vw);
+        text-align: right;
+      }
+    }
+
+    @media (max-width: 760px) {
+      #hero {
+        width: 100%;
+        max-width: none;
+        min-height: 100dvh;
+        height: 100dvh;
+      }
+      .hero-bg {
+        background-position: 50% 20%;
+      }
+      .hero-bg::after {
+        background: linear-gradient(
+          to top,
+          rgba(0,0,0,0.68) 0%,
+          rgba(0,0,0,0.23) 42%,
+          transparent 68%
+        );
+      }
+      .hero-text {
+        top: auto;
+        bottom: 82px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+        text-align: left;
+        color: var(--white);
+      }
+      .hero-name {
+        font-size: clamp(3.1rem, 13.4vw, 4.0rem);
+        font-weight: 200;
+        line-height: 1.0;
+        letter-spacing: -0.04em;
+      }
+      .hero-bezeichnung {
+        color: rgba(255,255,255,0.72);
+        margin-left: 0.22em;
+      }
+    }
+
+
+    /* ── NEUESTE WERKE ──────────────────────────────────────── */
+    #neueste { border-bottom: 1px solid var(--gray-mid); }
+
+    .werke-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .link-alle {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--gray-dark);
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .link-alle:hover { color: var(--black); }
+
+    .werke-slider-wrap { position: relative; overflow: hidden; }
+
+    .werke-slider {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .werke-slider::-webkit-scrollbar { display: none; }
+
+    .werke-slider .werk-card { flex: 0 0 auto; width: calc((100% - 48px) / 3); scroll-snap-align: start; }
+    .werke-slider .werk-card-img-wrap { height: 340px; }
+    .werke-slider .werk-card-img { max-width: 100%; max-height: 340px; }
+
+    .slider-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px;
+      background: var(--white); border: 1px solid var(--gray-mid); border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--black); z-index: 2;
+      transition: background 0.15s, opacity 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .slider-btn:hover { background: var(--gray-light); }
+    .slider-btn.hidden { opacity: 0; pointer-events: none; }
+    .slider-btn-prev { left: 10px; }
+    .slider-btn-next { right: 10px; }
+
+    @media (max-width: 900px) {
+      .werke-slider .werk-card { width: 260px; }
+      .werke-slider .werk-card-img-wrap { height: 300px; }
+      .werke-slider .werk-card-img { max-width: 260px; max-height: 300px; }
+      .slider-btn { display: none; }
+    }
+    @media (max-width: 480px) {
+      .werke-slider .werk-card { width: 220px; }
+      .werke-slider .werk-card-img-wrap { height: 260px; }
+      .werke-slider .werk-card-img { max-width: 220px; max-height: 260px; }
+    }
+
+
+
+    @media (max-width: 760px) {
+      .werke-slider {
+        gap: 0;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0;
+      }
+      .werke-slider .werk-card {
+        flex: 0 0 100%;
+        width: 100%;
+        scroll-snap-align: center;
+      }
+      .werke-slider .werk-card-img-wrap {
+        width: 100%;
+        height: clamp(260px, 70vw, 420px);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 28px;
+      }
+      .werke-slider .werk-card-img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        object-position: center bottom;
+      }
+      .werke-slider-wrap::after {
+        content: 'Nach links wischen';
+        display: block;
+        margin-top: 18px;
+        text-align: center;
+        font-size: 0.6875rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gray-dark);
+      }
+    }
+
+    /* ── AKTUELLES (NEWS) ───────────────────────────────────── */
+    #aktuelles { border-bottom: 1px solid var(--gray-mid); }
+
+    .news-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 80px);
+      align-items: start;
+      cursor: pointer;
+    }
+    .news-card-img-wrap img {
+      width: auto; max-width: 100%; max-height: 500px;
+      object-fit: contain; object-position: left top;
+      background: var(--gray-light); transition: opacity 0.2s;
+    }
+    .news-card:hover .news-card-img-wrap img { opacity: 0.85; }
+    .news-card-content { padding-top: 8px; }
+    .news-badge {
+      display: inline-block;
+      font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--gray-mid); padding: 3px 8px; border-radius: 2px;
+      margin-bottom: 20px; color: var(--gray-dark);
+    }
+    .news-card-titel {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 300;
+      line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 12px;
+    }
+    .news-card-ort { font-size: 0.8125rem; color: var(--gray-dark); margin-bottom: 20px; }
+    .news-card-text {
+      font-size: 0.9375rem; font-weight: 300; line-height: 1.65;
+      margin-bottom: 28px; max-width: 480px;
+    }
+    .link-mehr {
+      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.06em;
+      display: inline-flex; align-items: center; gap: 8px; transition: gap 0.2s;
+    }
+    .link-mehr:hover { gap: 14px; }
+    .link-mehr::after { content: '→'; }
+
+    @media (max-width: 768px) {
+      .news-card { grid-template-columns: 1fr; }
+    }
+
+    /* ── KATALOG-TEASER ─────────────────────────────────────── */
+    #katalog { border-bottom: 1px solid var(--gray-mid); }
+
+    .katalog-inner {
+      display: grid; grid-template-columns: 280px 1fr;
+      gap: clamp(40px, 6vw, 100px); align-items: start;
+    }
+    .katalog-cover img {
+      width: 100%; max-height: 420px; object-fit: contain; object-position: left top;
+      box-shadow: 4px 4px 24px rgba(0,0,0,0.12);
+    }
+    .katalog-content { padding-top: 8px; }
+    .katalog-titel {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 300;
+      line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .katalog-autoren { font-size: 0.8125rem; color: var(--gray-dark); margin-bottom: 24px; }
+    .katalog-text {
+      font-size: 0.9375rem; font-weight: 300; line-height: 1.65;
+      margin-bottom: 32px; max-width: 520px;
+    }
+    .katalog-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 640px) {
+      .katalog-inner { grid-template-columns: 1fr; }
+      .katalog-cover img { max-width: 200px; }
+    }
+
+    /* ── NEWSLETTER ─────────────────────────────────────────── */
+    #newsletter { background: var(--gray-light); border-bottom: 1px solid var(--gray-mid); }
+    .newsletter-inner { max-width: 560px; text-align: center; margin: 0 auto; }
+    .newsletter-titel { font-size: 1.125rem; font-weight: 300; margin-bottom: 8px; }
+    .newsletter-sub { font-size: 0.8125rem; color: var(--gray-dark); margin-bottom: 24px; }
+    .newsletter-form { display: flex; gap: 8px; max-width: 400px; margin: 0 auto 12px; }
+    .newsletter-input {
+      flex: 1; font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem; font-weight: 400; padding: 10px 14px;
+      border: 1px solid var(--gray-mid); border-radius: 2px; outline: none; transition: border-color 0.15s;
+    }
+    .newsletter-input:focus { border-color: var(--black); }
+    .newsletter-dsgvo { font-size: 0.6875rem; color: var(--gray-dark); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="werke.html" data-i18n="nav.werke">Werke</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="nav-overlay" id="nav-overlay">
+  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
+  <a href="werke.html" onclick="closeMenu()" data-i18n="nav.werke">Werke</a>
+  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
+  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
+  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
+  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
+  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-text">
+      <h1 class="hero-name">Sebastian Friedrich</h1>
+      <p class="hero-bezeichnung" data-i18n="hero.maler">Maler</p>
+    </div>
+    <button class="hero-scroll" onclick="document.getElementById('neueste').scrollIntoView({behavior:'smooth'})" aria-label="Nach unten scrollen">
+      <span class="hero-scroll-line"></span>
+      <span class="hero-scroll-label">Scroll</span>
+    </button>
+  </section>
+
+  <!-- NEUESTE WERKE -->
+  <section id="neueste" class="section">
+    <div class="werke-header">
+      <p class="section-label" data-i18n="home.neueste">Neueste Werke</p>
+      <a href="werke.html" class="link-alle" data-i18n="home.alleWerke">Alle Werke</a>
+    </div>
+    <div class="werke-slider-wrap">
+      <button class="slider-btn slider-btn-prev hidden" id="neueste-prev" aria-label="Zurück">‹</button>
+      <div class="werke-slider" id="neueste-grid"></div>
+      <button class="slider-btn slider-btn-next" id="neueste-next" aria-label="Weiter">›</button>
+    </div>
+  </section>
+
+  <!-- AKTUELLES -->
+  <section id="aktuelles" class="section">
+    <div class="werke-header">
+      <p class="section-label" data-i18n="home.aktuelles">Aktuelles</p>
+      <a href="news.html" class="link-alle" data-i18n="home.alleNews">Alle News</a>
+    </div>
+    <div id="news-card-wrap"><div class="loading">Lädt…</div></div>
+  </section>
+
+  <!-- KATALOG -->
+  <section id="katalog" class="section">
+    <p class="section-label" data-i18n="home.katalog">Katalog</p>
+    <div class="katalog-inner" id="katalog-inner"><div class="loading">Lädt…</div></div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="section newsletter-inner">
+      <p class="newsletter-titel" data-i18n="newsletter.titel">Neue Werke und Ausstellungen</p>
+      <p class="newsletter-sub" data-i18n="newsletter.sub">Gelegentliche Post — kein Spam.</p>
+      <div class="newsletter-form">
+        <input type="email" class="newsletter-input" id="nl-email"
+          placeholder="E-Mail-Adresse" data-i18n-placeholder="newsletter.placeholder">
+        <button class="btn" onclick="nlSubmit()" data-i18n="newsletter.btn">Anmelden</button>
+      </div>
+      <p class="newsletter-dsgvo" data-i18n="newsletter.dsgvo">
+        Mit der Anmeldung stimmst du der Speicherung deiner E-Mail-Adresse zu.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-arrow" id="lb-prev" aria-label="Vorheriges Werk">‹</button>
+  <div class="lightbox-card">
+    <div class="lightbox-img-wrap">
+      <img class="lightbox-img" id="lb-img" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <button class="lightbox-close" id="lb-close" aria-label="Schließen">✕</button>
+      <p class="lightbox-counter" id="lb-counter"></p>
+      <h2 class="lightbox-titel" id="lb-titel"></h2>
+      <ul class="lightbox-meta-list" id="lb-meta"></ul>
+      <div id="lb-action"></div>
+    </div>
+  </div>
+  <button class="lightbox-arrow" id="lb-next" aria-label="Nächstes Werk">›</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  <ul class="footer-links">
+    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+    <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</footer>
+
+<script src="sf-base.js?v=21"></script>
+<script>
+/* ── SEITEN-SPEZIFISCH: index.html ── */
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getNeusteWerke(data) {
+  const thisYear = new Date().getFullYear();
+  return data.werke
+    .filter(w => w.jahr >= thisYear - 1)
+    .sort((a, b) => b.jahr - a.jahr || (b.neu ? 1 : 0) - (a.neu ? 1 : 0));
+}
+
+function renderNeueste(data) {
+  const pool = getNeusteWerke(data);
+  window.NEUESTE_IDS = pool.map(w => w.id);
+  const slider = document.getElementById('neueste-grid');
+  slider.innerHTML = pool.map(w => `
+    <div class="werk-card" onclick="openDetail('${w.id}', NEUESTE_IDS)">
+      <div class="werk-card-img-wrap">
+        <img class="werk-card-img" src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
+      </div>
+      <p class="werk-card-titel">${w.titel}</p>
+      <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
+    </div>
+  `).join('');
+  const prev = document.getElementById('neueste-prev');
+  const next = document.getElementById('neueste-next');
+  const step = 352;
+  function updateBtns() {
+    prev.classList.toggle('hidden', slider.scrollLeft < 10);
+    next.classList.toggle('hidden', slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10);
+  }
+  prev.onclick = () => slider.scrollBy({ left: -step * 3, behavior: 'smooth' });
+  next.onclick = () => slider.scrollBy({ left:  step * 3, behavior: 'smooth' });
+  slider.addEventListener('scroll', updateBtns, { passive: true });
+  initOneStepMobileSlider(slider);
+  updateBtns();
+}
+
+function initOneStepMobileSlider(slider) {
+  if (!slider || slider.dataset.oneStepReady === '1') return;
+  slider.dataset.oneStepReady = '1';
+
+  let startX = 0;
+  let startY = 0;
+  let startIndex = 0;
+  let blockClickUntil = 0;
+
+  function isMobileSlider() {
+    return window.matchMedia('(max-width: 760px)').matches;
+  }
+
+  function cardWidth() {
+    return Math.max(1, slider.clientWidth);
+  }
+
+  function maxIndex() {
+    return Math.max(0, slider.children.length - 1);
+  }
+
+  function goToIndex(index) {
+    const target = Math.max(0, Math.min(maxIndex(), index));
+    slider.scrollTo({ left: target * cardWidth(), behavior: 'smooth' });
+  }
+
+  slider.addEventListener('touchstart', (event) => {
+    if (!isMobileSlider() || !event.touches.length) return;
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+    startIndex = Math.round(slider.scrollLeft / cardWidth());
+  }, { passive: true });
+
+  slider.addEventListener('touchmove', (event) => {
+    if (!isMobileSlider() || !event.touches.length) return;
+    const dx = event.touches[0].clientX - startX;
+    const dy = event.touches[0].clientY - startY;
+    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  slider.addEventListener('touchend', (event) => {
+    if (!isMobileSlider() || !event.changedTouches.length) return;
+    const dx = event.changedTouches[0].clientX - startX;
+    const dy = event.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 28 && Math.abs(dx) > Math.abs(dy)) {
+      const dir = dx < 0 ? 1 : -1;
+      goToIndex(startIndex + dir);
+      blockClickUntil = Date.now() + 450;
+    } else {
+      goToIndex(startIndex);
+    }
+  }, { passive: true });
+
+  slider.addEventListener('click', (event) => {
+    if (Date.now() < blockClickUntil) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+
+  window.addEventListener('resize', () => {
+    if (!isMobileSlider()) return;
+    goToIndex(Math.round(slider.scrollLeft / cardWidth()));
+  });
+}
+
+function renderNews(data) {
+  if (!data.news || !data.news.length) {
+    document.getElementById('news-card-wrap').innerHTML = '';
+    return;
+  }
+  const n = data.news[0];
+  const titel    = t(n, 'titel');
+  const text     = t(n, 'text');
+  const zeitraum = t(n, 'zeitraum');
+  const urlLabel = t(n, 'url_label');
+  document.getElementById('news-card-wrap').innerHTML = `
+    <div class="news-card" onclick="window.location='news.html#${n.id}'">
+      <div class="news-card-img-wrap">
+        ${n.titelbild ? `<img src="${n.titelbild}" alt="${titel}" loading="lazy">` : ''}
+      </div>
+      <div class="news-card-content">
+        <span class="news-badge">${n.kategorie}</span>
+        <h2 class="news-card-titel">${titel}</h2>
+        <p class="news-card-ort">${zeitraum}${n.ort ? ' · ' + n.ort : ''}</p>
+        <p class="news-card-text">${text}</p>
+        <a class="link-mehr" href="news.html#${n.id}">${urlLabel || (LANG === 'en' ? 'More' : 'Mehr')}</a>
+      </div>
+    </div>
+  `;
+}
+
+function renderKatalog(data) {
+  const k = data.katalog[0];
+  if (!k) return;
+  const katalogTitel = t(k, 'titel');
+  const katalogText  = t(k, 'text_de') || k.text_de || '';
+  const metaLine     = LANG === 'en' ? (k.start_meta_en || `${k.jahr} · Ed. by ${k.herausgeber || 'John Palatini'}`) : (k.start_meta || `${k.jahr} · Hrsg. v. ${k.herausgeber || 'John Palatini'}`);
+  document.getElementById('katalog-inner').innerHTML = `
+    <div class="katalog-cover">
+      <img src="${k.cover}" alt="${katalogTitel}" loading="lazy">
+    </div>
+    <div class="katalog-content">
+      <h2 class="katalog-titel">${katalogTitel}</h2>
+      <p class="katalog-autoren">${metaLine}</p>
+      <p class="katalog-text">${katalogText.substring(0, 280)}${katalogText.length > 280 ? '…' : ''}</p>
+      <div class="katalog-actions">
+        <a href="reader.html?buch=${k.id}" class="btn">
+          ${LANG === 'en' ? 'Browse Catalogue' : 'Im Katalog blättern'}
+        </a>
+        <a href="katalog.html" class="btn btn-outline">
+          ${LANG === 'en' ? 'About the catalogue' : 'Zur Katalogseite'}
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function nlSubmit() {
+  const email = document.getElementById('nl-email').value.trim();
+  if (!email || !email.includes('@')) return;
+  alert(LANG === 'en'
+    ? 'Thank you! Newsletter integration coming soon.'
+    : 'Danke! Newsletter-Integration folgt in Kürze.');
+}
+
+function onLangChange() {
+  if (DATA) { renderNeueste(DATA); renderNews(DATA); renderKatalog(DATA); }
+}
+
+async function init() {
+  applyI18n();
+  initNav(true); // hat Hero
+  initLightbox();
+  initContactInteractions();
+  const params = new URLSearchParams(location.search);
+  const werkId = params.get('werk');
+  try {
+    const res = await fetch('data.json');
+    DATA = await res.json();
+    renderNeueste(DATA);
+    renderNews(DATA);
+    renderKatalog(DATA);
+    renderFooter(DATA);
+    if (werkId) openDetail(werkId);
+  } catch(e) {
+    console.error('data.json konnte nicht geladen werden:', e);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

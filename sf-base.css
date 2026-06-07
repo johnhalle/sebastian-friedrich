@@ -1,0 +1,1088 @@
+/* ═══════════════════════════════════════════════════════════
+   sf-base.css — Sebastian Friedrich Website
+   Gemeinsame Styles für alle Seiten
+═══════════════════════════════════════════════════════════ */
+
+/* ── FONTS ─────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/webfonts/inter-latin-300-normal.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/webfonts/inter-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/webfonts/inter-latin-500-normal.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* ── RESET & BASE ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white:       #ffffff;
+  --black:       #111111;
+  --gray-light:  #f5f5f5;
+  --gray-mid:    #e0e0e0;
+  --gray-dark:   #888888;
+  /* Zentrales Desktop-Raster.
+     Alle normalen Seitenkoerper folgen dieser Breite.
+     Desktop: maximal 900 px, zentriert. Darunter 24 px Rand je Seite.
+     Der Katalog-Reader ist als funktionale Ausnahme weiter gefasst. */
+  --max-w:       900px;
+  --site-width:  calc(100vw - 48px);
+  --nav-h:       48px;
+  --gap:         clamp(24px, 4vw, 64px);
+}
+
+html { font-size: 16px; scroll-behavior: smooth; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--black);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+
+/* ── NAV ────────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: transparent;
+  border-bottom: none;
+  z-index: 100;
+  opacity: 0;
+  transition: background 0.3s, border-color 0.3s, opacity 0.4s;
+}
+nav.scrolled {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-mid);
+  opacity: 1;
+}
+nav.always-visible {
+  opacity: 1;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-mid);
+}
+
+/* Nav-Links weiß über dem Hero-Bild */
+nav:not(.scrolled):not(.always-visible) .nav-logo,
+nav:not(.scrolled):not(.always-visible) .nav-links a,
+nav:not(.scrolled):not(.always-visible) .nav-hamburger span {
+  color: rgba(255,255,255,0.85);
+}
+nav:not(.scrolled):not(.always-visible) .nav-lang {
+  color: rgba(255,255,255,0.85);
+  border-color: transparent;
+  background: transparent;
+}
+
+.nav-inner {
+  width: var(--site-width);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.nav-logo {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--black);
+  letter-spacing: 0.02em;
+  transition: opacity 0.15s;
+}
+.nav-links a:hover { opacity: 0.5; }
+.nav-links a.active { font-weight: 500; }
+
+.nav-lang {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--gray-mid);
+  padding: 3px 10px;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.nav-lang:hover { background: var(--gray-light); }
+
+/* Hamburger */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--black);
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Mobile overlay */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--white);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.nav-overlay.open { display: flex; }
+.nav-overlay a {
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.nav-overlay .overlay-close {
+  position: absolute;
+  top: 14px; right: clamp(16px, 3vw, 48px);
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--black);
+}
+.nav-overlay .overlay-lang {
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--gray-mid);
+  padding: 6px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+@media (max-width: 1050px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+}
+
+@media (max-width: 760px) {
+  .nav-inner,
+  .section,
+  footer {
+    width: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: clamp(16px, 5vw, 24px);
+    padding-right: clamp(16px, 5vw, 24px);
+  }
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+main { padding-top: 0; }
+
+.section {
+  width: var(--site-width);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--gap) 0;
+}
+
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  margin-bottom: 32px;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: 1px solid var(--black);
+  padding: 10px 24px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+  display: inline-block;
+}
+.btn:hover { background: var(--white); color: var(--black); }
+
+.btn-outline {
+  background: var(--white);
+  color: var(--black);
+}
+.btn-outline:hover { background: var(--black); color: var(--white); }
+
+.btn-active {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ── WERK-KARTE ─────────────────────────────────────────── */
+.werk-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.werk-card-img-wrap {
+  height: 380px;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.werk-card-img {
+  width: auto;
+  max-width: 320px;
+  max-height: 380px;
+  object-fit: contain;
+  object-position: left bottom;
+  display: block;
+  transition: opacity 0.2s;
+}
+.werk-card:hover .werk-card-img { opacity: 0.85; }
+.werk-card-titel { font-size: 0.875rem; font-weight: 300; margin-bottom: 2px; }
+.werk-card-meta  { font-size: 0.75rem; color: var(--gray-dark); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer {
+  width: var(--site-width);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--gray-dark);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-links a {
+  font-size: 0.75rem;
+  color: var(--gray-dark);
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--black); }
+
+/* ── LIGHTBOX ───────────────────────────────────────────── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px clamp(16px, 3vw, 48px);
+}
+.lightbox.open { display: flex; }
+
+.lightbox-card {
+  display: flex;
+  align-items: stretch;
+  height: 90dvh;
+  width: min(1100px, calc(100vw - 112px));
+}
+
+.lightbox-arrow {
+  flex: 0 0 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.45);
+  font-size: 2rem;
+  background: none;
+  border: none;
+  transition: color 0.15s;
+  user-select: none;
+}
+.lightbox-arrow:hover { color: rgba(255,255,255,0.95); }
+.lightbox-arrow.hidden { opacity: 0; pointer-events: none; }
+
+.lightbox-img-wrap {
+  flex: 1;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  min-width: 0;
+}
+.lightbox-img {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.lightbox-info {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--white);
+  border-left: 1px solid var(--white);
+  padding: 32px 28px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lightbox-close {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 1.125rem;
+  cursor: pointer;
+  color: var(--gray-dark);
+  margin-bottom: 28px;
+  padding: 0;
+  transition: color 0.15s;
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1;
+}
+.lightbox-close:hover { color: var(--black); }
+
+.lightbox-counter {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+  margin-bottom: 14px;
+}
+.lightbox-titel {
+  font-size: 1.375rem;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.lightbox-meta-list { list-style: none; margin-bottom: 28px; flex: 1; }
+.lightbox-meta-list li {
+  display: flex;
+  gap: 10px;
+  font-size: 0.8125rem;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gray-mid);
+}
+.lightbox-meta-list li:last-child { border-bottom: none; }
+.lightbox-meta-label {
+  font-weight: 500;
+  color: var(--gray-dark);
+  min-width: 76px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  padding-top: 1px;
+}
+
+@media (max-width: 768px) {
+  .lightbox { padding: 0; align-items: flex-end; background: var(--white); }
+  .lightbox-card {
+    flex-direction: column;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  .lightbox-img-wrap {
+    flex: 1 1 0;
+    padding: 12px 16px;
+    min-height: 0;
+    background: var(--white);
+  }
+  .lightbox-img { max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; }
+  .lightbox-info {
+    flex: 0 0 auto;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--gray-mid);
+    padding: 12px 20px 24px;
+    overflow-y: auto;
+    max-height: 44dvh;
+  }
+  .lightbox-close { margin-bottom: 8px; }
+  .lightbox-titel { font-size: 1.125rem; margin-bottom: 10px; }
+  .lightbox-meta-list { margin-bottom: 12px; }
+  .lightbox-meta-list li { padding: 3px 0; }
+  .lightbox-arrow { display: none; }
+}
+
+/* ── LOADING STATE ──────────────────────────────────────── */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--gray-dark);
+  font-size: 0.875rem;
+}
+
+
+/* ── KONTAKT-FORMULARE ───────────────────────────────────── */
+.contact-form {
+  width: 100%;
+}
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 24px;
+}
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contact-field-full {
+  grid-column: 1 / -1;
+}
+.contact-field-message {
+  min-height: 0;
+}
+.contact-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-dark);
+}
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.5;
+  border: 1px solid var(--gray-mid);
+  border-radius: 2px;
+  background: var(--white);
+  color: var(--black);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.contact-input:focus,
+.contact-textarea:focus {
+  border-color: var(--black);
+  background: #fbfbfb;
+}
+.contact-textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+.contact-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.contact-status {
+  font-size: 0.8125rem;
+  color: var(--gray-dark);
+}
+.contact-link {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--black);
+  padding-bottom: 3px;
+}
+.contact-link::after { content: '→'; }
+
+.contact-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 24px clamp(16px, 3vw, 48px);
+  background: rgba(0,0,0,0.92);
+}
+.contact-modal.open { display: flex; }
+.contact-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+.contact-modal-card {
+  position: relative;
+  width: min(1100px, calc(100vw - 112px));
+  height: 90dvh;
+  max-height: none;
+  overflow: hidden;
+  background: var(--white);
+  padding: 32px 28px;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+.contact-modal .contact-form {
+  max-width: 720px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.contact-modal .contact-form-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.contact-modal .contact-field-message .contact-textarea {
+  flex: 1 1 auto;
+  min-height: 0;
+  resize: none;
+}
+.contact-modal .contact-form-actions {
+  flex: 0 0 auto;
+}
+.contact-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: transparent;
+  color: var(--gray-dark);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+.contact-modal-close:hover { color: var(--black); }
+.contact-modal-title {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: -12px 32px 32px 0;
+}
+.contact-modal .section-label { margin-bottom: 24px; }
+
+@media (max-width: 640px) {
+  .contact-form-grid { grid-template-columns: 1fr; }
+  .contact-modal .contact-form-grid { grid-template-rows: auto auto auto minmax(0, 1fr); }
+  .contact-modal {
+    padding: 0;
+    align-items: stretch;
+    background: var(--white);
+  }
+  .contact-modal-card {
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    border: none;
+    box-shadow: none;
+    padding: 64px 20px 28px;
+  }
+  .contact-modal-title { margin-right: 0; }
+}
+
+.btn:disabled { opacity: 0.45; cursor: wait; }
+
+
+/* ── ZENTRALES DESKTOP-RASTER / SITE SHELL ────────────────
+   Diese Regel ist absichtlich übergeordnet: Alle großen Seitenkörper
+   folgen derselben linken und rechten Außenkante. */
+@media (min-width: 761px) {
+  .nav-inner,
+  #hero,
+  .section,
+  footer,
+  .page-section,
+  .essay-wrap,
+  .kontakt-inner,
+  .news-page,
+  .vita-inner,
+  .page-header-inner,
+  .werke-liste,
+  .werke-list {
+    width: var(--site-width) !important;
+    max-width: var(--max-w) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .werke-slider-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .werke-slider {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  #newsletter .section.newsletter-inner {
+    width: min(560px, var(--site-width)) !important;
+    max-width: 560px !important;
+  }
+}
+
+/* ── MOBILE WIDTH RESET ─────────────────────────────────── */
+@media (max-width: 760px) {
+  .nav-inner,
+  .section,
+  footer {
+    width: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: clamp(16px, 5vw, 24px);
+    padding-right: clamp(16px, 5vw, 24px);
+  }
+}
+
+/* ── V16: Harte zentrale Seitenbreite ─────────────────────
+   Diese Regeln stehen bewusst am Ende und überschreiben ältere Einzelregeln.
+   Ziel: alle Hauptbereiche folgen derselben linken/rechten Außenkante. */
+@media (min-width: 761px) {
+  .nav-inner,
+  #hero,
+  .section,
+  footer,
+  .page-section,
+  .essay-wrap,
+  .kontakt-inner,
+  .news-page,
+  .vita-inner,
+  .page-header-inner,
+  .werke-liste,
+  .werke-list,
+  .book-info {
+    box-sizing: border-box !important;
+    width: var(--site-width) !important;
+    max-width: var(--max-w) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .section,
+  footer,
+  .nav-inner,
+  #hero { padding-left: 0 !important; padding-right: 0 !important; }
+
+  .werke-slider-wrap,
+  .werke-slider {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .slider-btn-prev { left: 10px !important; }
+  .slider-btn-next { right: 10px !important; }
+}
+
+
+/* ── V16: Reader bleibt funktionale Ausnahme ───────────────
+   Header/Book-Info folgen dem 900-px-Raster, die eigentliche
+   Reader-Buehne und das Thumbnail-Band duerfen die volle Breite nutzen. */
+.reader-page .reader-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.reader-page .viewer-wrap,
+.reader-page .thumbs-wrap {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+
+/* ── V17: Einheitliche Unterseiten-Überschriften ──────────
+   Eine Regel für Werke, News, Katalog, Vita und Kontakt. */
+@media (min-width: 761px) {
+  .page-header {
+    padding-top: calc(var(--nav-h) + 56px) !important;
+    padding-bottom: 44px !important;
+    border-bottom: none !important;
+  }
+  .page-header-inner {
+    display: block !important;
+  }
+  .page-header-inner .filter-bar {
+    margin-top: clamp(22px, 3vw, 34px) !important;
+  }
+  .page-title,
+  .vita-title,
+  .kontakt-title,
+  .katalog-page-title {
+    display: block !important;
+    width: 100% !important;
+    font-size: clamp(5.2rem, 10vw, 7.8rem) !important;
+    font-weight: 300 !important;
+    line-height: 0.9 !important;
+    letter-spacing: -0.07em !important;
+    text-transform: uppercase !important;
+    margin: 0 0 clamp(44px, 6vw, 72px) !important;
+    padding-bottom: clamp(24px, 3vw, 40px) !important;
+    border-bottom: 1px solid var(--black) !important;
+  }
+}
+@media (max-width: 760px) {
+  .page-title,
+  .vita-title,
+  .kontakt-title,
+  .katalog-page-title {
+    display: block !important;
+    width: 100% !important;
+    font-size: clamp(4.6rem, 22vw, 6.6rem) !important;
+    font-weight: 300 !important;
+    line-height: 0.9 !important;
+    letter-spacing: -0.06em !important;
+    text-transform: uppercase !important;
+    margin: 0 0 clamp(54px, 14vw, 80px) !important;
+    padding-bottom: clamp(22px, 5vw, 34px) !important;
+    border-bottom: 1px solid var(--black) !important;
+  }
+}
+
+/* ── V17: Reader zurueck ins Seitenraster ─────────────────
+   Auch die Reader-Buehne und die Thumbnail-Leiste folgen 900 px.
+   Ausnahme aufgehoben: nur der funktionale Buchbereich bleibt innerhalb
+   des dunklen Viewers, nicht viewportbreit. */
+.reader-page .reader-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+.reader-page .book-info,
+.reader-page .viewer-wrap,
+.reader-page .thumbs-wrap {
+  box-sizing: border-box !important;
+  width: var(--site-width) !important;
+  max-width: var(--max-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.reader-page .viewer-wrap {
+  flex: 1 1 auto;
+}
+.reader-page .thumbs-wrap {
+  flex: 0 0 82px;
+}
+@media (max-width: 760px) {
+  .reader-page .book-info,
+  .reader-page .viewer-wrap,
+  .reader-page .thumbs-wrap {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* ── V18: Werke-Header kompakt + Filter rechts ───────────
+   Einheitliche Titelregel bleibt erhalten; nur die Filter werden
+   auf der Werke-Seite in dieselbe Kopfzeile gezogen. */
+@media (min-width: 761px) {
+  .page-header-werke .page-header-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: end !important;
+    gap: 32px !important;
+    padding-bottom: clamp(24px, 3vw, 40px) !important;
+    border-bottom: 1px solid var(--black) !important;
+  }
+  .page-header-werke .page-title {
+    width: auto !important;
+    margin: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+  }
+  .page-header-werke .filter-bar {
+    justify-content: flex-end !important;
+    margin: 0 0 0.45em !important;
+    white-space: nowrap !important;
+  }
+}
+@media (max-width: 760px) {
+  .page-header-werke .filter-bar {
+    margin-top: 22px !important;
+  }
+}
+
+/* ── V18: Mobile Startseiten-Slider kontrolliert ──────────
+   Ein Swipe = ein Werk. Kein halbes Nebenbild, etwas Weissraum
+   um die Bilder. Die eigentliche Steuerung steht in index.html. */
+@media (max-width: 760px) {
+  .werke-slider {
+    overflow-x: hidden !important;
+    scroll-snap-type: none !important;
+    touch-action: pan-y !important;
+  }
+  .werke-slider .werk-card {
+    box-sizing: border-box !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    padding-left: clamp(10px, 4vw, 18px) !important;
+    padding-right: clamp(10px, 4vw, 18px) !important;
+    scroll-snap-align: none !important;
+  }
+  .werke-slider .werk-card-img-wrap {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .werke-slider .werk-card-img {
+    max-width: 100% !important;
+  }
+}
+
+
+/* ── V19: Hero-Beschnitt + Werke-Skalierung ───────────────
+   Desktop: Hero oben um ca. 10 % beschnitten; Schrift rechts an den
+   freien Rand geschoben. Werke: alle vier Groessenklassen proportional
+   um ca. 10 % vergroessert. */
+@media (min-width: 761px) {
+  #hero .hero-bg {
+    top: -10% !important;
+    bottom: 0 !important;
+    background-position: 50% 34% !important;
+  }
+  #hero .hero-text {
+    right: clamp(24px, 3.2vw, 40px) !important;
+    text-align: right !important;
+  }
+  .werk-zeile { grid-template-columns: 581px 1fr !important; }
+  .werk-zeile.rechts { grid-template-columns: 1fr 581px !important; }
+  .werk-zeile[data-groesse="l"]  { grid-template-columns: 581px 1fr !important; }
+  .werk-zeile[data-groesse="m"]  { grid-template-columns: 411px 1fr !important; }
+  .werk-zeile[data-groesse="s"]  { grid-template-columns: 290px 1fr !important; }
+  .werk-zeile[data-groesse="xs"] { grid-template-columns: 194px 1fr !important; }
+  .werk-zeile.rechts[data-groesse="l"]  { grid-template-columns: 1fr 581px !important; }
+  .werk-zeile.rechts[data-groesse="m"]  { grid-template-columns: 1fr 411px !important; }
+  .werk-zeile.rechts[data-groesse="s"]  { grid-template-columns: 1fr 290px !important; }
+  .werk-zeile.rechts[data-groesse="xs"] { grid-template-columns: 1fr 194px !important; }
+}
+
+
+/* ── V20: einheitliche Unterseiten-Kopfzone, Hero querformatiger, Reader-Overlay ── */
+:root {
+  --subpage-top: calc(var(--nav-h) + 56px);
+  --subpage-top-mobile: calc(var(--nav-h) + 40px);
+}
+
+@media (min-width: 761px) {
+  .page-header,
+  .news-page,
+  .vita-page,
+  .kontakt-page,
+  .katalog-page-head {
+    padding-top: var(--subpage-top) !important;
+  }
+  .katalog-page { padding-top: 0 !important; }
+  .news-page,
+  .vita-page,
+  .kontakt-page,
+  .katalog-page-head,
+  .page-header {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .page-title,
+  .vita-title,
+  .kontakt-title,
+  .katalog-page-title {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-header,
+  .news-page,
+  .vita-page,
+  .kontakt-page,
+  .katalog-page-head {
+    padding-top: var(--subpage-top-mobile) !important;
+  }
+  .katalog-page { padding-top: 0 !important; }
+}
+
+@media (min-width: 761px) {
+  #hero {
+    min-height: 0 !important;
+    height: clamp(440px, 56vw, 560px) !important;
+    max-height: 560px !important;
+  }
+  #hero .hero-bg {
+    top: 0 !important;
+    bottom: 0 !important;
+    background-position: 50% 42% !important;
+  }
+  #hero .hero-scroll { bottom: 18px !important; }
+}
+
+.reader-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: #24211e;
+}
+.reader-modal.open { display: block; }
+.reader-modal iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #24211e;
+}
+.reader-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(0,0,0,0.24);
+  color: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.reader-modal-close:hover { background: rgba(255,255,255,0.10); color: #fff; }
+body.reader-open { overflow: hidden; }
+
+.reader-page .book-info,
+.reader-page .viewer-wrap,
+.reader-page .thumbs-wrap {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* ── V21: Scroll-Nav, Reader-Close, einheitlicher Inhaltsbeginn ─────────
+   - Nav erscheint direkt am Ende des verkürzten Hero.
+   - Reader-Schließen bleibt als sichtbarer, klickbarer Kreis erhalten.
+   - Der Abstand nach der Unterseiten-Trennlinie folgt überall der Vita-Logik. */
+:root {
+  --subpage-content-gap: clamp(64px, 7vw, 88px);
+  --subpage-content-gap-mobile: clamp(54px, 12vw, 76px);
+}
+
+@media (min-width: 761px) {
+  /* Einheitlicher Abstand nach der Titel-Linie: News, Vita, Kontakt */
+  .news-page > .page-title,
+  .vita-title,
+  .kontakt-title {
+    margin-bottom: var(--subpage-content-gap) !important;
+  }
+
+  /* Werke: Die Linie sitzt im Header; die Liste beginnt mit demselben Abstand. */
+  .page-header-werke {
+    padding-bottom: 0 !important;
+  }
+  .werke-liste {
+    padding-top: var(--subpage-content-gap) !important;
+  }
+
+  /* Katalog: Titel-Sektion ohne doppelten Abstand, Hero startet wie Vita. */
+  .katalog-page-head {
+    padding-bottom: 0 !important;
+  }
+  .katalog-page-title {
+    margin-bottom: 0 !important;
+  }
+  .katalog-hero {
+    padding-top: var(--subpage-content-gap) !important;
+  }
+
+  /* Kontakt: Formular bleibt in der normalen Seitenfolge, kein Extra-Versatz. */
+  .kontakt-intro {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .news-page > .page-title,
+  .vita-title,
+  .kontakt-title {
+    margin-bottom: var(--subpage-content-gap-mobile) !important;
+  }
+  .page-header-werke { padding-bottom: 0 !important; }
+  .werke-liste { padding-top: var(--subpage-content-gap-mobile) !important; }
+  .katalog-page-head { padding-bottom: 0 !important; }
+  .katalog-page-title { margin-bottom: 0 !important; }
+  .katalog-hero { padding-top: var(--subpage-content-gap-mobile) !important; }
+}
+
+.reader-modal-close {
+  position: fixed !important;
+  top: 18px !important;
+  right: 18px !important;
+  z-index: 10000 !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0,0,0,0.18) !important;
+  background: rgba(245,245,245,0.96) !important;
+  color: #111 !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.22) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.reader-modal-close:hover,
+.reader-modal-close:focus-visible {
+  background: #111 !important;
+  color: #fff !important;
+  border-color: #111 !important;
+  outline: none !important;
+}

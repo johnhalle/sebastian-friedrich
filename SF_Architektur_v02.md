@@ -1,0 +1,353 @@
+# Architektur: sebastianfriedrich.de
+# Stand: Juni 2026 — v02
+
+---
+
+## PROJEKT
+
+Website für Sebastian Friedrich, Maler
+Hosting: Netlify (Account johnhalle, temporär — später eigener Account)
+GitHub: johnhalle, Repository `sebastian-friedrich`
+Domain: noch zu sichern (sebastianfriedrich.de bevorzugt)
+SSL: via Netlify automatisch
+
+Alle Regeln aus `lessons-learned.md` (johnpalatini.de) gelten von Anfang an.
+
+---
+
+## DATEISTRUKTUR
+
+```
+index.html              – Startseite (SPA, History-API-Routing)
+verfuegbar.html         – Verfügbare Werke (öffentlich, OHNE Preise)
+verfuegbar-preise.html  – Verfügbare Werke MIT Preisen (nicht verlinkt, nicht in Sitemap)
+portraets.html          – Porträts (gefilterte Werkansicht)
+werkarchiv.html         – Gesamtes Werkarchiv (alle Werke, filterbar)
+news.html               – News-Übersicht
+katalog.html            – Katalog-Seite mit Anmoderation + Reader-Link
+reader.html             – Buchblätter-Viewer (aus johnpalatini.de übernommen, angepasst)
+vita.html               – Biografie
+kontakt.html            – Kontaktformular (Netlify Forms)
+admin.html              – CMS-Backend (nicht verlinkt, nicht in Sitemap, nicht in Nav)
+data.json               – EINZIGE Datenquelle für alle Seiten
+netlify.toml            – HTTP-Headers
+_headers                – zusätzliche Headers
+sitemap.xml             – eingereicht bei Google (verfuegbar-preise.html NICHT drin)
+og-image.png            – Social-Media-Vorschaubild
+favicon.ico / .png      – Favicons
+fonts/                  – lokale .woff2-Dateien (Inter 300, 400, 500)
+images/                 – Werkfotos (.jpg) — auf Cloudinary, URLs in data.json
+images/reader/          – Katalog-Seiten (lokal, falls nicht Cloudinary)
+pdfs/                   – Katalog-PDFs
+```
+
+---
+
+## CLOUDINARY
+
+Cloud Name: `def9qgwtw`
+Ordner: `sebastian-friedrich/werke/` (aktuell direkt im Root, ohne Unterordner)
+Basis-URL: `https://res.cloudinary.com/def9qgwtw/image/upload/`
+Dateiformat: `.jpg` (Cloudinary normalisiert .jpeg → .jpg)
+
+Katalog-Seiten (Reader): ebenfalls direkt im Root, 001.jpg–025.jpg
+Upload-Preset: `sebastian-friedrich` (als Default gesetzt)
+
+Auflösung Werkfotos: 2400px längste Seite, JPEG 85% — ca. 500 KB pro Datei
+Für Portfolio-PDF: URL-Parameter `w=1800,q=90` anhängen
+
+---
+
+## DESIGN-KONSTANTEN
+
+```
+Hintergrund:  #ffffff
+Text:         #111111
+Grau hell:    #f5f5f5
+Grau mittel:  #e0e0e0
+Grau dunkel:  #888888  (NUR für Meta-Infos, nie für Fließtext)
+Akzent:       keiner — die Bilder tragen die Seite
+Schriften:    Inter (lokal, @font-face)
+              Light 300:   Werktitel, Bildunterschriften
+              Regular 400: Fließtext, Navigation
+              Medium 500:  Labels, Buttons (kein Bold)
+max-width:    1400px
+Nav-Höhe:     48px
+Hamburger ab: 900px
+```
+
+**Grundprinzip:** Typografie tritt zurück. Viel Luft. Keine Akzentfarbe. Die Bilder
+sprechen allein. Jede Designentscheidung muss sich fragen lassen: „Drängt sich das
+vor das Bild?"
+
+---
+
+## NAVIGATION
+
+Desktop (links): **Sebastian Friedrich** (= Home-Link, kein eigener „Startseite"-Reiter)
+Desktop (rechts): Verfügbare Werke · Porträts · Werkarchiv · News · Katalog · Vita · Kontakt
++ Sprachumschalter (DE/EN)
+
+Mobile: Hamburger ab 900px, Vollbild-Overlay
+
+`verfuegbar-preise.html` erscheint NIE in der Navigation.
+`admin.html` erscheint NIE in der Navigation.
+
+Footer: Impressum · Datenschutz · Instagram-Link
+Footer-Bereich: Newsletter-Anmeldung (Brevo, dezent, immer sichtbar)
+
+---
+
+## SPRACHUMSCHALTUNG
+
+Identisch zu johnpalatini.de:
+- Globale Hilfsfunktion: t(obj, field) — gibt obj[field_en] zurück wenn LANG==='en'
+- KRITISCH: Loop-Variablen dürfen NIE 't' heißen
+- Übersetzungen als _en-Felder direkt in data.json
+- Sprachzustand in localStorage('lang')
+- Button zeigt Zielsprache (EN wenn Seite auf DE, DE wenn auf EN)
+- document.documentElement.lang wird bei Sprachwechsel aktualisiert
+- Institutionsnamen bleiben auf Deutsch auch in EN-Version
+
+---
+
+## DATENSTRUKTUR data.json
+
+Stand: vollständig befüllt (Juni 2026)
+
+```json
+{
+  "meta": {
+    "name": "Sebastian Friedrich",
+    "tagline": "Sebastian Friedrich malt Bilder...",   ← befüllt (Rückentext Katalog)
+    "tagline_en": "",
+    "vita": {
+      "text": "...",        ← befüllt (aus Katalog S. 70)
+      "text_en": "",
+      "ausbildung": "Studium an der Burg Giebichenstein...",
+      "ausbildung_en": "Studies at Burg Giebichenstein..."
+    },
+    "kontakt": {
+      "email": "",          ← noch einzutragen
+      "instagram": "",      ← noch einzutragen
+      "newsletter_list_id": ""  ← nach Brevo-Setup einzutragen
+    },
+    "admin": {
+      "passwordHash": ""    ← noch einzurichten
+    }
+  },
+
+  "werke": [ ... ],   ← 44 Einträge, vollständig (Cloudinary-URLs, Verfügbarkeit, Serien)
+
+  "katalog": [
+    {
+      "id":          "sebastian-katalog",
+      "titel":       "Sebastian Friedrich. ON STAGE. Malerei",
+      "titel_en":    "Sebastian Friedrich. ON STAGE. Paintings",
+      "jahr":        2024,
+      "text_de":     "...",   ← befüllt (erster Absatz Drobe/Palatini)
+      "text_en":     "",
+      "autoren":     ["Christian Drobe", "John Palatini"],
+      "cover":       "https://res.cloudinary.com/def9qgwtw/image/upload/001.jpg",
+      "reader_pfad": "https://res.cloudinary.com/def9qgwtw/image/upload/",
+      "pdf":         "pdfs/sebastian-katalog.pdf"
+    }
+  ],
+
+  "news": []   ← noch zu befüllen
+}
+```
+
+### Werkfelder im Detail
+
+| Feld | Typ | Bedeutung |
+|------|-----|-----------|
+| `id` | string | Sprechend: `urania-2022` — NIE numerisch |
+| `titel` | string | Werktitel (bleibt auf Deutsch) |
+| `jahr` | number | Entstehungsjahr |
+| `masse` | string | z.B. „40 × 30 cm" |
+| `medium` | string | z.B. „Öl auf MDF" |
+| `medium_en` | string | z.B. „Oil on MDF" |
+| `gerahmt` | boolean | |
+| `serie` | string\|null | z.B. „Musen", „Girls", „Atelier" — für Filter |
+| `portraet` | boolean | steuert Anzeige auf portraets.html |
+| `verfuegbar` | boolean | steuert Anzeige auf verfuegbar.html |
+| `preis` | number\|null | optional — nur auf verfuegbar-preise.html sichtbar |
+| `neu` | boolean | Badge + Priorisierung auf Startseite |
+| `bild` | string | Cloudinary-URL (endet auf .jpg) |
+
+### Serien (in data.json)
+`"Musen"` (9 Werke) · `"Girls"` (3) · `"Mythologie"` (2) · `"Atelier"` (4) ·
+`"Nachtschicht"` (2) · `"Elise"` (2) · `"Senhora Rodriguez"` (2) · `null` (20)
+
+### News-Felder (noch zu definieren — Word-Datei ausstehend)
+
+Vorläufige Struktur:
+```json
+{
+  "id":         "ausstellung-oper-halle-2025",
+  "datum":      "2025-09-20",
+  "titel":      "",
+  "titel_en":   "",
+  "text":       "",
+  "text_en":    "",
+  "bild":       "",
+  "kategorie":  ""   ← z.B. "Ausstellung", "Presse", "Neu" — noch zu klären
+}
+```
+
+---
+
+## SEITEN
+
+### index.html — Startseite
+
+Sechs Blöcke, großzügig, kein Karussell, keine Listen:
+
+1. **Hero** — ein einzelnes großes Werk (`neu: true`). Nur Bild, Titel, Jahr.
+2. **Neueste Werke** — 3–4 Werke nach Jahr absteigend. Klick öffnet Detailansicht.
+3. **Aktuelles** — neuester News-Eintrag. Bild + Titel + Kurztext + Link.
+4. **Verfügbare Werke** — 2–3 Werke mit `verfuegbar: true`. Ohne Preise.
+   CTA → verfuegbar.html
+5. **Katalog-Teaser** — Cover + ein Satz Anmoderation.
+   CTA: „Im Katalog blättern" → reader.html
+6. **Newsletter-Teaser** — schmal, Übergang zum Footer.
+
+### verfuegbar.html — Verfügbare Werke (öffentlich)
+
+Alle Werke mit `verfuegbar: true`. Grid. Kein Preis.
+Lightbox: Titel, Jahr, Maße, Medium, Rahmung + „Für Anfragen: [email]"
+
+### verfuegbar-preise.html — Verfügbare Werke mit Preisen
+
+Wie verfuegbar.html, aber `preis` sichtbar.
+NICHT verlinkt · NICHT in Nav · NICHT in sitemap.xml
+Verwendung: Link per E-Mail an Interessenten.
+
+### portraets.html — Porträts
+
+Alle Werke mit `portraet: true`.
+
+### werkarchiv.html — Werkarchiv
+
+Alle 44 Werke, filterbar nach Serie · Jahr · Medium.
+**Layout: noch offen** — individuelle Lösung, wird nach allen anderen Seiten
+entwickelt. Kein Masonry. Entscheidung erst mit echten Bildern + Rücksprache Sebastian.
+
+### news.html — News
+
+Struktur noch zu definieren (Word-Datei ausstehend).
+
+### katalog.html — Katalog
+
+Cover groß · Titel, Jahr, Autoren, Anmoderationstext (aus data.json)
+Button: „Im Katalog blättern" → reader.html?buch=sebastian-katalog
+Button: „PDF herunterladen" (HEAD-Check)
+
+### reader.html — Buchblätter-Viewer
+
+Aus johnpalatini.de übernommen, Design angepasst.
+Katalog: 25 Seiten (001.jpg–025.jpg), auf Cloudinary.
+Aufruf: /reader.html?buch=sebastian-katalog
+
+### vita.html — Biografie
+
+Zweispaltig Desktop (Text + Porträtfoto), einspaltig Mobile.
+
+### kontakt.html — Kontakt
+
+Netlify Forms · DE/EN · E-Mail sichtbar · Instagram-Link.
+
+---
+
+## NEWSLETTER — Brevo
+
+**Footer-Formular:** auf jeder Seite, sehr dezent. E-Mail + Button + DSGVO.
+
+**Popup:**
+- Erscheint nach 45 Sekunden Inaktivität
+- Nur einmal pro Session (sessionStorage-Flag)
+- Schließbar per X
+- Design: zentriertes Modal, weißer Kasten
+
+---
+
+## ADMIN-PANEL — admin.html
+
+Passwortschutz: SHA-256-Hash in data.json (admin.passwordHash).
+GitHub PAT im localStorage (pro Gerät einmal eintragen).
+Speichern → data.json via GitHub API → Netlify baut → ~2 Min. live.
+
+### Kategorien
+- Werke (anlegen, bearbeiten, löschen, sortieren)
+- News (anlegen, bearbeiten, löschen)
+- Katalog (Metadaten, Texte)
+- Vita & Meta (Kontakt, Biografie, Tagline)
+- Einstellungen (Passwort, GitHub-Konfiguration)
+
+### Portfolio-Generator
+
+Im Admin: „Portfolio erstellen"
+1. Werke per Klick auswählen (Thumbnail-Grid)
+2. Reihenfolge per Drag & Drop
+3. Schalter: Mit / Ohne Preise
+4. „PDF generieren & herunterladen"
+
+Technisch: `jsPDF` + `html2canvas`, clientseitig, kein Server.
+PDF-Inhalt: Deckblatt · pro Werk: Bild + Titel/Jahr/Maße/Medium/Rahmung (±Preis) · Kontaktseite
+Bilder von Cloudinary mit `w=1800,q=90`.
+Fallback auf reine jsPDF-Lösung falls html2canvas instabil.
+
+---
+
+## SEO
+
+Meta-Tags: description, keywords, author
+Open Graph: og:type=website, og:description, og:locale:alternate
+Twitter Cards: summary_large_image
+Schema.org Person + Schema.org VisualArtwork (pro Werk)
+Google Search Console: nach Go-Live verifizieren, sitemap.xml einreichen
+
+---
+
+## TECHNISCHE KONVENTIONEN
+
+- Daten NUR in data.json, NIEMALS in HTML einbetten
+- Werk-IDs und Katalog-IDs: sprechend, stabil, nie numerisch
+- Bilder auf Cloudinary als .jpg (Cloudinary-Standard)
+- Anführungszeichen im JSON-Text: gerade " verwenden (typografische „..." brechen JSON)
+- Inter: lokale @font-face (fonts/-Ordner)
+- Loop-Variablen NIE 't' (Konflikt mit t()-Übersetzungsfunktion)
+- Nach Edits: grep -c "<body>" datei.html → muss 1 ergeben
+- 100dvh statt 100vh (Mobile)
+- PDF-Viewer: direkter <iframe> — KEIN mozilla.github.io
+- HEAD-Check für bedingte PDF-Link-Anzeige
+- atob() für UTF-8 immer via TextDecoder
+- #888 nie für Fließtext
+- VOR JEDEM EDIT: aktuelle Dateien anfordern
+
+---
+
+## OFFENE PUNKTE
+
+1. **Domain sichern** — sebastianfriedrich.de
+2. **Inter-Fonts** — Gewichte 300/400/500 als .woff2 lokal hosten
+3. **Netlify-Konto verbinden** — Repository sebastian-friedrich deployen
+4. **GitHub PAT anlegen** — fine-grained, nur Repository sebastian-friedrich,
+   Contents Read & Write
+5. **News-Struktur** — Word-Datei auswerten, data.json ergänzen
+6. **E-Mail + Instagram** — in data.json meta.kontakt eintragen
+7. **Admin-Passwort** — SHA-256-Hash setzen
+8. **Brevo** — Account prüfen, List-ID in data.json eintragen
+9. **Werkarchiv-Layout** — individuelle Lösung, zuletzt entwickeln
+10. **EN-Übersetzungen** — tagline_en, vita.text_en, medium_en-Felder
+11. **Katalog-PDF** — für HEAD-Check in pdfs/ ablegen
+
+---
+
+## WORKFLOW IM ALLTAG
+
+**Inhalte:** Admin-Panel → Speichern → ~2 Min. live
+**Code/Design:** HTML/JS mit Claude → GitHub Desktop → Push → Netlify
+**Portfolio:** Admin → Portfolio erstellen → Auswahl → PDF
+**Preisliste:** URL /verfuegbar-preise.html per E-Mail an Interessenten

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt – Sebastian Friedrich</title>
+  <meta name="description" content="Kontakt zu Sebastian Friedrich. Anfragen zu Werken, Ausstellungen und Kooperationen.">
+  <link rel="stylesheet" href="sf-base.css?v=21">
+  <style>
+    .kontakt-page {
+      padding-top: calc(var(--nav-h) + clamp(44px, 7vw, 96px));
+      padding-bottom: clamp(64px, 8vw, 120px);
+    }
+    .kontakt-inner {
+      width: var(--site-width);
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0;
+    }
+    .kontakt-title {
+      font-size: clamp(4rem, 13vw, 10rem);
+      font-weight: 300;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+      text-transform: uppercase;
+      margin-bottom: clamp(28px, 5vw, 56px);
+      padding-bottom: clamp(24px, 4vw, 40px);
+      border-bottom: 1px solid var(--black);
+    }
+    .kontakt-intro {
+      max-width: 660px;
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .kontakt-social {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: clamp(48px, 7vw, 72px);
+    }
+    .kontakt-form-wrap {
+      max-width: 900px;
+      border-top: 1px solid var(--gray-mid);
+      padding-top: clamp(32px, 5vw, 48px);
+    }
+    @media (max-width: 640px) {
+      .kontakt-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
+      .kontakt-title { letter-spacing: -0.05em; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="werke.html" data-i18n="nav.werke">Werke</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt" class="active">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="nav-overlay" id="nav-overlay">
+  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
+  <a href="werke.html" onclick="closeMenu()" data-i18n="nav.werke">Werke</a>
+  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
+  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
+  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
+  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
+  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+</div>
+
+<main class="kontakt-page">
+  <div class="kontakt-inner">
+    <h1 class="kontakt-title" data-i18n="contact.titel">Kontakt</h1>
+    <p class="kontakt-intro" data-i18n="contact.intro">
+      Für Anfragen, Kooperationen und Informationen zu verfügbaren Werken nutzen Sie bitte das Formular.
+    </p>
+    <div class="kontakt-social">
+      <a class="contact-link" id="kontakt-instagram" href="https://www.instagram.com/sebastiano_friedrich/" target="_blank" rel="noopener" data-i18n="contact.instagram">Instagram</a>
+    </div>
+    <div class="kontakt-form-wrap">
+      <form class="contact-form" id="contact-page-form" name="kontakt" method="POST" action="/danke.html" data-netlify="true" novalidate>
+        <input type="hidden" name="form-name" value="kontakt">
+        <input type="hidden" name="work_id" value="">
+        <input type="hidden" name="work_title" value="">
+        <input type="hidden" name="work_year" value="">
+        <input type="hidden" name="page" value="">
+        <div class="contact-form-grid">
+          <label class="contact-field">
+            <span class="contact-label" data-i18n="contact.name">Name</span>
+            <input class="contact-input" type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="contact-field">
+            <span class="contact-label" data-i18n="contact.email">E-Mail</span>
+            <input class="contact-input" type="email" name="email" autocomplete="email" required>
+          </label>
+          <label class="contact-field contact-field-full">
+            <span class="contact-label" data-i18n="contact.subject">Betreff</span>
+            <input class="contact-input" type="text" name="subject" required>
+          </label>
+          <label class="contact-field contact-field-full contact-field-message">
+            <span class="contact-label" data-i18n="contact.message">Nachricht</span>
+            <textarea class="contact-textarea" name="message" required></textarea>
+          </label>
+        </div>
+        <div class="contact-form-actions">
+          <button class="btn" type="submit" data-i18n="contact.send">Nachricht senden</button>
+          <span class="contact-status" data-contact-status aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  <ul class="footer-links">
+    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+    <li><a href="https://www.instagram.com/sebastiano_friedrich/" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</footer>
+
+<script src="sf-base.js?v=21"></script>
+<script>
+async function init() {
+  applyI18n();
+  initNav(false);
+  const params = new URLSearchParams(location.search);
+  const werkId = params.get('werk');
+  try {
+    const res = await fetch('data.json');
+    DATA = await res.json();
+    renderFooter(DATA);
+    const insta = DATA?.meta?.kontakt?.instagram;
+    if (insta) {
+      document.getElementById('kontakt-instagram').href = insta;
+    }
+    initContactPageForm('contact-page-form', werkId);
+  } catch(e) {
+    console.error('data.json konnte nicht geladen werden:', e);
+    initContactPageForm('contact-page-form', werkId);
+  }
+}
+
+function onLangChange() {
+  const params = new URLSearchParams(location.search);
+  initContactPageForm('contact-page-form', params.get('werk'));
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
