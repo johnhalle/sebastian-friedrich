@@ -206,18 +206,16 @@ function initNav(hasHero) {
   nav.classList.remove('scrolled');
   const hero = document.getElementById('hero');
   if (hero && 'IntersectionObserver' in window) {
-    // Nav erscheint sobald Hero nicht mehr sichtbar ist
     const observer = new IntersectionObserver(
       ([entry]) => { nav.classList.toggle('scrolled', !entry.isIntersecting); },
-      { threshold: 0, rootMargin: '0px 0px -' + (nav.offsetHeight || 48) + 'px 0px' }
+      { threshold: 0 }
     );
     observer.observe(hero);
   } else {
-    // Fallback: einfacher Scroll-Threshold
     function updateNav() {
       const h = document.getElementById('hero');
-      const threshold = h ? h.offsetHeight - (nav.offsetHeight || 48) : window.innerHeight * 0.9;
-      nav.classList.toggle('scrolled', window.scrollY >= Math.max(0, threshold));
+      const threshold = h ? h.offsetHeight * 0.9 : window.innerHeight * 0.9;
+      nav.classList.toggle('scrolled', window.scrollY >= threshold);
     }
     updateNav();
     window.addEventListener('scroll', updateNav, { passive: true });
