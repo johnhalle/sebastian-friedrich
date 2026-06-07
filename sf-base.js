@@ -206,8 +206,16 @@ function initNav(hasHero) {
   nav.classList.remove('scrolled');
   function updateNav() {
     const hero = document.getElementById('hero');
-    const navHeight = nav.offsetHeight || 48;
-    const threshold = hero ? Math.max(0, hero.offsetHeight - navHeight) : window.innerHeight * 0.9;
+    // Mobile: Hero ist 100dvh; threshold = 80% der sichtbaren Viewport-Höhe
+    // Desktop: threshold = Hero-Höhe minus Nav
+    const isMobile = window.innerWidth <= 760;
+    let threshold;
+    if (isMobile) {
+      threshold = window.innerHeight * 0.8;
+    } else {
+      const navHeight = nav.offsetHeight || 48;
+      threshold = hero ? Math.max(0, hero.offsetHeight - navHeight) : window.innerHeight * 0.9;
+    }
     nav.classList.toggle('scrolled', window.scrollY >= threshold);
   }
   updateNav();

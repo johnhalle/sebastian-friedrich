@@ -973,6 +973,17 @@ body.reader-open { overflow: hidden; }
 
 /* ── 15. MOBILE WIDTH RESET ─────────────────────────────── */
 @media (max-width: 760px) {
+  /* Unterseiten-Titel: auf Mobile nie breiter als Viewport */
+  .page-title,
+  .vita-title,
+  .kontakt-title,
+  .katalog-page-title {
+    font-size: clamp(3.2rem, 18vw, 5rem);
+    line-height: 0.92;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
   .nav-inner,
   .section,
   footer {
