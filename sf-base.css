@@ -1150,3 +1150,13 @@ nav.over-hero:not(.scrolled) {
     letter-spacing: -0.065em !important;
   }
 }
+
+/* V27 Feintuning: Katalog-Hero braucht auf Mobile mehr Luft vor der Trennlinie. */
+.katalog-hero {
+  padding-bottom: clamp(48px, 7vw, 72px) !important;
+}
+@media (max-width: 760px) {
+  .katalog-hero {
+    padding-bottom: clamp(82px, 18vw, 112px) !important;
+  }
+}
