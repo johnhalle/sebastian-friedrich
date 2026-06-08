@@ -17,16 +17,16 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="sf-base.css?v=46">
+  <link rel="stylesheet" href="sf-base.css?v=49">
   <style>
     /* ── HERO ──────────────────────────────────────────────── */
     #hero {
       position: relative;
       min-height: unset;
-      height: 90dvh;
-      width: var(--site-width);
-      max-width: var(--max-w);
-      margin: 0 auto;
+      height: 100dvh;
+      width: 100%;
+      max-width: none;
+      margin: 0;
       overflow: hidden;
       background: #c8c4be;
     }
@@ -64,30 +64,30 @@
       pointer-events: none;
     }
 
-    .hero-text {
+    #hero .hero-text {
       position: absolute;
       z-index: 2;
-      top: calc(var(--nav-h) + 28px);
-      right: clamp(24px, 3.2vw, 40px);
+      top: calc(var(--nav-h) + 4vw);
+      right: 3vw;
       left: auto;
-      width: min(430px, 39vw);
+      width: 37vw;
       text-align: right;
       color: var(--white);
       text-shadow: 0 2px 18px rgba(0,0,0,0.18);
     }
 
-    .hero-name {
-      font-size: clamp(3.0rem, 5.0vw, 5.35rem);
-      font-weight: 300;
+    #hero .hero-name {
+      font-size: 7.8vw !important;
+      font-weight: 300 !important;
       line-height: 1.0;
       letter-spacing: -0.035em;
       color: currentColor;
-      margin-bottom: 12px;
+      margin-bottom: 0.25em;
     }
     .hero-name span { display: block; }
 
-    .hero-bezeichnung {
-      font-size: clamp(0.6875rem, 0.9vw, 0.875rem);
+    #hero .hero-bezeichnung {
+      font-size: 1.1vw !important;
       font-weight: 500;
       letter-spacing: 0.24em;
       text-transform: uppercase;
@@ -131,22 +131,22 @@
 
     @media (min-width: 761px) and (max-width: 1120px) {
       .hero-text {
-        right: clamp(24px, 4vw, 40px);
-        top: calc(var(--nav-h) + 28px);
-        width: min(380px, 40vw);
+        right: 3vw;
+        top: calc(var(--nav-h) + 4vw);
+        width: 37vw;
         text-align: right;
       }
       .hero-name {
-        font-size: clamp(3.2rem, 7vw, 5.35rem);
+        font-size: 4.5vw;
       }
     }
 
     @media (orientation: portrait) and (min-width: 761px) {
       .hero-bg { background-position: 48% 34%; }
       .hero-text {
-        top: calc(var(--nav-h) + 28px);
-        right: clamp(24px, 4vw, 40px);
-        width: min(360px, 42vw);
+        top: calc(var(--nav-h) + 4vw);
+        right: 3vw;
+        width: 37vw;
         text-align: right;
       }
     }
@@ -261,19 +261,17 @@
         margin-right: 0;
       }
       #neueste .werke-slider .werk-card-inner {
-        height: 444px;
         min-height: 0 !important;
+        display: flex;
+        flex-direction: column;
       }
       #neueste .werke-slider .werk-card-img-wrap {
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
         flex: 0 0 auto;
       }
       #neueste .werke-slider .werk-card-img {
-        width: auto;
-        max-width: 100%;
-        max-height: 358px;
+        width: 100%;
+        height: auto;
+        display: block;
       }
       #neueste .werke-slider .werk-card-body {
         margin-top: 0;
@@ -660,17 +658,90 @@ function shuffle(arr) {
 
 function getNeusteWerke(data) {
   const thisYear = new Date().getFullYear();
-  return data.werke
-    .filter(w => w.jahr >= thisYear - 1)
-    .sort((a, b) => b.jahr - a.jahr);
+
+  // Pool: laufendes + vergangenes Jahr
+  let pool = data.werke.filter(w => w.jahr >= thisYear - 1);
+
+  // Hochformat: erster Maß-Wert > zweiter
+  function isPortrait(w) {
+    if (!w.masse) return false;
+    const m = w.masse.match(/(\d+)\s*[×x]\s*(\d+)/);
+    return m ? parseInt(m[1]) > parseInt(m[2]) : false;
+  }
+
+  // Fisher-Yates shuffle
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Hoch- und Querformate getrennt mischen
+  let portraits  = shuffle(pool.filter(w =>  isPortrait(w)));
+  let landscapes = shuffle(pool.filter(w => !isPortrait(w)));
+
+  // Zusammenführen: In jeder 3er-Gruppe nie alle gleich.
+  // Strategie: abwechselnd aus beiden Stapeln ziehen.
+  // Muster: H Q H Q Q H Q H … (je nach Verfügbarkeit)
+  // Konkret: Immer wenn 2 gleiche in Folge, nächste aus dem anderen Stapel.
+  const result = [];
+  let pi = 0, li = 0;
+
+  // Erstes Element: Hochformat (Pflicht)
+  if (portraits.length > 0) {
+    result.push(portraits[pi++]);
+  } else {
+    result.push(landscapes[li++]);
+  }
+
+  while (pi < portraits.length || li < landscapes.length) {
+    // Zähle wie viele gleiche am Ende der result-Liste stehen
+    const last = result[result.length - 1];
+    const secondLast = result.length > 1 ? result[result.length - 2] : null;
+    const lastIsPortrait = isPortrait(last);
+    const twoSameInRow = secondLast && isPortrait(secondLast) === lastIsPortrait;
+
+    if (twoSameInRow) {
+      // Muss wechseln
+      if (lastIsPortrait && li < landscapes.length) {
+        result.push(landscapes[li++]);
+      } else if (!lastIsPortrait && pi < portraits.length) {
+        result.push(portraits[pi++]);
+      } else if (pi < portraits.length) {
+        result.push(portraits[pi++]);
+      } else {
+        result.push(landscapes[li++]);
+      }
+    } else {
+      // Bevorzuge abwechselnd, aber nimm was verfügbar ist
+      if (lastIsPortrait && li < landscapes.length) {
+        result.push(landscapes[li++]);
+      } else if (!lastIsPortrait && pi < portraits.length) {
+        result.push(portraits[pi++]);
+      } else if (pi < portraits.length) {
+        result.push(portraits[pi++]);
+      } else {
+        result.push(landscapes[li++]);
+      }
+    }
+  }
+
+  return result;
 }
 
 function renderNeueste(data) {
   const pool = getNeusteWerke(data);
   window.NEUESTE_IDS = pool.map(w => w.id);
   const slider = document.getElementById('neueste-grid');
-  slider.innerHTML = pool.map(w => `
-    <div class="werk-card ${w.id === 'marco-2026' ? 'werk-card-marco' : ''}" onclick="openDetail('${w.id}', NEUESTE_IDS)">
+  slider.innerHTML = pool.map(w => {
+    const _mm = w.masse ? w.masse.match(/([\d,]+)\s*[\u00d7x]\s*([\d,]+)/) : null;
+    const _ratio = _mm
+      ? (parseFloat(_mm[1].replace(',','.')) / parseFloat(_mm[2].replace(',','.'))).toFixed(4)
+      : '1.0000';
+    return `
+    <div class="werk-card ${w.id === 'marco-2026' ? 'werk-card-marco' : ''}" data-ratio="${_ratio}" onclick="openDetail('${w.id}', NEUESTE_IDS)">
       <div class="werk-card-inner">
         <div class="werk-card-img-wrap">
           <img class="werk-card-img" src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
@@ -680,15 +751,15 @@ function renderNeueste(data) {
           <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
   slider.querySelectorAll('.werk-card-img').forEach(img => {
     const classify = () => {
       if (!img.naturalWidth || !img.naturalHeight) return;
       const card = img.closest('.werk-card');
       if (!card) return;
       card.classList.toggle('werk-card-portrait', img.naturalHeight > img.naturalWidth * 1.08);
-      requestAnimationFrame(layoutNeuesteCards);
+      requestAnimationFrame(() => { layoutNeuesteCards(); syncCardHeights(); });
     };
     if (img.complete) classify();
     img.addEventListener('load', classify, { once: true });
@@ -697,6 +768,23 @@ function renderNeueste(data) {
   function equalizeNeuesteCards() {
     slider.querySelectorAll('.werk-card-inner').forEach(inner => {
       inner.style.minHeight = '0px';
+    });
+  }
+
+  function syncCardHeights() {
+    const cards = Array.from(slider.querySelectorAll('.werk-card'));
+    const captionH = 86;
+
+    // Höchstes gerendertes Bild über alle Karten → fixe Gesamthöhe für alle
+    const maxImgH = Math.max(...cards.map(card => {
+      const img = card.querySelector('.werk-card-img');
+      return img ? img.offsetHeight : 0;
+    }), 0);
+    if (maxImgH === 0) return;
+
+    const totalCardH = maxImgH + captionH;
+    cards.forEach(card => {
+      card.querySelector('.werk-card-inner').style.height = `${totalCardH}px`;
     });
   }
 
@@ -745,18 +833,15 @@ function renderNeueste(data) {
 
     for (let i = 0; i < cards.length; i += visibleColumns) {
       const group = cards.slice(i, i + visibleColumns);
-      const weights = group.map(card => card.classList.contains('werk-card-portrait') ? 0.80 : 1);
-      while (weights.length < visibleColumns) weights.push(1);
-      const totalWeight = weights.reduce((sum, value) => sum + value, 0);
+      // Alle Karten gleich breit
+      const cardW = Math.round(available / visibleColumns);
+      group.forEach(card => { card.style.width = `${cardW}px`; });
 
-      group.forEach((card, index) => {
-        const width = Math.round((available * weights[index]) / totalWeight);
-        card.style.width = `${width}px`;
-      });
+      // Gesamthöhe nach Bildladen setzen (siehe classify unten)
+      // Hier nur Breiten – Höhen werden in syncCardHeights() gesetzt
     }
 
     equalizeNeuesteCards();
-    requestAnimationFrame(syncNeuesteCardWidths);
   }
 
 
