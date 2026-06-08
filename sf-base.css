@@ -686,6 +686,7 @@ footer {
   .lightbox-card {
     position: relative;
     flex-direction: column;
+    justify-content: space-between;
     width: 100vw;
     height: 100dvh;
     overflow-y: auto;
@@ -693,14 +694,14 @@ footer {
   }
   .lightbox-info {
     position: static;
-    flex: 0 0 auto;
-    min-height: 0;
-    max-height: none;
+    flex: 0 0 30dvh;
+    min-height: 30dvh;
+    max-height: 30dvh;
     width: 100%;
     border-left: none;
     border-top: 1px solid var(--gray-mid);
     padding: 18px 20px 28px;
-    overflow: visible;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -722,13 +723,14 @@ footer {
     z-index: 11;
   }
   .lightbox-img-wrap {
-    flex: 0 0 auto;
-    height: clamp(320px, 58dvh, 640px);
-    padding: 72px 16px 18px;
+    flex: 1 1 auto;
     min-height: 0;
+    padding: 72px 16px 18px;
     background: var(--white);
+    display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
   .lightbox-img {
     max-width: 100%;
