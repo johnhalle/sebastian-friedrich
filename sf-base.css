@@ -602,7 +602,7 @@ footer {
 /* X oben rechts im Info-Panel */
 .lightbox-close {
   position: absolute;
-  top: 32px;
+  top: 38px;
   right: 28px;
   background: none;
   border: none;
@@ -619,7 +619,7 @@ footer {
 /* Zählung oben mittig mit Pfeilen */
 .lightbox-counter {
   position: absolute;
-  top: 29px;
+  top: 35px;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
@@ -652,7 +652,7 @@ footer {
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin-bottom: 24px;
-  margin-top: 56px;
+  margin-top: 66px;
 }
 .lightbox-meta-list { list-style: none; margin-bottom: 28px; flex: 1; }
 .lightbox-meta-list li {
@@ -684,38 +684,57 @@ footer {
   }
   .lightbox-info {
     position: static;
-    flex: 0 0 auto;
+    flex: 0 0 clamp(232px, 31dvh, 286px);
+    min-height: clamp(232px, 31dvh, 286px);
+    max-height: clamp(232px, 31dvh, 286px);
     width: 100%;
     border-left: none;
     border-top: 1px solid var(--gray-mid);
-    padding: 20px 20px 24px;
+    padding: 18px 20px 22px;
     overflow-y: auto;
-    max-height: 42dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
   }
   .lightbox-close {
     position: absolute;
-    top: 14px;
-    right: 16px;
+    top: 22px;
+    right: 18px;
     z-index: 12;
     background: transparent;
     padding: 4px;
   }
   .lightbox-counter {
     position: absolute;
-    top: 14px;
+    top: 22px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 11;
   }
   .lightbox-img-wrap {
-    flex: 1 1 0;
-    padding: 56px 16px 12px;
+    flex: 1 1 auto;
+    padding: 72px 16px 18px;
     min-height: 0;
     background: var(--white);
+    align-items: center;
+    justify-content: center;
   }
-  .lightbox-img { max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; }
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center center;
+  }
   .lightbox-titel { font-size: 1.125rem; margin-bottom: 10px; margin-top: 0; }
-  .lightbox-meta-list { margin-bottom: 12px; }
+  .lightbox-meta-list {
+    margin-bottom: 12px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
   .lightbox-meta-list li { padding: 3px 0; }
   .lightbox-arrow { display: none; }
 }
