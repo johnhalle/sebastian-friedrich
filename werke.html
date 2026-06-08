@@ -6,7 +6,7 @@
   <title>Werke – Sebastian Friedrich</title>
   <meta name="description" content="Alle Werke von Sebastian Friedrich. Malerei in Öl auf Leinwand und MDF.">
 
-  <link rel="stylesheet" href="sf-base.css?v=28">
+  <link rel="stylesheet" href="sf-base.css?v=32">
   <style>
     /* Unterseitenkopf zentral in sf-base.css. */
     .filter-bar {
@@ -51,6 +51,25 @@
       grid-template-columns: 581px 1fr;
       gap: 48px;
       align-items: end;
+      position: relative;
+      --connector-left: 0px;
+      --connector-right: 100%;
+    }
+    @media (min-width: 681px) {
+      .werk-zeile::after {
+        content: '';
+        position: absolute;
+        left: var(--connector-left);
+        right: var(--connector-right);
+        bottom: 0;
+        height: 1px;
+        background: var(--gray-mid);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .werk-zeile.connector-ready::after {
+        opacity: 1;
+      }
     }
     .werk-zeile.rechts {
       grid-template-columns: 1fr 581px;
@@ -182,6 +201,9 @@
         display: block !important;
         text-align: center;
       }
+      .werk-zeile::after {
+        display: none !important;
+      }
       .werk-zeile-bild {
         display: block;
         text-align: center;
@@ -295,7 +317,7 @@
   </ul>
 </footer>
 
-<script src="sf-base.js?v=28"></script>
+<script src="sf-base.js?v=32"></script>
 <script>
 /* ── SEITEN-SPEZIFISCH: werke.html ── */
 
@@ -342,6 +364,7 @@ function applyImageSize(img, groesse) {
       img.style.maxHeight = px + 'px';
       img.style.maxWidth  = '';
     }
+    requestAnimationFrame(updateWerkConnectors);
   }
   if (img.complete && img.naturalWidth) {
     setSide();
@@ -349,6 +372,50 @@ function applyImageSize(img, groesse) {
     img.addEventListener('load', setSide, { once: true });
   }
 }
+
+function updateWerkConnectors() {
+  const rows = document.querySelectorAll('.werk-zeile');
+  rows.forEach(row => row.classList.remove('connector-ready'));
+  if (window.innerWidth <= 680) return;
+
+  rows.forEach(row => {
+    const img = row.querySelector('.werk-zeile-bild img');
+    const infoParts = row.querySelectorAll('.werk-zeile-titel, .werk-zeile-meta-list, .werk-zeile-anfrage .btn');
+    if (!img || !infoParts.length) return;
+
+    const rowRect = row.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    const parts = Array.from(infoParts)
+      .map(el => el.getBoundingClientRect())
+      .filter(rect => rect.width > 0 && rect.height > 0);
+    if (!parts.length) return;
+
+    const safetyGap = 12;
+    let left;
+    let right;
+
+    if (row.classList.contains('rechts')) {
+      const contentRight = Math.max(...parts.map(rect => rect.right));
+      left = Math.round(contentRight - rowRect.left + safetyGap);
+      right = Math.round(rowRect.right - imgRect.left);
+    } else {
+      const contentLeft = Math.min(...parts.map(rect => rect.left));
+      left = Math.round(imgRect.right - rowRect.left);
+      right = Math.round(rowRect.right - contentLeft + safetyGap);
+    }
+
+    if (rowRect.width - left - right < 24) return;
+    row.style.setProperty('--connector-left', `${left}px`);
+    row.style.setProperty('--connector-right', `${right}px`);
+    row.classList.add('connector-ready');
+  });
+}
+
+let connectorResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(connectorResizeTimer);
+  connectorResizeTimer = setTimeout(updateWerkConnectors, 80);
+});
 
 function werkZeile(w, index, ids) {
   const seite = index % 2 === 0 ? '' : 'rechts';
@@ -395,11 +462,15 @@ function renderListe(werke) {
   liste.querySelectorAll('.werk-zeile').forEach(zeile => {
     const img = zeile.querySelector('img');
     const g   = zeile.dataset.groesse;
-    if (img && g) applyImageSize(img, g);
+    if (img && g) {
+      applyImageSize(img, g);
+      img.addEventListener('load', updateWerkConnectors, { once: true });
+    }
     // Lightbox-Klick
     const bild = zeile.querySelector('.werk-zeile-bild');
     if (bild) bild.addEventListener('click', () => openDetail(bild.dataset.id, ALLE_IDS));
   });
+  requestAnimationFrame(updateWerkConnectors);
 }
 
 function renderAll(data) {

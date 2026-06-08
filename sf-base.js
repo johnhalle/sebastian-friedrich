@@ -143,6 +143,32 @@ function ui(key) {
   return (I18N[LANG] && I18N[LANG][key]) || (I18N['de'][key]) || key;
 }
 
+function fitPageTitles() {
+  const titles = document.querySelectorAll('.page-title, .vita-title, .kontakt-title, .katalog-page-title');
+  titles.forEach(el => {
+    el.style.removeProperty('font-size');
+    const computed = window.getComputedStyle(el);
+    const baseSize = parseFloat(computed.fontSize);
+    if (!baseSize || !el.clientWidth) return;
+    if (el.scrollWidth <= el.clientWidth + 1) return;
+
+    const minSize = window.innerWidth <= 760 ? 42 : 72;
+    let low = minSize;
+    let high = baseSize;
+    for (let i = 0; i < 12; i++) {
+      const mid = (low + high) / 2;
+      el.style.setProperty('font-size', `${mid}px`, 'important');
+      if (el.scrollWidth <= el.clientWidth + 1) low = mid;
+      else high = mid;
+    }
+    el.style.setProperty('font-size', `${Math.floor(low)}px`, 'important');
+  });
+}
+
+function scheduleFitPageTitles() {
+  window.requestAnimationFrame(() => fitPageTitles());
+}
+
 function applyI18n() {
   document.documentElement.lang = LANG;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -159,7 +185,10 @@ function applyI18n() {
   const overlayBtn = document.getElementById('overlay-lang-btn');
   if (langBtn) langBtn.textContent = LANG === 'de' ? 'EN' : 'DE';
   if (overlayBtn) overlayBtn.textContent = LANG === 'de' ? 'EN' : 'DE';
+  scheduleFitPageTitles();
 }
+
+window.addEventListener('resize', scheduleFitPageTitles, { passive: true });
 
 function toggleLang() {
   LANG = LANG === 'de' ? 'en' : 'de';
