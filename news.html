@@ -9,13 +9,17 @@
   <meta property="og:description" content="Aktuelle und ausgewählte Veranstaltungen von Sebastian Friedrich.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="sf-base.css?v=25">
+  <link rel="stylesheet" href="sf-base.css?v=26">
   <style>
 
     /* Unterseitenkopf zentral in sf-base.css. */
+    .news-page {
+      padding-bottom: clamp(56px, 9vw, 88px);
+    }
     .news-list {
       display: grid;
       gap: clamp(64px, 10vw, 132px);
+      padding-bottom: clamp(24px, 4vw, 40px);
     }
     .news-item {
       display: grid;
@@ -291,7 +295,7 @@
     }
     .news-lightbox-counter-nav:disabled { opacity: 0.25; cursor: default; }
     @media (max-width: 760px) {
-      .news-page { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); padding-bottom: clamp(64px, 12vw, 92px); }
+      .news-page { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); padding-bottom: clamp(80px, 14vw, 112px); }
       .news-item { grid-template-columns: 1fr; gap: 10px; }
       .news-year { position: static; font-size: 3rem; }
       .news-facts li { grid-template-columns: 1fr; gap: 2px; }
@@ -370,7 +374,7 @@
     <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
 </footer>
-<script src="sf-base.js?v=25"></script>
+<script src="sf-base.js?v=26"></script>
 <script>
 let NEWS_ITEMS = [];
 let NEWS_LIGHTBOX_ID = null;

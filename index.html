@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="sf-base.css?v=25">
+  <link rel="stylesheet" href="sf-base.css?v=26">
   <style>
     /* ── HERO ──────────────────────────────────────────────── */
     #hero {
@@ -203,7 +203,7 @@
     }
     .link-alle:hover { color: var(--black); }
 
-    .werke-slider-wrap { position: relative; overflow: hidden; }
+    .werke-slider-wrap { overflow: hidden; }
 
     .werke-slider {
       display: flex;
@@ -220,25 +220,34 @@
     .werke-slider .werk-card-img-wrap { height: 340px; }
     .werke-slider .werk-card-img { max-width: 100%; max-height: 340px; }
 
-    .slider-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 40px; height: 40px;
-      background: var(--white); border: 1px solid var(--gray-mid); border-radius: 50%;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; color: var(--black); z-index: 2;
-      transition: background 0.15s, opacity 0.15s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    .slider-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      margin-top: 18px;
     }
-    .slider-btn:hover { background: var(--gray-light); }
-    .slider-btn.hidden { opacity: 0; pointer-events: none; }
-    .slider-btn-prev { left: 10px; }
-    .slider-btn-next { right: 10px; }
+    .slider-nav-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--gray-dark);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 1.125rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 6px;
+      transition: color 0.15s, opacity 0.15s;
+    }
+    .slider-nav-btn:hover { color: var(--black); }
+    .slider-nav-btn.hidden {
+      display: none;
+    }
 
     @media (max-width: 900px) {
       .werke-slider .werk-card { width: 260px; }
       .werke-slider .werk-card-img-wrap { height: 300px; }
       .werke-slider .werk-card-img { max-width: 260px; max-height: 300px; }
-      .slider-btn { display: none; }
     }
     @media (max-width: 480px) {
       .werke-slider .werk-card { width: 220px; }
@@ -249,6 +258,9 @@
 
 
     @media (max-width: 760px) {
+      #neueste {
+        padding-top: clamp(38px, 10vw, 56px);
+      }
       .werke-slider {
         gap: 0;
         scroll-snap-type: x mandatory;
@@ -275,15 +287,8 @@
         object-fit: contain;
         object-position: center bottom;
       }
-      .werke-slider-wrap::after {
-        content: '←        →';
-        display: block;
-        margin-top: 18px;
-        text-align: center;
-        font-size: 1.125rem;
-        letter-spacing: 0.28em;
-        text-transform: uppercase;
-        color: var(--gray-dark);
+      .slider-nav {
+        margin-top: 14px;
       }
     }
 
@@ -363,7 +368,7 @@
     .newsletter-inner { max-width: 560px; text-align: center; margin: 0 auto; }
     .newsletter-titel { font-size: 1.125rem; font-weight: 300; margin-bottom: 8px; }
     .newsletter-sub { font-size: 0.8125rem; color: var(--gray-dark); margin-bottom: 24px; }
-    .newsletter-form { display: flex; gap: 8px; max-width: 400px; margin: 0 auto 12px; }
+    .newsletter-form { display: flex; gap: 8px; width: 100%; max-width: 400px; margin: 0 auto 12px; }
     .newsletter-input {
       flex: 1; font-family: 'Inter', system-ui, sans-serif;
       font-size: 0.875rem; font-weight: 400; padding: 10px 14px;
@@ -373,16 +378,19 @@
     .newsletter-dsgvo { font-size: 0.6875rem; color: var(--gray-dark); }
 
 
-    /* V22: Mobile Startbereich – Label näher an das erste Werk, ohne den Slider zu dominieren */
     @media (max-width: 760px) {
       #neueste .werke-header {
-        margin-top: clamp(24px, 7vw, 36px);
-        margin-bottom: 6px;
+        margin-top: clamp(32px, 9vw, 48px);
+        margin-bottom: 10px;
       }
-      .werke-slider-wrap::after {
-        font-weight: 300;
-        line-height: 1;
+      .newsletter-form {
+        width: 100%;
+        max-width: none;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
       }
+      .newsletter-input { min-width: 0; }
+      .newsletter-form .btn { white-space: nowrap; }
     }
   </style>
 </head>
@@ -439,9 +447,11 @@
       <a href="werke.html" class="link-alle" data-i18n="home.alleWerke">Alle Werke</a>
     </div>
     <div class="werke-slider-wrap">
-      <button class="slider-btn slider-btn-prev hidden" id="neueste-prev" aria-label="Zurück">‹</button>
       <div class="werke-slider" id="neueste-grid"></div>
-      <button class="slider-btn slider-btn-next" id="neueste-next" aria-label="Weiter">›</button>
+    </div>
+    <div class="slider-nav" aria-label="Navigation der neuesten Werke">
+      <button class="slider-nav-btn hidden" id="neueste-prev" aria-label="Vorheriges Werk">←</button>
+      <button class="slider-nav-btn hidden" id="neueste-next" aria-label="Nächstes Werk">→</button>
     </div>
   </section>
 
@@ -506,7 +516,7 @@
   </ul>
 </footer>
 
-<script src="sf-base.js?v=25"></script>
+<script src="sf-base.js?v=26"></script>
 <script>
 /* ── SEITEN-SPEZIFISCH: index.html ── */
 
@@ -541,15 +551,33 @@ function renderNeueste(data) {
   `).join('');
   const prev = document.getElementById('neueste-prev');
   const next = document.getElementById('neueste-next');
-  const step = 352;
-  function updateBtns() {
-    prev.classList.toggle('hidden', slider.scrollLeft < 10);
-    next.classList.toggle('hidden', slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10);
+
+  function getStep() {
+    const cards = slider.querySelectorAll('.werk-card');
+    if (cards.length > 1) {
+      const first = cards[0].getBoundingClientRect();
+      const second = cards[1].getBoundingClientRect();
+      const delta = second.left - first.left;
+      if (delta > 0) return delta;
+    }
+    return slider.clientWidth || 1;
   }
-  prev.onclick = () => slider.scrollBy({ left: -step * 3, behavior: 'smooth' });
-  next.onclick = () => slider.scrollBy({ left:  step * 3, behavior: 'smooth' });
+
+  function updateBtns() {
+    const maxScroll = Math.max(0, slider.scrollWidth - slider.clientWidth);
+    prev.classList.toggle('hidden', slider.scrollLeft <= 10);
+    next.classList.toggle('hidden', slider.scrollLeft >= maxScroll - 10 || maxScroll <= 10);
+  }
+
+  function move(dir) {
+    slider.scrollBy({ left: dir * getStep(), behavior: 'smooth' });
+  }
+
+  prev.onclick = () => move(-1);
+  next.onclick = () => move(1);
   slider.addEventListener('scroll', updateBtns, { passive: true });
   initOneStepMobileSlider(slider);
+  window.addEventListener('resize', updateBtns, { passive: true });
   updateBtns();
 }
 
