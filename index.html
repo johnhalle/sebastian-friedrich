@@ -216,9 +216,36 @@
     }
     .werke-slider::-webkit-scrollbar { display: none; }
 
-    .werke-slider .werk-card { flex: 0 0 auto; width: calc((100% - 48px) / 3); scroll-snap-align: start; }
-    .werke-slider .werk-card-img-wrap { height: 340px; }
+    .werke-slider .werk-card {
+      flex: 0 0 auto;
+      width: calc((100% - 48px) / 3);
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+    }
+    .werke-slider .werk-card-img-wrap {
+      height: 340px;
+      margin-bottom: 0;
+    }
     .werke-slider .werk-card-img { max-width: 100%; max-height: 340px; }
+
+    @media (min-width: 761px) {
+      #neueste .werke-slider .werk-card-body {
+        margin-top: 14px;
+        padding: 18px 18px 20px;
+        background: var(--gray-light);
+        min-height: 102px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      #neueste .werk-card-titel {
+        margin-bottom: 6px;
+      }
+      #neueste .werk-card-meta {
+        line-height: 1.45;
+      }
+    }
 
     .slider-nav {
       display: flex;
@@ -402,6 +429,12 @@
       #neueste .werke-slider .werk-card {
         text-align: center;
       }
+      #neueste .werke-slider .werk-card-body {
+        margin-top: 0;
+        padding: 0;
+        background: transparent;
+        min-height: 0;
+      }
       #neueste .werke-slider .werk-card-img-wrap {
         height: auto;
         min-height: 0;
@@ -573,7 +606,7 @@ function getNeusteWerke(data) {
   const thisYear = new Date().getFullYear();
   return data.werke
     .filter(w => w.jahr >= thisYear - 1)
-    .sort((a, b) => b.jahr - a.jahr || (b.neu ? 1 : 0) - (a.neu ? 1 : 0));
+    .sort((a, b) => b.jahr - a.jahr);
 }
 
 function renderNeueste(data) {
@@ -585,8 +618,10 @@ function renderNeueste(data) {
       <div class="werk-card-img-wrap">
         <img class="werk-card-img" src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
       </div>
-      <p class="werk-card-titel">${w.titel}</p>
-      <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
+      <div class="werk-card-body">
+        <p class="werk-card-titel">${w.titel}</p>
+        <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
+      </div>
     </div>
   `).join('');
   const prev = document.getElementById('neueste-prev');

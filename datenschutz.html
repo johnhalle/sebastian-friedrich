@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datenschutzerklärung – Sebastian Friedrich</title>
+  <meta name="description" content="Datenschutzerklärung der Website von Sebastian Friedrich.">
+  <link rel="stylesheet" href="sf-base.css?v=28">
+  <style>
+    .legal-content {
+      width: var(--site-width);
+      max-width: 720px;
+      margin: var(--subpage-content-gap) auto 0;
+      padding-bottom: clamp(64px, 9vw, 112px);
+    }
+    .legal-section {
+      margin-bottom: clamp(34px, 5vw, 52px);
+    }
+    .legal-content h2 {
+      font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+      font-weight: 300;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      margin-bottom: 14px;
+    }
+    .legal-content p,
+    .legal-content li,
+    .legal-address {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--black);
+    }
+    .legal-content ul {
+      margin: 10px 0 0 1.1em;
+    }
+    .legal-content a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .legal-address {
+      font-style: normal;
+      margin-top: 4px;
+    }
+    .legal-updated {
+      color: var(--gray-dark);
+      font-size: 0.8125rem;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+    @media (max-width: 760px) {
+      .legal-content {
+        width: auto;
+        max-width: none;
+        margin-top: var(--subpage-content-gap-mobile);
+        padding-left: clamp(16px, 5vw, 24px);
+        padding-right: clamp(16px, 5vw, 24px);
+        padding-bottom: clamp(56px, 12vw, 96px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="werke.html" data-i18n="nav.werke">Werke</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE OVERLAY -->
+<div class="nav-overlay" id="nav-overlay">
+  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
+  <a href="werke.html" onclick="closeMenu()" data-i18n="nav.werke">Werke</a>
+  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
+  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
+  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
+  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
+  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+</div>
+
+
+<main>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1 class="page-title">Datenschutz</h1>
+    </div>
+  </header>
+
+  <div class="legal-content">
+    <section class="legal-section">
+      <h2>1. Verantwortlicher</h2>
+      <address class="legal-address">
+        Sebastian Friedrich<br>
+        Atelierhaus Ehemalige Farbenfabrik<br>
+        Franz-Flemming-Straße 15<br>
+        04179 Leipzig<br>
+        Deutschland
+      </address>
+      <p>Elektronische Kontaktaufnahme: über das <a href="kontakt.html">Kontaktformular</a> dieser Website.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>2. Allgemeine Hinweise zur Datenverarbeitung</h2>
+      <p>Diese Website informiert über Sebastian Friedrich, seine Werke, Ausstellungen, Kataloge und Kontaktmöglichkeiten. Personenbezogene Daten werden nur verarbeitet, soweit dies für den technischen Betrieb, die Sicherheit des Angebots, die Darstellung der Inhalte oder die Bearbeitung von Kontakt- und Bestellanfragen erforderlich ist.</p>
+      <p>Rechtsgrundlage ist, soweit nachfolgend nicht anders angegeben, Art. 6 Abs. 1 lit. f DSGVO. Das berechtigte Interesse liegt in einem sicheren, funktionsfähigen und nutzerfreundlichen Webangebot.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>3. Hosting über Netlify</h2>
+      <p>Diese Website wird über Netlify bereitgestellt. Anbieter ist Netlify, Inc., San Francisco, USA. Beim Aufruf der Website verarbeitet Netlify technisch erforderliche Zugriffsdaten, insbesondere IP-Adresse, Datum und Uhrzeit des Abrufs, angeforderte Dateien, übertragene Datenmenge, Referrer-URL, Browsertyp und Betriebssystem.</p>
+      <p>Die Verarbeitung dient der Auslieferung, Stabilität und Sicherheit der Website. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Soweit personenbezogene Daten in die USA übermittelt werden, stützt Netlify solche Übermittlungen nach eigenen Angaben unter anderem auf das EU-U.S. Data Privacy Framework.</p>
+      <p>Weitere Informationen: <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">netlify.com/privacy</a> und <a href="https://www.netlify.com/gdpr-ccpa/" target="_blank" rel="noopener">netlify.com/gdpr-ccpa</a>.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>4. Bildauslieferung über Cloudinary</h2>
+      <p>Werkabbildungen, Newsbilder, Katalogcover und Reader-Seiten können über Cloudinary ausgeliefert werden. Anbieter ist Cloudinary, Inc., USA. Beim Laden dieser Medien können technisch erforderliche Zugriffsdaten wie IP-Adresse, Browserinformationen, Zeitpunkt des Abrufs und angeforderte Mediendateien verarbeitet werden.</p>
+      <p>Die Nutzung erfolgt zur performanten, stabilen und bildqualitativ geeigneten Auslieferung der Website-Inhalte. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>
+      <p>Weitere Informationen: <a href="https://cloudinary.com/privacy" target="_blank" rel="noopener">cloudinary.com/privacy</a>.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>5. Schriftarten</h2>
+      <p>Diese Website verwendet lokal eingebundene Schriftarten. Es erfolgt kein Abruf von Google Fonts oder anderen externen Schriftanbietern.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>6. Cookies und lokale Speicherung</h2>
+      <p>Diese Website verwendet keine Tracking-, Analyse- oder Werbe-Cookies. Für einzelne Komfortfunktionen können Informationen lokal im Browser gespeichert werden, insbesondere die gewählte Spracheinstellung. Diese Speicherung erfolgt ausschließlich lokal auf dem Endgerät und dient der Beibehaltung der gewählten Einstellung.</p>
+      <p>Rechtsgrundlage für technisch notwendige lokale Speicherung ist § 25 Abs. 2 TDDDG.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>7. Kontaktformular und Katalogbestellung</h2>
+      <p>Wenn Sie das Kontaktformular nutzen oder über die Website eine Anfrage zu einem Werk oder eine Katalogbestellung absenden, werden die von Ihnen eingegebenen Daten verarbeitet. Dazu können insbesondere Name, E-Mail-Adresse, Betreff, Nachricht sowie vom Formular automatisch ergänzte Angaben zu Werk oder Katalog gehören.</p>
+      <p>Die Verarbeitung erfolgt zur Bearbeitung Ihrer Anfrage. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; bei vorvertraglichen oder vertraglichen Anfragen zusätzlich Art. 6 Abs. 1 lit. b DSGVO. Die Daten werden nicht ohne Einwilligung an Dritte weitergegeben, soweit dies nicht zur Bearbeitung der Anfrage erforderlich oder gesetzlich vorgeschrieben ist.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>8. Newsletter-Hinweis</h2>
+      <p>Der Newsletterbereich ist derzeit als Frontend-Struktur angelegt. Solange keine aktive Newsletter-Anmeldung eingerichtet ist, findet darüber keine serverseitige Newsletter-Verarbeitung statt. Bei späterer Aktivierung wird diese Datenschutzerklärung entsprechend ergänzt.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>9. Externe Links</h2>
+      <p>Diese Website enthält Links zu externen Websites, insbesondere zu Instagram. Beim Anklicken eines externen Links verlassen Sie diese Website. Für die Datenverarbeitung auf den verlinkten Seiten ist der jeweilige Anbieter verantwortlich.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>10. Ihre Rechte</h2>
+      <p>Sie haben nach Maßgabe der gesetzlichen Voraussetzungen das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) sowie Widerspruch gegen die Verarbeitung (Art. 21 DSGVO).</p>
+      <p>Zur Ausübung dieser Rechte können Sie sich über das Kontaktformular oder postalisch an den Verantwortlichen wenden.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>11. Beschwerderecht bei einer Aufsichtsbehörde</h2>
+      <p>Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren. Für Sachsen ist zuständig:</p>
+      <address class="legal-address">
+        Sächsische Datenschutz- und Transparenzbeauftragte<br>
+        Maternistraße 17<br>
+        01067 Dresden
+      </address>
+      <p><a href="https://www.datenschutz.sachsen.de/" target="_blank" rel="noopener">datenschutz.sachsen.de</a></p>
+    </section>
+
+    <p class="legal-updated">Stand: Juni 2026</p>
+
+  </div>
+</main>
+
+<footer>
+  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  <ul class="footer-links">
+    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+    <li><a href="https://www.instagram.com/sebastiano_friedrich/" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</footer>
+
+<script src="sf-base.js?v=28"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  applyI18n();
+  initNav(false);
+  try {
+    const res = await fetch('data.json');
+    DATA = await res.json();
+    renderFooter(DATA);
+  } catch (e) {
+    const yearEl = document.getElementById('footer-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  }
+});
+</script>
+</body>
+</html>
