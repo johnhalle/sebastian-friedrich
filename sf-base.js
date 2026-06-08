@@ -285,7 +285,7 @@ function alignInfoPanel() {
   const img  = document.getElementById('lb-img');
   const info = document.querySelector('.lightbox-info');
   if (!img || !info) return;
-  if (window.innerWidth <= 768) {
+  if (window.innerWidth <= 1120) {
     info.style.paddingTop = '';
     info.style.paddingBottom = '';
     return;

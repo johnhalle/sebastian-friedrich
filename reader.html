@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sebastian Friedrich – Katalogreader</title>
   <meta name="description" content="Online-Reader zum Katalog Sebastian Friedrich: ON STAGE. Malerei.">
-  <link rel="stylesheet" href="sf-base.css?v=32">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="sf-base.css?v=46">
   <style>
     body.reader-page { height: 100dvh; overflow: hidden; }
     .reader-shell {
@@ -163,6 +169,15 @@
       .reader-controls { display: none; }
       .thumbs-wrap { flex-basis: 56px; padding-top: 6px; padding-bottom: 6px; }
       .thumb { height: 40px; }
+
+      /* V42 mobile embedded offset */
+      body.reader-page.reader-embedded .reader-shell {
+        padding-top: max(72px, env(safe-area-inset-top)) !important;
+      }
+      body.reader-page.reader-embedded .book-info {
+        padding-top: 10px !important;
+        padding-right: 72px !important;
+      }
     }
   </style>
 </head>
@@ -216,7 +231,7 @@
   </div>
   <div class="thumbs-wrap" id="thumbsWrap" style="display:none"></div>
 </div>
-<script src="sf-base.js?v=32"></script>
+<script src="sf-base.js?v=46"></script>
 <script>
 let pages = [];
 let current = 0;

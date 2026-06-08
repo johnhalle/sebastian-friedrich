@@ -10,7 +10,13 @@
   <meta property="og:image" content="https://res.cloudinary.com/def9qgwtw/image/upload/v1780737694/001.jpg">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="sf-base.css?v=32">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="sf-base.css?v=46">
   <style>
 
     .page-section {
@@ -118,6 +124,44 @@
       align-items: end;
       max-width: 760px;
       margin: clamp(44px, 7vw, 78px) 0;
+      position: relative;
+      --essay-connector-bottom-left: 0px;
+      --essay-connector-bottom-width: 0px;
+      --essay-connector-stem-left: 0px;
+      --essay-connector-stem-top: 0px;
+      --essay-connector-stem-height: 0px;
+      --essay-connector-top-width: 0px;
+    }
+    .essay-connector {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .essay-connector-part {
+      position: absolute;
+      background: var(--gray-mid);
+    }
+    @media (min-width: 761px) {
+      .essay-work-card.connector-ready .essay-connector { opacity: 1; }
+      .essay-connector-bottom {
+        left: var(--essay-connector-bottom-left);
+        bottom: 0;
+        width: var(--essay-connector-bottom-width);
+        height: 1px;
+      }
+      .essay-connector-stem {
+        left: var(--essay-connector-stem-left);
+        top: var(--essay-connector-stem-top);
+        width: 1px;
+        height: var(--essay-connector-stem-height);
+      }
+      .essay-connector-top {
+        left: var(--essay-connector-stem-left);
+        top: var(--essay-connector-stem-top);
+        width: var(--essay-connector-top-width);
+        height: 1px;
+      }
     }
     .essay-work-image {
       appearance: none;
@@ -265,7 +309,7 @@
     <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
 </footer>
-<script src="sf-base.js?v=32"></script>
+<script src="sf-base.js?v=46"></script>
 <script>
 
 function openReaderOverlay(url) {
@@ -304,6 +348,48 @@ function esc(s) {
 }
 function attr(s) { return esc(s).replace(/'/g, '&#39;'); }
 function workById(id) { return DATA?.werke?.find(w => w.id === id); }
+
+function updateEssayWorkConnectors() {
+  const cards = document.querySelectorAll('.essay-work-card');
+  cards.forEach(card => card.classList.remove('connector-ready'));
+  if (window.innerWidth <= 760) return;
+
+  cards.forEach(card => {
+    const img = card.querySelector('.essay-work-image img');
+    const title = card.querySelector('.essay-work-title');
+    const meta = card.querySelector('.essay-work-meta-list');
+    if (!img || !title || !meta) return;
+
+    const cardRect = card.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+    const titleRect = title.getBoundingClientRect();
+    const metaRect = meta.getBoundingClientRect();
+
+    const imageSide = imgRect.right;
+    const infoInnerSide = Math.min(titleRect.left, metaRect.left);
+    const infoOuterSide = Math.max(titleRect.right, metaRect.right);
+
+    const stemOffset = 16;
+    const titleTopOffset = 30;
+    const stemX = Math.round(infoInnerSide - cardRect.left - stemOffset);
+    const bottomStart = Math.round(imageSide - cardRect.left);
+    const bottomWidth = stemX - bottomStart;
+    const stemTop = Math.round(titleRect.top - cardRect.top - titleTopOffset);
+    const stemHeight = Math.round(cardRect.bottom - cardRect.top - stemTop);
+    const topWidth = Math.round(infoOuterSide - cardRect.left - stemX);
+
+    if (bottomWidth < 26 || stemHeight < 28 || topWidth < 24) return;
+
+    card.style.setProperty('--essay-connector-bottom-left', `${bottomStart}px`);
+    card.style.setProperty('--essay-connector-bottom-width', `${bottomWidth}px`);
+    card.style.setProperty('--essay-connector-stem-left', `${stemX}px`);
+    card.style.setProperty('--essay-connector-stem-top', `${stemTop}px`);
+    card.style.setProperty('--essay-connector-stem-height', `${stemHeight}px`);
+    card.style.setProperty('--essay-connector-top-width', `${topWidth}px`);
+    card.classList.add('connector-ready');
+  });
+}
+
 function renderKatalogPage(data) {
   const k = data.katalog?.[0];
   if (!k) return;
@@ -343,6 +429,11 @@ function renderKatalogPage(data) {
         { label: ui('detail.masse'), val: w.masse }
       ].filter(m => m.val).map(m => `<li><span class="essay-work-meta-label">${esc(m.label)}</span><span>${esc(m.val)}</span></li>`).join('');
       return `<figure class="essay-work-card" data-work-id="${attr(w.id)}">
+        <div class="essay-connector" aria-hidden="true">
+          <span class="essay-connector-part essay-connector-bottom"></span>
+          <span class="essay-connector-part essay-connector-stem"></span>
+          <span class="essay-connector-part essay-connector-top"></span>
+        </div>
         <button class="essay-work-image" type="button" data-work-lightbox="${attr(w.id)}" aria-label="${attr(w.titel)} öffnen">
           <img src="${attr(w.bild)}" alt="${attr(w.titel + ', ' + w.jahr)}" loading="lazy">
         </button>
@@ -366,6 +457,11 @@ function renderKatalogPage(data) {
   document.querySelectorAll('[data-work-lightbox]').forEach(btn => {
     btn.addEventListener('click', () => openDetail(btn.dataset.workLightbox, [btn.dataset.workLightbox]));
   });
+  document.querySelectorAll('.essay-work-image img').forEach(img => {
+    if (img.complete) requestAnimationFrame(updateEssayWorkConnectors);
+    img.addEventListener('load', updateEssayWorkConnectors, { once: true });
+  });
+  requestAnimationFrame(updateEssayWorkConnectors);
 }
 function onLangChange() { if (DATA) renderKatalogPage(DATA); }
 async function init() {
@@ -378,6 +474,7 @@ async function init() {
   renderKatalogPage(DATA);
   initLightbox();
 }
+window.addEventListener('resize', updateEssayWorkConnectors, { passive: true });
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>

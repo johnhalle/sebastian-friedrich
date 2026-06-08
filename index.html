@@ -11,7 +11,13 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="sf-base.css?v=32">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="sf-base.css?v=46">
   <style>
     /* ── HERO ──────────────────────────────────────────────── */
     #hero {
@@ -61,7 +67,7 @@
     .hero-text {
       position: absolute;
       z-index: 2;
-      top: clamp(118px, 18dvh, 180px);
+      top: calc(var(--nav-h) + 28px);
       right: clamp(24px, 3.2vw, 40px);
       left: auto;
       width: min(430px, 39vw);
@@ -126,7 +132,7 @@
     @media (min-width: 761px) and (max-width: 1120px) {
       .hero-text {
         right: clamp(24px, 4vw, 40px);
-        top: clamp(104px, 18dvh, 158px);
+        top: calc(var(--nav-h) + 28px);
         width: min(380px, 40vw);
         text-align: right;
       }
@@ -138,6 +144,7 @@
     @media (orientation: portrait) and (min-width: 761px) {
       .hero-bg { background-position: 48% 34%; }
       .hero-text {
+        top: calc(var(--nav-h) + 28px);
         right: clamp(24px, 4vw, 40px);
         width: min(360px, 42vw);
         text-align: right;
@@ -206,8 +213,9 @@
     .werke-slider-wrap { overflow: hidden; }
 
     .werke-slider {
+      --desktop-card-gap: 24px;
       display: flex;
-      gap: 24px;
+      gap: var(--desktop-card-gap);
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
@@ -221,29 +229,62 @@
       width: calc((100% - 48px) / 3);
       scroll-snap-align: start;
       display: flex;
+      align-items: stretch;
+    }
+    .werke-slider .werk-card-inner {
+      width: 100%;
+      display: flex;
       flex-direction: column;
+      align-items: stretch;
+      height: 100%;
+      min-height: 0;
     }
     .werke-slider .werk-card-img-wrap {
-      height: 340px;
+      height: auto;
+      display: block;
       margin-bottom: 0;
     }
-    .werke-slider .werk-card-img { max-width: 100%; max-height: 340px; }
+    .werke-slider .werk-card-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      max-height: none;
+      object-fit: contain;
+      object-position: center top;
+    }
 
     @media (min-width: 761px) {
+      #neueste .werke-slider .werk-card-portrait .werk-card-inner {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      #neueste .werke-slider .werk-card-inner {
+        height: 444px;
+        min-height: 0 !important;
+      }
       #neueste .werke-slider .werk-card-img-wrap {
-        background: var(--gray-light);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex: 0 0 auto;
       }
       #neueste .werke-slider .werk-card-img {
-        background: var(--white);
+        width: auto;
+        max-width: 100%;
+        max-height: 358px;
       }
       #neueste .werke-slider .werk-card-body {
         margin-top: 0;
-        padding: 22px 22px 24px;
+        padding: 14px 22px 20px;
         background: var(--gray-light);
-        min-height: 102px;
+        min-height: 86px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-end;
+        flex: 1 1 auto;
+        box-sizing: border-box;
       }
       #neueste .werke-slider .werk-card-marco .werk-card-img {
         border-bottom: 1px solid var(--gray-mid);
@@ -282,13 +323,9 @@
 
     @media (max-width: 900px) {
       .werke-slider .werk-card { width: 260px; }
-      .werke-slider .werk-card-img-wrap { height: 300px; }
-      .werke-slider .werk-card-img { max-width: 260px; max-height: 300px; }
     }
     @media (max-width: 480px) {
       .werke-slider .werk-card { width: 220px; }
-      .werke-slider .werk-card-img-wrap { height: 260px; }
-      .werke-slider .werk-card-img { max-width: 220px; max-height: 260px; }
     }
 
 
@@ -438,16 +475,26 @@
       #neueste .werke-slider .werk-card {
         text-align: center;
       }
+      #neueste .werke-slider .werk-card-inner {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        height: auto;
+        min-height: 0 !important;
+      }
       #neueste .werke-slider .werk-card-body {
         margin-top: 0;
         padding: 0;
         background: transparent;
         min-height: 0;
+        flex: 0 0 auto;
       }
       #neueste .werke-slider .werk-card-img-wrap {
         height: auto;
         min-height: 0;
+        display: flex;
         align-items: center;
+        justify-content: center;
         margin-bottom: clamp(26px, 7vw, 38px);
       }
       #neueste .werke-slider .werk-card-img {
@@ -598,7 +645,7 @@
   </ul>
 </footer>
 
-<script src="sf-base.js?v=32"></script>
+<script src="sf-base.js?v=46"></script>
 <script>
 /* ── SEITEN-SPEZIFISCH: index.html ── */
 
@@ -624,15 +671,95 @@ function renderNeueste(data) {
   const slider = document.getElementById('neueste-grid');
   slider.innerHTML = pool.map(w => `
     <div class="werk-card ${w.id === 'marco-2026' ? 'werk-card-marco' : ''}" onclick="openDetail('${w.id}', NEUESTE_IDS)">
-      <div class="werk-card-img-wrap">
-        <img class="werk-card-img" src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
-      </div>
-      <div class="werk-card-body">
-        <p class="werk-card-titel">${w.titel}</p>
-        <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
+      <div class="werk-card-inner">
+        <div class="werk-card-img-wrap">
+          <img class="werk-card-img" src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
+        </div>
+        <div class="werk-card-body">
+          <p class="werk-card-titel">${w.titel}</p>
+          <p class="werk-card-meta">${w.jahr} · ${LANG === 'en' ? w.medium_en || w.medium : w.medium}</p>
+        </div>
       </div>
     </div>
   `).join('');
+  slider.querySelectorAll('.werk-card-img').forEach(img => {
+    const classify = () => {
+      if (!img.naturalWidth || !img.naturalHeight) return;
+      const card = img.closest('.werk-card');
+      if (!card) return;
+      card.classList.toggle('werk-card-portrait', img.naturalHeight > img.naturalWidth * 1.08);
+      requestAnimationFrame(layoutNeuesteCards);
+    };
+    if (img.complete) classify();
+    img.addEventListener('load', classify, { once: true });
+  });
+
+  function equalizeNeuesteCards() {
+    slider.querySelectorAll('.werk-card-inner').forEach(inner => {
+      inner.style.minHeight = '0px';
+    });
+  }
+
+  function syncNeuesteCardWidths() {
+    const cards = Array.from(slider.querySelectorAll('.werk-card'));
+    cards.forEach(card => {
+      const inner = card.querySelector('.werk-card-inner');
+      const img = card.querySelector('.werk-card-img');
+      if (!inner || !img) return;
+
+      inner.style.width = '';
+      inner.style.marginLeft = '';
+      inner.style.marginRight = '';
+      if (window.innerWidth <= 760) return;
+
+      const cardWidth = card.getBoundingClientRect().width;
+      const imgWidth = img.getBoundingClientRect().width;
+      if (imgWidth > 0 && cardWidth > 0 && imgWidth < cardWidth - 1) {
+        inner.style.width = `${Math.ceil(imgWidth)}px`;
+        inner.style.marginLeft = 'auto';
+        inner.style.marginRight = 'auto';
+      }
+    });
+  }
+
+
+  function layoutNeuesteCards() {
+    const cards = Array.from(slider.querySelectorAll('.werk-card'));
+    cards.forEach(card => {
+      card.style.width = '';
+      const inner = card.querySelector('.werk-card-inner');
+      if (inner) {
+        inner.style.width = '';
+        inner.style.marginLeft = '';
+        inner.style.marginRight = '';
+      }
+    });
+    if (window.innerWidth <= 760 || !cards.length) {
+      equalizeNeuesteCards();
+      return;
+    }
+
+    const gap = parseFloat(getComputedStyle(slider).columnGap || getComputedStyle(slider).gap || 24) || 24;
+    const visibleColumns = 3;
+    const available = slider.clientWidth - gap * (visibleColumns - 1);
+
+    for (let i = 0; i < cards.length; i += visibleColumns) {
+      const group = cards.slice(i, i + visibleColumns);
+      const weights = group.map(card => card.classList.contains('werk-card-portrait') ? 0.80 : 1);
+      while (weights.length < visibleColumns) weights.push(1);
+      const totalWeight = weights.reduce((sum, value) => sum + value, 0);
+
+      group.forEach((card, index) => {
+        const width = Math.round((available * weights[index]) / totalWeight);
+        card.style.width = `${width}px`;
+      });
+    }
+
+    equalizeNeuesteCards();
+    requestAnimationFrame(syncNeuesteCardWidths);
+  }
+
+
   const prev = document.getElementById('neueste-prev');
   const next = document.getElementById('neueste-next');
 
@@ -661,8 +788,14 @@ function renderNeueste(data) {
   next.onclick = () => move(1);
   slider.addEventListener('scroll', updateBtns, { passive: true });
   initOneStepMobileSlider(slider);
-  window.addEventListener('resize', updateBtns, { passive: true });
-  updateBtns();
+  window.addEventListener('resize', () => {
+    layoutNeuesteCards();
+    updateBtns();
+  }, { passive: true });
+  requestAnimationFrame(() => {
+    layoutNeuesteCards();
+    updateBtns();
+  });
 }
 
 function initOneStepMobileSlider(slider) {

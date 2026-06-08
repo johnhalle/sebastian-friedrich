@@ -6,7 +6,13 @@
   <title>Werke – Sebastian Friedrich</title>
   <meta name="description" content="Alle Werke von Sebastian Friedrich. Malerei in Öl auf Leinwand und MDF.">
 
-  <link rel="stylesheet" href="sf-base.css?v=32">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="sf-base.css?v=46">
   <style>
     /* Unterseitenkopf zentral in sf-base.css. */
     .filter-bar {
@@ -52,23 +58,49 @@
       gap: 48px;
       align-items: end;
       position: relative;
-      --connector-left: 0px;
-      --connector-right: 100%;
+      --connector-bottom-left: 0px;
+      --connector-bottom-width: 0px;
+      --connector-stem-left: 0px;
+      --connector-stem-top: 0px;
+      --connector-stem-height: 0px;
+      --connector-top-width: 0px;
     }
-    @media (min-width: 681px) {
-      .werk-zeile::after {
-        content: '';
-        position: absolute;
-        left: var(--connector-left);
-        right: var(--connector-right);
-        bottom: 0;
-        height: 1px;
-        background: var(--gray-mid);
-        opacity: 0;
-        pointer-events: none;
-      }
-      .werk-zeile.connector-ready::after {
+    .werk-connector {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .werk-connector-part {
+      position: absolute;
+      background: var(--gray-mid);
+    }
+    @media (min-width: 1121px) {
+      .werk-zeile.connector-ready .werk-connector {
         opacity: 1;
+      }
+      .werk-connector-bottom {
+        left: var(--connector-bottom-left);
+        bottom: 0;
+        width: var(--connector-bottom-width);
+        height: 1px;
+      }
+      .werk-connector-stem {
+        left: var(--connector-stem-left);
+        top: var(--connector-stem-top);
+        width: 1px;
+        height: var(--connector-stem-height);
+      }
+      .werk-connector-top {
+        top: var(--connector-stem-top);
+        width: var(--connector-top-width);
+        height: 1px;
+      }
+      .werk-zeile:not(.rechts) .werk-connector-top {
+        left: var(--connector-stem-left);
+      }
+      .werk-zeile.rechts .werk-connector-top {
+        left: calc(var(--connector-stem-left) - var(--connector-top-width));
       }
     }
     .werk-zeile.rechts {
@@ -196,12 +228,12 @@
     }
 
     /* ── GESTAPELT: Bild oben, Text darunter, zentriert ── */
-    @media (max-width: 680px) {
+    @media (max-width: 1120px) {
       .werk-zeile {
         display: block !important;
         text-align: center;
       }
-      .werk-zeile::after {
+      .werk-connector {
         display: none !important;
       }
       .werk-zeile-bild {
@@ -317,7 +349,7 @@
   </ul>
 </footer>
 
-<script src="sf-base.js?v=32"></script>
+<script src="sf-base.js?v=46"></script>
 <script>
 /* ── SEITEN-SPEZIFISCH: werke.html ── */
 
@@ -376,40 +408,58 @@ function applyImageSize(img, groesse) {
 function updateWerkConnectors() {
   const rows = document.querySelectorAll('.werk-zeile');
   rows.forEach(row => row.classList.remove('connector-ready'));
-  if (window.innerWidth <= 680) return;
+  if (window.innerWidth <= 1120) return;
 
   rows.forEach(row => {
     const img = row.querySelector('.werk-zeile-bild img');
-    const infoParts = row.querySelectorAll('.werk-zeile-titel, .werk-zeile-meta-list, .werk-zeile-anfrage .btn');
-    if (!img || !infoParts.length) return;
+    const title = row.querySelector('.werk-zeile-titel');
+    const meta = row.querySelector('.werk-zeile-meta');
+    const cta = row.querySelector('.werk-zeile-anfrage .btn');
+    if (!img || !title || !meta) return;
 
     const rowRect = row.getBoundingClientRect();
     const imgRect = img.getBoundingClientRect();
-    const parts = Array.from(infoParts)
-      .map(el => el.getBoundingClientRect())
-      .filter(rect => rect.width > 0 && rect.height > 0);
-    if (!parts.length) return;
+    const titleRect = title.getBoundingClientRect();
+    const metaRect = meta.getBoundingClientRect();
+    const infoRects = [titleRect, metaRect, cta?.getBoundingClientRect()].filter(Boolean);
 
-    const safetyGap = 12;
-    let left;
-    let right;
+    const isRechts = row.classList.contains('rechts');
+    const imageSide = isRechts ? imgRect.left : imgRect.right;
+    const infoInnerSide = isRechts
+      ? Math.max(...infoRects.map(rect => rect.right))
+      : Math.min(...infoRects.map(rect => rect.left));
+    const infoOuterSide = isRechts
+      ? Math.min(...infoRects.map(rect => rect.left))
+      : Math.max(...infoRects.map(rect => rect.right));
 
-    if (row.classList.contains('rechts')) {
-      const contentRight = Math.max(...parts.map(rect => rect.right));
-      left = Math.round(contentRight - rowRect.left + safetyGap);
-      right = Math.round(rowRect.right - imgRect.left);
-    } else {
-      const contentLeft = Math.min(...parts.map(rect => rect.left));
-      left = Math.round(imgRect.right - rowRect.left);
-      right = Math.round(rowRect.right - contentLeft + safetyGap);
-    }
+    const stemOffset = 16;
+    const minBottomLength = 26;
+    const minStemHeight = 28;
+    const stemX = isRechts
+      ? Math.round(infoInnerSide - rowRect.left + stemOffset)
+      : Math.round(infoInnerSide - rowRect.left - stemOffset);
 
-    if (rowRect.width - left - right < 24) return;
-    row.style.setProperty('--connector-left', `${left}px`);
-    row.style.setProperty('--connector-right', `${right}px`);
+    const bottomStart = Math.round(imageSide - rowRect.left);
+    const bottomWidth = isRechts ? (bottomStart - stemX) : (stemX - bottomStart);
+    const titleTopOffset = 30;
+    const stemTop = Math.round(titleRect.top - rowRect.top - titleTopOffset);
+    const stemHeight = Math.round(rowRect.bottom - rowRect.top - stemTop);
+    const topOuter = Math.round(infoOuterSide - rowRect.left);
+    const topWidth = isRechts ? (stemX - topOuter) : (topOuter - stemX);
+
+    if (bottomWidth < minBottomLength || stemHeight < minStemHeight || topWidth < 24) return;
+
+    const bottomLeft = isRechts ? stemX : bottomStart;
+    row.style.setProperty('--connector-bottom-left', `${bottomLeft}px`);
+    row.style.setProperty('--connector-bottom-width', `${bottomWidth}px`);
+    row.style.setProperty('--connector-stem-left', `${stemX}px`);
+    row.style.setProperty('--connector-stem-top', `${stemTop}px`);
+    row.style.setProperty('--connector-stem-height', `${stemHeight}px`);
+    row.style.setProperty('--connector-top-width', `${topWidth}px`);
     row.classList.add('connector-ready');
   });
 }
+
 
 let connectorResizeTimer;
 window.addEventListener('resize', () => {
@@ -437,6 +487,11 @@ function werkZeile(w, index, ids) {
 
   return `
     <div class="werk-zeile ${seite}" data-groesse="${groesse}">
+      <div class="werk-connector" aria-hidden="true">
+        <span class="werk-connector-part werk-connector-bottom"></span>
+        <span class="werk-connector-part werk-connector-stem"></span>
+        <span class="werk-connector-part werk-connector-top"></span>
+      </div>
       <div class="werk-zeile-bild" data-id="${w.id}">
         <img src="${w.bild}" alt="${w.titel}, ${w.jahr}" loading="lazy">
       </div>
