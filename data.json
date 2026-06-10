@@ -32,11 +32,13 @@
       "newsletter_list_id": ""
     },
     "admin": {
-      "passwordHash": ""
+      "passwordHash": "0ba8ff80ae6e2f7822291ff4b8ab0bb8431762350d80d3c033a5bf74f505e5ae"
     },
     "hero_bilder": [
       "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024_ausschnitt.jpg",
-      "https://res.cloudinary.com/def9qgwtw/image/upload/v1780985883/perseus-2025_ausschnitt.jpg"
+      "https://res.cloudinary.com/def9qgwtw/image/upload/v1780985883/perseus-2025_ausschnitt.jpg",
+      "https://res.cloudinary.com/def9qgwtw/image/upload/v1781120669/kalliope-2023_ausschnitt.jpg",
+      "https://res.cloudinary.com/def9qgwtw/image/upload/v1781120998/susi-2016_ausschnitt.jpg"
     ]
   },
   "werke": [
