@@ -4,7 +4,7 @@
 *Code-Stand: Website-Paket v52*  
 *Ersetzt / konsolidiert: `SF_Architektur_v12.md`.*
 
-Gegenüber v12 neu: Lightbox-Refactor (HTML aus `sf-base.js` injiziert), Galerie-Lightbox vollständig verdrahtet (Anfrage stellen, Navigation), Stapel-Zentrierung, Titel-Schriftgröße vereinheitlicht, `subpage-content-gap` kompakter, Landing-Page-Link → Galerie, `galerie.titel` i18n-Key ergänzt.
+Gegenüber v12 neu: Lightbox vollständig refaktoriert, Nav + Overlay + Footer + Newsletter aus `sf-base.js` injiziert (Single Source), Galerie-Lightbox verdrahtet, Caption-Positionen fixiert, Stapel-Zentrierung, Seitentitel vereinheitlicht, Admin-Backend `admin.html`, Scrollbar-Gestaltung, diverse Mobile-Fixes.
 
 ---
 
@@ -19,7 +19,7 @@ Kataloge:  1
 ```
 
 ```text
-CSS/JS Cache-Busting: v=50  ← bei nächstem Deployment erhöhen auf v=52
+CSS/JS Cache-Busting: v=50  ← vor nächstem Deployment auf v=52 erhöhen
 Lokale Fonts:         Inter 300, 400, 500 als WOFF2
 Datenquellen:         data.json, galerie.json
 Bildhosting:          Cloudinary (cloud: def9qgwtw)
@@ -41,6 +41,7 @@ Tracking:             keine Analyse-/Werbe-Cookies vorgesehen
 ├── reader.html
 ├── vita.html
 ├── kontakt.html
+├── admin.html                         # NEU: Admin-Backend
 ├── danke.html
 ├── impressum.html
 ├── datenschutz.html
@@ -93,61 +94,42 @@ Kontakt   → kontakt.html
 [EN/DE]
 ```
 
-`werke.html` ist **nicht in der Navigation**. Primärzugang zu den Werken ist die Galerie. Der „Alle Werke"-Link auf der Startseite zeigt ebenfalls auf `galerie.html`.
+`werke.html` ist **nicht in der Navigation**. Der „Alle Werke"-Link auf der Startseite zeigt auf `galerie.html`.
 
 ---
 
-## 4. `sf-base.js` – Zentrale Logik
+## 4. `sf-base.js` – Single Source of Truth für alle gemeinsamen Komponenten
 
-### 4.1 Aufbau
+### 4.1 Prinzip
 
-Enthält alle seitenübergreifenden Funktionen. Einbindung auf jeder Seite:
+`sf-base.js` injiziert alle gemeinsamen HTML-Komponenten selbst ins DOM. Keine HTML-Datei pflegt Nav, Overlay, Footer oder Lightbox mehr manuell. Änderungen an diesen Elementen erfolgen ausschließlich in `sf-base.js`.
 
-```html
-<script src="sf-base.js?v=52"></script>
-```
-
-### 4.2 Init-Funktionen (Aufruf je nach Seite)
+### 4.2 Init-Funktionen
 
 | Funktion | Beschreibung | Seiten |
 |---|---|---|
-| `initNav(hasHero)` | Navigation + Mobile-Menü | alle |
-| `initLightbox()` | Lightbox injizieren + verdrahten | galerie, index, werke, katalog |
+| `initNav(hasHero)` | Nav + Hamburger + Overlay injizieren, aktiven Link per URL erkennen | alle |
+| `initFooter(data)` / `renderFooter(data)` | Newsletter-Sektion + Footer injizieren | alle außer galerie |
+| `initLightbox()` | Lightbox-HTML injizieren + verdrahten | galerie, index, werke, katalog |
 | `initContactInteractions()` | „Anfrage stellen"-Modal | galerie, index, werke, katalog |
 | `initContactPageForm(formId, workId)` | Kontaktformular-Seite | kontakt |
+| `nlSubmit()` | Newsletter-Anmeldung | global (via initFooter) |
 
-### 4.3 Lightbox – Single Source of Truth *(neu in v52)*
+### 4.3 Injizierte Komponenten – Übersicht
 
-`initLightbox()` schreibt das Lightbox-HTML selbst per `insertAdjacentHTML` ins `<body>`, falls noch keins vorhanden ist. Die HTML-Dateien enthalten **kein** statisches Lightbox-HTML mehr. So gibt es genau eine Quelle für die Lightbox-Struktur.
+**Nav** (`initNav`): Logo, Links (Galerie/News/Katalog/Vita/Kontakt), Sprachumschalter, Hamburger. Aktiver Link wird per `location.pathname` automatisch gesetzt.
 
-Injiziertes HTML:
+**Overlay** (`initNav`): Mobile-Vollbild-Menü mit denselben Links + Sprachumschalter.
 
-```html
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-arrow" id="lb-prev">‹</button>
-  <div class="lightbox-card">
-    <div class="lightbox-img-wrap">
-      <img class="lightbox-img" id="lb-img" src="" alt="">
-    </div>
-    <div class="lightbox-info">
-      <button class="lightbox-close" id="lb-close">✕</button>
-      <p class="lightbox-counter" id="lb-counter"></p>
-      <h2 class="lightbox-titel" id="lb-titel"></h2>
-      <ul class="lightbox-meta-list" id="lb-meta"></ul>
-      <div id="lb-action"></div>
-    </div>
-  </div>
-  <button class="lightbox-arrow" id="lb-next">›</button>
-</div>
-```
+**Footer + Newsletter** (`initFooter`): Newsletter-Sektion (E-Mail, DSGVO-Hinweis) direkt vor dem Footer. Footer mit Copyright, Impressum, Datenschutz, Instagram-Link aus `data.json`.
 
-**Regel:** Nie Lightbox-HTML in einzelne HTML-Seiten schreiben. Nie Element-IDs umbenennen.
+**Lightbox** (`initLightbox`): Vollständige Lightbox-Struktur inkl. `lb-img-wrap`, `lb-info`, `lb-close`, `lb-counter`, `lb-titel`, `lb-meta`, `lb-action`.
 
 ### 4.4 Technische Regeln
 
 - Loop-Variablen nie `t` nennen (Konflikt mit `t()`-Übersetzungsfunktion)
-- `atob()` für UTF-8 immer via TextDecoder
-- `openDetail(id, context)` öffnet die Lightbox; `context` ist Array von Werk-IDs für Navigation
+- `openDetail(id, context)` öffnet die Lightbox
+- `renderFooter(data)` ist Alias für `initFooter(data)` – beide Namen funktionieren
 
 ---
 
@@ -159,78 +141,62 @@ Einbindung:
 <link rel="stylesheet" href="sf-base.css?v=52">
 ```
 
-**Wichtige Regel:** Globale Regeln nie in lokalen `<style>`-Blöcken von HTML-Dateien überschreiben oder duplizieren. Ausnahmen nur für genuinen Seitenbedarf (z.B. Galerie-Vollbild-Layout).
+**Wichtigste Regel:** Globale Stile nie lokal in HTML-Dateien überschreiben. Ausnahmen nur für genuinen Seitenbedarf (Galerie-Vollbild-Layout).
 
-### 5.1 Seitentitel – vereinheitlicht *(neu in v52)*
-
-Gilt für alle Unterseiten (News, Vita, Kontakt, Katalog, Galerie, Werke):
+### 5.1 Seitentitel
 
 ```css
-.page-title,
-.vita-title,
-.kontakt-title,
-.katalog-page-title {
-  font-size: min(13vw, 10rem, 12dvh) !important;
-}
+font-size: min(13vw, 10rem, 12dvh) !important;
 ```
 
-Der `12dvh`-Wert begrenzt die Schriftgröße auf Laptops und Hochformat-Displays, sodass der Inhalt direkt darunter sichtbar bleibt. Kein lokaler Override in HTML-Dateien.
+Gilt für alle Unterseiten. `12dvh` verhindert überdimensionale Titel auf Laptops und Hochformat.
 
 ### 5.2 Abstände Unterseiten
 
 ```css
---subpage-top:                calc(var(--nav-h) + 56px);
---subpage-content-gap:        clamp(44px, 5vw, 64px);      /* Abstand Titel → Inhalt */
---subpage-content-gap-mobile: clamp(40px, 10vw, 60px);
+--subpage-content-gap: clamp(44px, 5vw, 64px);
 ```
 
-### 5.3 Lightbox-Größe
+### 5.3 Lightbox
 
 ```css
-.lightbox-card {
-  height: 90dvh;
-  width: min(1100px, calc(100vw - 112px));
-}
+.lightbox-card { height: 90dvh; width: min(1100px, calc(100vw - 112px)); }
 ```
 
-Feste Kartengröße, Bild passt sich per `max-height: 100%; max-width: 100%; object-fit: contain` ein. Nie die Card-Größe von Bildinhalten abhängig machen.
+Feste Kartengröße. Caption: 4 feste Zeilen (Jahr, Medium, Maße, Serie), `serie` als unsichtbarer Platzhalter wenn leer. `#lb-action` mit `margin-top: auto` immer am unteren Rand.
+
+### 5.4 Scrollbar (Webkit)
+
+```css
+::-webkit-scrollbar { width: 15px; }
+::-webkit-scrollbar-track { background: white; box-shadow: inset 1px/−1px schwarz; }
+::-webkit-scrollbar-thumb { background: black; border-radius: 0; }
+html { scrollbar-width: thin; scrollbar-color: black white; } /* Firefox */
+```
+
+### 5.5 Hero-Bezeichnung
+
+`font-size: 0.8rem` – rem-basiert, nicht vw, damit stabile Größe auf allen Viewports.
 
 ---
 
 ## 6. `galerie.html` – Vollbild-Layout
 
-### 6.1 Grundprinzip
+### 6.1 Einzige Sonderregeln
 
-Die Galerie-Seite scrollt **nicht vertikal**. Alles ist auf einem Bildschirm sichtbar:
+- `footer { display: none }` – kein Footer, kein vertikales Scrollen
+- `html, body { height: 100dvh; overflow: hidden }`
+- `z-index: 999` auf `.nav-overlay` – überlagert das Vollbild-Layout
 
-```
-[Nav]           flex: 0 0 auto
-[Seitentitel]   flex: 0 0 auto
-[Wand-Outer]    flex: 1 1 0
-[Scrollbar]     flex: 0 0 20px
-```
-
-**Einzige Sonderregel gegenüber anderen Unterseiten:** `footer { display: none }` und `html, body { height: 100dvh; overflow: hidden }`. Alle anderen globalen Stile (Titel, Nav) gelten identisch.
-
-### 6.2 Seitentitel
-
-Kein lokaler Font-Size-Override. Gilt `min(13vw, 10rem, 12dvh)` aus `sf-base.css`.
-
-### 6.3 Init-Sequenz
+### 6.2 Init-Sequenz
 
 ```js
 initNav(false);
 initLightbox();
 initContactInteractions();
-
-Promise.all([
-  fetch('data.json').then(r => r.json()),
-  fetch('galerie.json').then(r => r.json())
-]).then(([werkData, galerie]) => {
-  DATA = werkData;
-  buildWand(werkData, galerie);
-  applyLang();
-});
+// kein initFooter() → kein Footer
+Promise.all([fetch('data.json'), fetch('galerie.json')])
+  .then(([werkData, galerie]) => { DATA = werkData; buildWand(...); applyLang(); });
 ```
 
 ---
@@ -240,12 +206,7 @@ Promise.all([
 ### 7.1 Config
 
 ```json
-{
-  "config": {
-    "haenge_prozent": 47,
-    "stapel_gap_px": 16
-  }
-}
+{ "haenge_prozent": 47, "stapel_gap_px": 16 }
 ```
 
 ### 7.2 Slots
@@ -256,172 +217,153 @@ Promise.all([
 | `abstand_vor` | ja | Horizontaler Abstand zum vorherigen Block in px |
 | `werk_id` | ja | Referenz auf `id` in `data.json` |
 | `reihe` | ja | 1 = neuer Block, >1 = Teil des vorherigen Stapels |
-| `versatz_px` | nein | Vertikaler Versatz des gesamten Blocks von der Mittellinie |
-| `zoom` | nein | Prozentualer Zoom (100 = normal, 85 = 15% kleiner) |
+| `versatz_px` | nein | Vertikaler Versatz des Blocks von der Mittellinie |
+| `zoom` | nein | Prozentualer Zoom (100 = normal) |
 
-### 7.3 Stapel-Logik *(präzisiert in v52)*
+### 7.3 Stapel
 
-Wenn `reihe > 1`, hängt das Bild vertikal unter dem vorangehenden. Die Gesamtkonstruktion wird gemeinsam an der Mittellinie ausgerichtet:
+Gesamthöhe = h₁ + `stapel_gap_px` + h₂. Mittellinie bei Gesamthöhe/2. Bilder unterschiedlicher Breite werden horizontal zentriert. Aktuelle Stapelblöcke: Slots 1+2 (Nachtschicht), Slots 5+6 (Atelier 2+3).
 
-```
-Gesamthöhe = h(Bild 1) + stapel_gap_px + h(Bild 2) + ...
-Mittellinie bei Gesamthöhe / 2
-```
+### 7.4 Galerie-Editor
 
-Bilder mit unterschiedlicher Breite werden **horizontal zentriert** innerhalb des Blocks (seit v52). Versatz gilt für den gesamten Block und wird am ersten Slot (`reihe: 1`) eingestellt.
-
-Aktuelle Stapelblöcke:
-- Slots 1+2: Nachtschicht / Nachtschicht 2
-- Slots 5+6: Atelier 2 / Atelier 3
-
-### 7.4 Größenberechnung
-
-```
-px_pro_cm = (wand-outer.clientHeight × 0.80) / maxHCm
-```
-
-Perseus (150 × 120 cm) ist das größte Werk und Referenz für die Skalierung. Berechnung erfolgt nach dem Rendern aus `wand-outer.clientHeight`. Bei Viewport-Resize Rebuild nach 400ms Debounce.
-
-### 7.5 Galerie-Editor
-
-Für die kuratorische Arbeit an `galerie.json` steht ein lokaler HTML-Editor zur Verfügung (`galerie-editor.html`, nicht im Deployment). Funktionen: Reihenfolge per ↑↓ verschieben, Abstand/Versatz/Zoom pro Slot, Stapel-Toggle, JSON-Export.
+`galerie-editor.html` (nicht im Deployment) – lokales Werkzeug mit ↑↓, Abstand/Versatz/Zoom, Stapel-Toggle, JSON-Export. Dieselbe Funktionalität auch im Admin-Backend unter „Galerie-Wand".
 
 ---
 
-## 8. `data.json` – Datenmodell
+## 8. Admin-Backend (`admin.html`)
 
-### 8.1 Struktur
+Passwortgeschützt (SHA-256-Hash in `data.json` → `meta.admin.passwordHash`). GitHub Token und Repo-URL werden im `localStorage` des Browsers gespeichert.
 
-```json
-{
-  "meta": {},
-  "werke": [],
-  "katalog": [],
-  "news": []
-}
-```
+### 8.1 Sektionen
 
-### 8.2 `werke[]`
+| Sektion | Funktion |
+|---|---|
+| Werke | Liste, bearbeiten, neues Werk, löschen |
+| News | Liste, bearbeiten, neue News, löschen |
+| Katalog | Bibliografie, Ausstellungsinfo, Aufsatz (alle Textblöcke DE/EN) |
+| Vita | Fließtext DE/EN, Steckbrief, Tagline |
+| Galerie-Wand | Vollständiger Slot-Editor (identisch mit galerie-editor.html) |
+| Bilder hochladen | Direkt zu Cloudinary via Unsigned Preset |
+| Einstellungen | GitHub Token/Repo/Branch, Netlify Deploy Hook, Hero-Bilder, Passwort ändern |
 
-```json
-{
-  "id": "string",
-  "titel": "string",
-  "jahr": 2026,
-  "masse": "150 × 120 cm",
-  "medium": "Öl auf Leinwand",
-  "medium_en": "Oil on canvas",
-  "gerahmt": false,
-  "serie": null,
-  "portraet": true,
-  "verfuegbar": true,
-  "preis": null,
-  "neu": true,
-  "bild": "https://res.cloudinary.com/def9qgwtw/...",
-  "groesse": "l"
-}
-```
+### 8.2 Technischer Ablauf
 
-Wichtig:
-- `masse` Format: `"Höhe × Breite cm"` – Quellfeld für alle Größenberechnungen
-- `gerahmt` wird nie angezeigt
-- `groesse` (xs/s/m/l) steuert Darstellung auf `werke.html`, nicht in der Galerie
-- `id` ist technischer Schlüssel für Lightbox, Galerie-Slots und URL-Bezüge
+Speichern → GitHub API (`PUT /repos/{repo}/contents/{path}`) → optional Netlify Deploy Hook auslösen → Website live.
 
 ---
 
-## 9. Unterseiten – Überblick
+## 9. `data.json` – Datenmodell
+
+```json
+{
+  "meta": {
+    "name": "Sebastian Friedrich",
+    "tagline": "...", "tagline_en": "...",
+    "vita": { "text": "...", "text_en": "...", "ausbildung": "...", "geboren": "1987",
+              "lebt_arbeitet": "Leipzig", "ausstellungen": [...] },
+    "kontakt": { "email": "", "instagram": "https://...", "newsletter_list_id": "" },
+    "admin": { "passwordHash": "sha256-hash" },
+    "hero_bilder": ["url1", "url2"]
+  },
+  "werke": [...],
+  "katalog": [...],
+  "news": [...]
+}
+```
+
+Aktuell: 44 Werke, 1 Katalog, 5 News. Hero-Bilder: Senhora Rodriguez 3, Perseus.
+
+---
+
+## 10. Unterseiten
 
 | Seite | Besonderheit |
 |---|---|
-| `index.html` | Hero fullbleed, Fisher-Yates-Shuffle neueste Werke, „Alle Werke" → `galerie.html` |
-| `galerie.html` | Vollbild, kein Footer, horizontales Scrollen, `galerie.json` |
-| `werke.html` | Filter, Verfügbarkeitsmodus, Desktop-Layout mit Verbindungslinien |
-| `news.html` | Jahres-Gliederung, News-Lightbox |
-| `katalog.html` | Hero mit Cover + Bibliografie, Essay, Reader-Modal |
-| `vita.html` | Zweispaltig: Fließtext + Steckbrief-Tabelle |
+| `index.html` | Hero fullbleed, Fisher-Yates-Shuffle neueste Werke, „Alle Werke" → galerie.html |
+| `galerie.html` | Vollbild, kein Footer, horizontales Scrollen, galerie.json |
+| `werke.html` | Filter, Verfügbarkeitsmodus, Desktop mit Verbindungslinien |
+| `news.html` | Jahres-Gliederung |
+| `katalog.html` | Hero Cover + Bibliografie, Essay, Reader-Modal |
+| `vita.html` | Fließtext + Steckbrief, letzte Tabellenzeile ohne Border |
 | `kontakt.html` | Netlify Form, Social-Links |
 | `reader.html` | PDF.js-Reader |
 
 ---
 
-## 10. Responsive Architektur
+## 11. Responsive
 
 ```text
-> 1120px     Desktop: Werke und Lightbox nebeneinander
-≤ 1120px     Werke und Lightbox gestapelt
-≤ 760px      Mobile: Slider-Logik, mobile Nav
+> 1120px   Desktop: Lightbox nebeneinander
+≤ 1120px   Mobile-Lightbox: gestapelt, 30dvh Caption-Bereich, scrollbar
+≤ 760px    Mobile Nav, Slider-Logik
 ```
 
-Galerie hat eigene Responsive-Logik: `px_pro_cm` aus Viewport-Höhe, Rebuild bei Orientierungswechsel.
-
 ---
 
-## 11. Assets und externe Dienste
+## 12. Assets und externe Dienste
 
-- **Cloudinary** `def9qgwtw`: alle Werk-, News- und Katalogbilder
+- **Cloudinary** `def9qgwtw`: alle Bilder
 - **Netlify**: Hosting + Forms
-- **Fonts**: lokal, Inter 300/400/500 WOFF2, kein Google Fonts
+- **GitHub**: Datei-Storage, Admin schreibt via API
+- **Fonts**: lokal, Inter 300/400/500 WOFF2
 
 ---
 
-## 12. Cache-Busting
+## 13. Cache-Busting
 
 ```html
 sf-base.css?v=52
 sf-base.js?v=52
 ```
 
-**Regel:** Bei jedem Deployment konsistent in allen HTML-Dateien erhöhen.
-
-Aktuell steht noch `v=50` in den Dateien – **vor dem nächsten Deployment auf `v=52` erhöhen**.
+**Aktuell steht noch `v=50` in den HTML-Dateien – vor dem nächsten Deployment auf `v=52` erhöhen.**
 
 ---
 
-## 13. Verbindliche Gestaltungsentscheidungen Stand v52
+## 14. Verbindliche Gestaltungsentscheidungen Stand v52
 
 - Navigation: Galerie, News, Katalog, Vita, Kontakt
-- Primärzugang Werke: Galerie (nicht Werke-Seite)
-- Seitentitel alle Unterseiten: `min(13vw, 10rem, 12dvh)` – eine Regel, kein lokaler Override
-- Galerie: maßstabsgerechte Darstellung aus cm-Maßen, Stapel horizontal zentriert
-- Perseus (150 × 120 cm) ist Referenzwerk für Wandskalierung
-- Scrollbar: 20px Höhe, schwarzer Thumb, 1px-Linien oben/unten
-- Lightbox: einmalig in `sf-base.js` definiert, HTML per `initLightbox()` injiziert
-- `gerahmt` wird nie angezeigt
-- Autorenreihenfolge immer: **John Palatini, Christian Drobe**
-- Keine Google Fonts
+- Primärzugang Werke: Galerie
+- Seitentitel: `min(13vw, 10rem, 12dvh)` – eine Regel, überall gleich
+- Hero-Bezeichnung: `rem`-basiert (stabile Größe)
+- Hero-Bilder: Senhora Rodriguez 3, Perseus
+- Galerie: cm-genaue Darstellung, Stapel horizontal zentriert, kein Footer
+- Perseus (150 × 120 cm): Referenzwerk für Wandskalierung
+- Lightbox: aus `sf-base.js` injiziert, 4 feste Caption-Zeilen, Button immer unten
+- Nav + Overlay + Footer + Newsletter: aus `sf-base.js` injiziert
+- Scrollbar: Webkit 15px, schwarz/weiß, eckig; Firefox thin
+- Autorenreihenfolge: **John Palatini, Christian Drobe**
+- Keine Google Fonts, `youtube-nocookie.com`, `100dvh` statt `100vh`
 - Favicon: typografisches `SF`, schwarz auf weiß
-- `youtube-nocookie.com` für YouTube-Einbettungen
-- `100dvh` statt `100vh`
 
 ---
 
-## 14. Offene Punkte
+## 15. Offene Punkte
 
-1. **Cache-Busting** auf `v=52` erhöhen vor nächstem Deployment
-2. **Admin-Backend** (`admin.html`): noch nicht umgesetzt
-3. **Rechtstexte** final prüfen vor Veröffentlichung
-4. **Realer Gerätecheck** (iPhone Safari, Android Chrome, WhatsApp-In-App)
-5. **Galerie-Admin**: visueller Editor für `galerie.json` (Slots, Abstand, Stapel) – Konzept vorhanden, lokaler Editor `galerie-editor.html` als Zwischenlösung
+1. **Cache-Busting** auf `v=52` erhöhen vor Deployment
+2. **Cloudinary Upload Preset** einrichten (für Admin-Bildupload)
+3. **Rechtstexte** final prüfen
+4. **Gerätecheck** (iPhone Safari, WhatsApp-In-App)
 
 ---
 
-## 15. Versionslog
+## 16. Versionslog
 
 ```text
 v30–v48  siehe SF_Architektur_v11.md
-v49      Hero Fullbleed, Slider-Überarbeitung, Lightbox Tablet gestapelt
-v50      Galerie-Seite neu, Navigation Werke→Galerie, galerie.json,
-         px_pro_cm aus Viewport, Scrollbar-Design, Vollbild-Layout,
-         versatz_px und zoom als Slot-Felder
-v51      Scrollbar 20px, Thumb füllt Zwischenraum, Titelgröße dvh-Begrenzung,
-         Resize-Debounce 400ms, body padding-bottom
-v52      Galerie: alle 44 Werke in galerie.json (2 Stapelblöcke),
-         Stapel horizontal zentriert, Lightbox verdrahtet (Klick, Anfrage),
-         Lightbox-Refactor: HTML aus sf-base.js injiziert (Single Source),
-         Seitentitel vereinheitlicht min(13vw,10rem,12dvh) alle Unterseiten,
-         subpage-content-gap kompakter (44px–64px),
-         Katalog-Hero kompakter, Kontakt kompakter,
-         Landing-Page „Alle Werke"-Link → galerie.html,
-         galerie.titel i18n-Key ergänzt (DE/EN)
+v49      Hero Fullbleed, Slider, Lightbox Tablet
+v50      Galerie-Seite, galerie.json, Scrollbar-Design, Vollbild-Layout
+v51      Scrollbar 20px, dvh-Titelgröße, Resize-Debounce
+v52      Galerie: 44 Werke, 2 Stapelblöcke, horizontal zentriert
+         Lightbox Single Source (sf-base.js), alle Fragmente entfernt
+         Nav + Overlay + Footer + Newsletter Single Source (sf-base.js)
+         Aktiver Nav-Link per URL automatisch erkannt
+         Admin-Backend (admin.html): Werke, News, Katalog, Vita,
+           Galerie-Editor, Cloudinary-Upload, Einstellungen
+         Caption: 4 feste Zeilen, Button margin-top:auto
+         Seitentitel vereinheitlicht min(13vw,10rem,12dvh)
+         Hero-Bezeichnung rem-basiert
+         Vita: letzte Tabellenzeile ohne border-bottom
+         Scrollbar: Webkit 15px schwarz/weiß, Firefox thin
+         Medusa aus hero_bilder entfernt
 ```

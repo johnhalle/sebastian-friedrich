@@ -214,7 +214,7 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   position: fixed;
   inset: 0;
   background: var(--white);
-  z-index: 99;
+  z-index: 999;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -225,6 +225,8 @@ nav:not(.scrolled):not(.always-visible) .nav-lang {
   font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--black);
 }
 .nav-overlay .overlay-close {
   position: absolute;
@@ -702,8 +704,8 @@ footer {
     width: 100%;
     border-left: none;
     border-top: 1px solid var(--gray-mid);
-    padding: 18px 20px 28px;
-    overflow: hidden;
+    padding: 14px 20px 16px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -1230,4 +1232,76 @@ nav.over-hero:not(.scrolled) {
   .reader-modal-close {
     top: max(88px, env(safe-area-inset-top)) !important;
   }
+}
+
+/* ── NEWSLETTER ─────────────────────────────────────────── */
+#newsletter {
+  background: var(--gray-light);
+  border-bottom: 1px solid var(--gray-mid);
+}
+.newsletter-inner {
+  max-width: 560px;
+  text-align: center;
+  margin: 0 auto;
+}
+.newsletter-titel {
+  font-size: 1.125rem;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+.newsletter-sub {
+  font-size: 0.8125rem;
+  color: var(--gray-dark);
+  margin-bottom: 24px;
+}
+.newsletter-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 12px;
+}
+.newsletter-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--gray-mid);
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--white);
+}
+.newsletter-input:focus { outline: none; border-color: var(--black); }
+.newsletter-dsgvo {
+  font-size: 0.6875rem;
+  color: var(--gray-dark);
+}
+@media (max-width: 760px) {
+  .newsletter-form { flex-direction: column; }
+  .newsletter-input { min-width: 0; }
+  .newsletter-form .btn { white-space: nowrap; }
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────── */
+/* Webkit (Chrome, Edge, Brave, Safari) */
+::-webkit-scrollbar {
+  width: 15px;
+}
+::-webkit-scrollbar-track {
+  background: var(--white);
+  box-shadow: inset 1px 0 0 var(--black), inset -1px 0 0 var(--black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--black);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+::-webkit-scrollbar-corner {
+  background: var(--white);
+}
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--black) var(--white);
 }

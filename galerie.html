@@ -46,10 +46,6 @@
     .galerie-page-header {
       flex: 0 0 auto;
     }
-    .galerie-page-header .page-header-inner {
-      max-width: 1400px !important;
-      width: calc(100vw - 80px) !important;
-    }
     /* Titelgröße: zusätzlich nach Höhe begrenzt damit Wand genug Platz hat */
     .galerie-page-header .page-title {
       padding-bottom: clamp(12px, 2vw, 20px) !important;
@@ -145,33 +141,7 @@
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
-    <ul class="nav-links">
-      <li><a href="galerie.html" class="active" data-i18n="nav.galerie">Galerie</a></li>
-      <li><a href="news.html" data-i18n="nav.news">News</a></li>
-      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
-      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
-      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
-      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
 
-<div class="nav-overlay" id="nav-overlay">
-  <button class="nav-overlay-close" onclick="closeMenu()" aria-label="Menü schließen">✕</button>
-  <ul class="nav-overlay-links">
-    <li><a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a></li>
-    <li><a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a></li>
-    <li><a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a></li>
-    <li><a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a></li>
-    <li><a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a></li>
-  </ul>
-</div>
 
 <main>
   <div class="page-header galerie-page-header">
@@ -195,16 +165,6 @@
     </div>
   </div>
 </main>
-
-<footer>
-  <div class="section footer-inner">
-    <div class="footer-links">
-      <a href="impressum.html" data-i18n="footer.impressum">Impressum</a>
-      <a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a>
-    </div>
-    <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
-  </div>
-</footer>
 
 <script src="sf-base.js?v=50"></script>
 <script>
@@ -446,7 +406,6 @@ function initScrollbar(totalW) {
 }
 
 // ── INIT ─────────────────────────────────────────────────
-document.getElementById('footer-year').textContent = new Date().getFullYear();
 initNav(false);
 initLightbox();
 initContactInteractions();

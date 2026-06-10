@@ -278,33 +278,8 @@
 <body>
 
 <!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
-    <ul class="nav-links">
-      <li><a href="galerie.html" data-i18n="nav.galerie">Galerie</a></li>
-      <li><a href="news.html" data-i18n="nav.news">News</a></li>
-      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
-      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
-      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
-      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
 
 <!-- MOBILE OVERLAY -->
-<div class="nav-overlay" id="nav-overlay">
-  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
-  <a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a>
-  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
-  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
-  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
-  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
-  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
-</div>
 
 <!-- SEITEN-HEADER -->
 <div class="page-header page-header-werke">
@@ -321,15 +296,6 @@
   <div class="werke-liste" id="werke-liste"></div>
 </main>
 
-<!-- FOOTER -->
-<footer>
-  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
-  <ul class="footer-links">
-    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
-    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
-    <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
-  </ul>
-</footer>
 
 <script src="sf-base.js?v=50"></script>
 <script>

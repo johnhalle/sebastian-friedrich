@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Sebastian Friedrich</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#111;--white:#fff;--gray-light:#f5f5f3;--gray-mid:#ddd;--gray-dark:#888;
+  --accent:#111;--danger:#c0392b;--success:#27ae60;--warn:#e67e22;
+  --nav-h:56px;--sidebar-w:220px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:14px;color:var(--black);
+}
+body{background:var(--gray-light);min-height:100vh}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--white);z-index:1000}
+.login-box{width:340px;padding:48px 40px;border:1px solid var(--gray-mid)}
+.login-box h1{font-size:1.25rem;font-weight:400;letter-spacing:0.04em;margin-bottom:32px}
+.login-box input{width:100%;border:1px solid var(--gray-mid);padding:10px 12px;font-family:inherit;font-size:14px;margin-bottom:12px;background:var(--white)}
+.login-box input:focus{outline:none;border-color:var(--black)}
+.login-box button{width:100%;padding:11px;background:var(--black);color:var(--white);border:none;cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:0.04em}
+.login-box button:hover{opacity:.85}
+#login-error{color:var(--danger);font-size:12px;margin-top:8px;display:none}
+
+/* ── SHELL ── */
+#app{display:none;min-height:100vh}
+header{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--black);color:var(--white);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:100}
+header .logo{font-size:13px;font-weight:500;letter-spacing:0.06em;opacity:.7}
+header .site-name{font-size:14px;font-weight:400}
+header .spacer{flex:1}
+header .github-status{font-size:11px;color:rgba(255,255,255,.5);cursor:pointer}
+header .github-status.ok{color:#6bcf7f}
+header .header-btn{background:rgba(255,255,255,.1);border:none;color:var(--white);padding:6px 14px;cursor:pointer;font-family:inherit;font-size:12px;border-radius:2px}
+header .header-btn:hover{background:rgba(255,255,255,.2)}
+
+aside{position:fixed;top:var(--nav-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--gray-mid);overflow-y:auto;z-index:50}
+.sidebar-section{padding:20px 0 8px;border-bottom:1px solid var(--gray-light)}
+.sidebar-section:last-child{border-bottom:none}
+.sidebar-label{padding:0 20px 8px;font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gray-dark);text-transform:uppercase}
+.sidebar-item{display:block;padding:9px 20px;font-size:13px;color:var(--black);text-decoration:none;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.sidebar-item:hover{background:var(--gray-light)}
+.sidebar-item.active{background:var(--black);color:var(--white)}
+.sidebar-badge{float:right;background:var(--gray-mid);color:var(--gray-dark);font-size:10px;padding:1px 6px;border-radius:10px}
+.sidebar-item.active .sidebar-badge{background:rgba(255,255,255,.2);color:var(--white)}
+
+main{margin-left:var(--sidebar-w);margin-top:var(--nav-h);padding:32px;min-height:calc(100vh - var(--nav-h))}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.active{display:block}
+.panel-header{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.panel-header h2{font-size:1.25rem;font-weight:400;letter-spacing:.02em}
+.panel-header .spacer{flex:1}
+
+/* ── CARDS / LISTS ── */
+.item-list{display:flex;flex-direction:column;gap:6px}
+.item-card{background:var(--white);border:1px solid var(--gray-mid);padding:14px 18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color .15s}
+.item-card:hover{border-color:var(--black)}
+.item-card .item-thumb{width:48px;height:48px;object-fit:cover;flex-shrink:0;background:var(--gray-light)}
+.item-card .item-info{flex:1;min-width:0}
+.item-card .item-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-card .item-meta{font-size:11px;color:var(--gray-dark);margin-top:2px}
+.item-card .item-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 18px;border:1px solid var(--gray-mid);background:var(--white);font-family:inherit;font-size:13px;cursor:pointer;letter-spacing:.02em}
+.btn:hover{background:var(--gray-light)}
+.btn-primary{background:var(--black);color:var(--white);border-color:var(--black)}
+.btn-primary:hover{opacity:.85}
+.btn-danger{color:var(--danger);border-color:var(--danger)}
+.btn-danger:hover{background:#fdf0ef}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-icon{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--gray-mid);background:var(--white);cursor:pointer;font-size:14px}
+.btn-icon:hover{background:var(--gray-light)}
+
+/* ── FORMS ── */
+.form-section{background:var(--white);border:1px solid var(--gray-mid);padding:24px;margin-bottom:20px}
+.form-section h3{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-dark);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--gray-light)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.form-row.single{grid-template-columns:1fr}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:500;color:var(--gray-dark);letter-spacing:.04em}
+.field input,.field textarea,.field select{font-family:inherit;font-size:13px;border:1px solid var(--gray-mid);padding:8px 10px;background:var(--white);color:var(--black)}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--black)}
+.field textarea{resize:vertical;min-height:80px;line-height:1.5}
+.field .hint{font-size:11px;color:var(--gray-dark);margin-top:3px}
+.field-img-preview{width:80px;height:60px;object-fit:cover;display:none;margin-top:6px;border:1px solid var(--gray-mid)}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px}
+.checkbox-row input[type=checkbox]{width:15px;height:15px;cursor:pointer}
+
+/* ── TOAST / STATUS ── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 20px;font-size:13px;display:none;z-index:9999;max-width:340px}
+#toast.error{background:var(--danger)}
+#toast.success{background:var(--success)}
+.save-bar{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--gray-mid);padding:14px 0;display:flex;gap:12px;align-items:center;margin-top:32px}
+.save-bar .save-status{font-size:12px;color:var(--gray-dark);margin-left:auto}
+
+/* ── TABS ── */
+.tab-bar{display:flex;border-bottom:1px solid var(--gray-mid);margin-bottom:24px}
+.tab-btn{padding:10px 18px;border:none;background:none;cursor:pointer;font-family:inherit;font-size:13px;color:var(--gray-dark);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab-btn.active{color:var(--black);border-bottom-color:var(--black);font-weight:500}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* ── GALERIE EDITOR ── */
+.col-header{display:grid;grid-template-columns:36px 30px 1fr 90px 90px 90px 90px 64px;gap:8px;padding:6px 12px;font-size:10px;color:var(--gray-dark);margin-bottom:4px}
+.galerie-gruppe{margin-bottom:8px;border:1px solid var(--gray-mid);background:var(--white)}
+.galerie-gruppe.stapel{border-color:#999;border-width:1.5px}
+.galerie-gruppe-header{display:none}
+.galerie-gruppe.stapel .galerie-gruppe-header{display:flex;align-items:center;gap:8px;background:#f0f0ee;padding:5px 12px;border-bottom:1px solid var(--gray-mid);font-size:11px;color:#666;font-weight:500}
+.galerie-slot-row{display:grid;grid-template-columns:36px 30px 1fr 90px 90px 90px 90px 64px;gap:8px;align-items:center;padding:9px 12px}
+.galerie-gruppe .galerie-slot-row+.galerie-slot-row{border-top:1px dashed #eee}
+.slot-num{font-size:12px;color:var(--gray-dark);text-align:center;font-weight:600}
+.orient{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;font-size:11px;font-weight:600}
+.orient.p{background:#e8f0fb;color:#1a56a0}
+.orient.q{background:#f0f0f0;color:#666}
+.gal-werk-info{min-width:0}
+.gal-werk-titel{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal-werk-meta{font-size:11px;color:var(--gray-dark);margin-top:1px}
+.gal-field{display:flex;flex-direction:column;gap:2px}
+.gal-field label{font-size:10px;color:var(--gray-dark)}
+.gal-field input[type=number]{font-family:inherit;font-size:12px;width:100%;border:1px solid var(--gray-mid);padding:4px 7px;background:#fafafa;color:var(--black);height:28px;text-align:right}
+.gal-field input[type=number]:focus{outline:none;border-color:var(--black)}
+.gal-field input[type=number]:disabled{opacity:.3}
+.stapel-toggle{display:flex;align-items:center;justify-content:center;width:100%;height:28px;border:1px solid var(--gray-mid);cursor:pointer;font-size:11px;color:#999;user-select:none}
+.stapel-toggle:hover{background:#f0f0f0}
+.stapel-toggle.aktiv{background:var(--black);color:var(--white);font-weight:600}
+.stapel-toggle.disabled{opacity:.2;cursor:default;pointer-events:none}
+.gal-move-btns{display:flex;gap:4px;justify-content:center}
+.gal-move-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--gray-mid);font-size:13px;cursor:pointer;background:#fafafa;color:#666}
+.gal-move-btn:hover:not(:disabled){background:#eee}
+.gal-move-btn:disabled{opacity:.2;cursor:default}
+.gal-output{margin-top:20px;border-top:1px solid var(--gray-mid);padding-top:16px}
+.gal-output textarea{font-family:monospace;font-size:11px;width:100%;height:220px;border:1px solid var(--gray-mid);padding:12px;background:var(--white);resize:vertical}
+
+/* ── GITHUB MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:500}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);padding:32px;width:440px;border:1px solid var(--gray-mid)}
+.modal-box h3{font-size:1rem;font-weight:400;margin-bottom:20px}
+.modal-box input{width:100%;border:1px solid var(--gray-mid);padding:9px 12px;font-family:inherit;font-size:13px;margin-bottom:12px}
+.modal-box input:focus{outline:none;border-color:var(--black)}
+.modal-row{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.modal-hint{font-size:11px;color:var(--gray-dark);margin-bottom:16px;line-height:1.6}
+
+/* ── CLOUDINARY UPLOAD ── */
+.upload-zone{border:2px dashed var(--gray-mid);padding:32px;text-align:center;cursor:pointer;transition:border-color .2s}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--black)}
+.upload-zone input{display:none}
+.upload-zone p{font-size:13px;color:var(--gray-dark);margin-bottom:8px}
+.upload-zone strong{font-size:14px}
+.upload-preview{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+.upload-preview-item{position:relative;width:120px}
+.upload-preview-item img{width:120px;height:90px;object-fit:cover;display:block;border:1px solid var(--gray-mid)}
+.upload-preview-item .upl-name{font-size:10px;color:var(--gray-dark);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upload-preview-item .upl-status{font-size:10px;font-weight:600}
+.upload-preview-item .upl-status.ok{color:var(--success)}
+.upload-preview-item .upl-status.err{color:var(--danger)}
+.upload-preview-item .upl-status.pending{color:var(--warn)}
+.upload-preview-item .upl-url{font-size:9px;color:var(--gray-dark);word-break:break-all;margin-top:2px}
+
+/* ── MISC ── */
+.danger-zone{border:1px solid var(--danger);padding:20px;margin-top:24px}
+.danger-zone h4{color:var(--danger);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.copy-ok{font-size:12px;color:var(--success);display:none;margin-left:8px}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{background:var(--gray-light);border:1px solid var(--gray-mid);padding:3px 10px;font-size:12px;display:inline-flex;align-items:center;gap:6px}
+.tag button{background:none;border:none;cursor:pointer;color:var(--gray-dark);font-size:14px;line-height:1}
+.tag button:hover{color:var(--danger)}
+.tag-input-row{display:flex;gap:8px;margin-top:8px}
+.tag-input-row input{flex:1;border:1px solid var(--gray-mid);padding:6px 10px;font-family:inherit;font-size:12px}
+.new-item-form{background:var(--white);border:1px solid var(--black);padding:24px;margin-bottom:24px;display:none}
+.new-item-form.open{display:block}
+.section-divider{height:1px;background:var(--gray-mid);margin:24px 0}
+.info-row{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--gray-dark);padding:8px 0}
+.info-row strong{color:var(--black)}
+.werk-img-wrap{position:relative;display:inline-block}
+.werk-img-wrap img{width:120px;height:90px;object-fit:cover;border:1px solid var(--gray-mid);display:block}
+.werk-img-wrap .change-img{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:10px;text-align:center;padding:3px;cursor:pointer;display:none}
+.werk-img-wrap:hover .change-img{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Sebastian Friedrich<br>Admin</h1>
+    <input type="password" id="pw-input" placeholder="Passwort" autocomplete="current-password">
+    <button onclick="doLogin()">Anmelden</button>
+    <div id="login-error">Falsches Passwort.</div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app">
+  <header>
+    <span class="logo">SF</span>
+    <span class="site-name">Admin</span>
+    <div class="spacer"></div>
+    <span class="github-status" id="gh-status" onclick="openGithubModal()" title="GitHub-Einstellungen">⚙ GitHub</span>
+    <button class="header-btn" onclick="window.open('index.html','_blank')">Website →</button>
+    <button class="header-btn" onclick="doLogout()">Abmelden</button>
+  </header>
+
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Inhalte</div>
+      <button class="sidebar-item" onclick="showPanel('werke')">Werke <span class="sidebar-badge" id="badge-werke">0</span></button>
+      <button class="sidebar-item" onclick="showPanel('news')">News <span class="sidebar-badge" id="badge-news">0</span></button>
+      <button class="sidebar-item" onclick="showPanel('katalog')">Katalog</button>
+      <button class="sidebar-item" onclick="showPanel('vita')">Vita</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Galerie</div>
+      <button class="sidebar-item" onclick="showPanel('galerie')">Galerie-Wand</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Medien</div>
+      <button class="sidebar-item" onclick="showPanel('upload')">Bilder hochladen</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <button class="sidebar-item" onclick="showPanel('einstellungen')">Einstellungen</button>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- ══ PANEL: WERKE ══ -->
+    <div class="panel" id="panel-werke">
+      <div class="panel-header">
+        <h2>Werke</h2>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="openNewWerkForm()">+ Neues Werk</button>
+      </div>
+
+      <div class="new-item-form" id="new-werk-form">
+        <h3 style="font-size:14px;font-weight:500;margin-bottom:20px">Neues Werk</h3>
+        <div id="new-werk-fields"></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-primary" onclick="saveNewWerk()">Werk speichern</button>
+          <button class="btn" onclick="closeNewWerkForm()">Abbrechen</button>
+        </div>
+      </div>
+
+      <div class="item-list" id="werke-list"></div>
+    </div>
+
+    <!-- ══ PANEL: NEWS ══ -->
+    <div class="panel" id="panel-news">
+      <div class="panel-header">
+        <h2>News</h2>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="openNewNewsForm()">+ Neue News</button>
+      </div>
+      <div class="new-item-form" id="new-news-form">
+        <h3 style="font-size:14px;font-weight:500;margin-bottom:20px">Neue News</h3>
+        <div id="new-news-fields"></div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-primary" onclick="saveNewNews()">News speichern</button>
+          <button class="btn" onclick="document.getElementById('new-news-form').classList.remove('open')">Abbrechen</button>
+        </div>
+      </div>
+      <div class="item-list" id="news-list"></div>
+    </div>
+
+    <!-- ══ PANEL: KATALOG ══ -->
+    <div class="panel" id="panel-katalog">
+      <div class="panel-header"><h2>Katalog</h2></div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('katalog','info')">Allgemein</button>
+        <button class="tab-btn" onclick="switchTab('katalog','aufsatz')">Aufsatz</button>
+      </div>
+      <div class="tab-pane active" id="tab-katalog-info">
+        <div id="katalog-fields"></div>
+        <div class="save-bar">
+          <button class="btn btn-primary" onclick="saveKatalog()">Speichern & publizieren</button>
+          <span class="save-status" id="katalog-save-status"></span>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-katalog-aufsatz">
+        <p style="font-size:13px;color:var(--gray-dark);margin-bottom:16px">Der Aufsatz ist in <code>data.json</code> als Blocks-Array gespeichert. Hier können Texte in DE und EN bearbeitet werden.</p>
+        <div id="aufsatz-fields"></div>
+        <div class="save-bar">
+          <button class="btn btn-primary" onclick="saveKatalog()">Speichern & publizieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: VITA ══ -->
+    <div class="panel" id="panel-vita">
+      <div class="panel-header"><h2>Vita</h2></div>
+      <div id="vita-fields"></div>
+      <div class="save-bar">
+        <button class="btn btn-primary" onclick="saveVita()">Speichern & publizieren</button>
+        <span class="save-status" id="vita-save-status"></span>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: GALERIE ══ -->
+    <div class="panel" id="panel-galerie">
+      <div class="panel-header">
+        <h2>Galerie-Wand</h2>
+        <div class="spacer"></div>
+        <button class="btn" onclick="galerieResetToSaved()">↺ Letzter Stand</button>
+        <button class="btn btn-primary" onclick="galeriePublish()">Speichern & publizieren</button>
+      </div>
+      <p style="font-size:12px;color:var(--gray-dark);margin-bottom:16px">Reihenfolge per ↑↓, Abstand / Versatz / Zoom pro Slot, Stapel-Toggle. Änderungen erst nach „Speichern & publizieren" live.</p>
+      <div class="col-header">
+        <div>#</div><div></div><div>Werk</div>
+        <div style="text-align:right">Abstand px</div>
+        <div style="text-align:right">Versatz px</div>
+        <div style="text-align:right">Zoom %</div>
+        <div style="text-align:center">Stapel</div>
+        <div></div>
+      </div>
+      <div id="galerie-slot-list"></div>
+    </div>
+
+    <!-- ══ PANEL: UPLOAD ══ -->
+    <div class="panel" id="panel-upload">
+      <div class="panel-header"><h2>Bilder hochladen</h2></div>
+      <p style="font-size:12px;color:var(--gray-dark);margin-bottom:20px">Bilder werden direkt zu Cloudinary (cloud: <strong>def9qgwtw</strong>) hochgeladen.</p>
+      <div class="form-section">
+        <h3>Cloudinary-Einstellungen</h3>
+        <div class="form-row">
+          <div class="field">
+            <label>Upload Preset</label>
+            <input type="text" id="cld-preset" placeholder="z.B. sf_unsigned">
+            <span class="hint">Unsigned Preset in Cloudinary-Einstellungen anlegen</span>
+          </div>
+          <div class="field">
+            <label>Ordner (optional)</label>
+            <input type="text" id="cld-folder" placeholder="z.B. sf-werke">
+          </div>
+        </div>
+      </div>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" multiple accept="image/*" onchange="handleFileSelect(this.files)">
+        <strong>Klicken oder Dateien hierher ziehen</strong>
+        <p>JPEG, PNG, WebP – mehrere Dateien möglich</p>
+      </div>
+      <div class="upload-preview" id="upload-preview"></div>
+      <div style="margin-top:16px;display:flex;gap:10px">
+        <button class="btn btn-primary" id="upload-btn" onclick="startUpload()" style="display:none">Alle hochladen</button>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: EINSTELLUNGEN ══ -->
+    <div class="panel" id="panel-einstellungen">
+      <div class="panel-header"><h2>Einstellungen</h2></div>
+      <div class="form-section">
+        <h3>GitHub</h3>
+        <div class="form-row">
+          <div class="field">
+            <label>GitHub Token</label>
+            <input type="password" id="set-gh-token" placeholder="ghp_...">
+            <span class="hint">Personal Access Token mit repo-Schreibrechten</span>
+          </div>
+          <div class="field">
+            <label>Repository (user/repo)</label>
+            <input type="text" id="set-gh-repo" placeholder="z.B. sebastianfriedrich/website">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Branch</label>
+            <input type="text" id="set-gh-branch" value="main">
+          </div>
+          <div class="field">
+            <label>Netlify Deploy Hook URL (optional)</label>
+            <input type="text" id="set-netlify-hook" placeholder="https://api.netlify.com/build_hooks/...">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">Einstellungen speichern</button>
+        <span id="settings-ok" style="font-size:12px;color:var(--success);margin-left:12px;display:none">✓ Gespeichert</span>
+      </div>
+      <div class="form-section">
+        <h3>Passwort ändern</h3>
+        <div class="form-row">
+          <div class="field">
+            <label>Neues Passwort</label>
+            <input type="password" id="new-pw" placeholder="Neues Passwort">
+          </div>
+          <div class="field">
+            <label>Wiederholen</label>
+            <input type="password" id="new-pw2" placeholder="Wiederholen">
+          </div>
+        </div>
+        <button class="btn" onclick="changePassword()">Passwort ändern</button>
+        <span id="pw-change-status" style="font-size:12px;margin-left:12px;display:none"></span>
+      </div>
+      <div class="form-section">
+        <h3>Hero-Bilder</h3>
+        <p style="font-size:12px;color:var(--gray-dark);margin-bottom:12px">URLs der zufällig ausgewählten Hero-Hintergrundbilder (Cloudinary).</p>
+        <div id="hero-bilder-list"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input type="text" id="new-hero-url" placeholder="Cloudinary-URL" style="flex:1;border:1px solid var(--gray-mid);padding:8px 10px;font-family:inherit;font-size:13px">
+          <button class="btn" onclick="addHeroBild()">+ Hinzufügen</button>
+        </div>
+        <div class="save-bar" style="margin-top:12px">
+          <button class="btn btn-primary" onclick="saveHeroBilder()">Speichern & publizieren</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- GitHub Modal -->
+<div class="modal-overlay" id="gh-modal">
+  <div class="modal-box">
+    <h3>GitHub-Verbindung</h3>
+    <p class="modal-hint">Token und Repo werden nur lokal im Browser gespeichert (localStorage). Sie verlassen diesen Computer nicht.</p>
+    <input type="password" id="modal-gh-token" placeholder="GitHub Token (ghp_...)">
+    <input type="text" id="modal-gh-repo" placeholder="user/repository">
+    <input type="text" id="modal-gh-branch" placeholder="Branch (default: main)">
+    <div class="modal-row">
+      <button class="btn" onclick="closeGithubModal()">Abbrechen</button>
+      <button class="btn btn-primary" onclick="saveGithubModal()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal (Werke / News) -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box" style="width:700px;max-height:85vh;overflow-y:auto;padding:28px 32px">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+      <h3 id="edit-modal-title" style="font-size:1rem;font-weight:400;margin:0">Bearbeiten</h3>
+      <div style="flex:1"></div>
+      <button class="btn-icon" onclick="closeEditModal()">✕</button>
+    </div>
+    <div id="edit-modal-fields"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--gray-mid)">
+      <button class="btn btn-primary" onclick="saveEditModal()">Speichern & publizieren</button>
+      <button class="btn" onclick="closeEditModal()">Abbrechen</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentItem()">Löschen</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATEN
+// ═══════════════════════════════════════════════════════
+let DATA = null;
+let GALERIE = null;
+let GALERIE_SLOTS = [];
+let EDIT_TYPE = null; // 'werk' | 'news'
+let EDIT_ID = null;
+
+const STORED_HASH = '0ba8ff80ae6e2f7822291ff4b8ab0bb8431762350d80d3c033a5bf74f505e5ae';
+
+// ═══════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function doLogin() {
+  const pw = document.getElementById('pw-input').value;
+  const hash = await sha256(pw);
+  const storedHash = (DATA?.meta?.admin?.passwordHash) || STORED_HASH;
+  if (hash === storedHash) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    showPanel('werke');
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+}
+
+// ═══════════════════════════════════════════════════════
+// SETTINGS (localStorage)
+// ═══════════════════════════════════════════════════════
+function getSettings() {
+  return {
+    token:  localStorage.getItem('sf_gh_token') || '',
+    repo:   localStorage.getItem('sf_gh_repo') || '',
+    branch: localStorage.getItem('sf_gh_branch') || 'main',
+    netlify: localStorage.getItem('sf_netlify_hook') || '',
+    cldPreset: localStorage.getItem('sf_cld_preset') || '',
+    cldFolder: localStorage.getItem('sf_cld_folder') || '',
+  };
+}
+
+function saveSettings() {
+  const s = getSettings();
+  localStorage.setItem('sf_gh_token',  document.getElementById('set-gh-token').value || s.token);
+  localStorage.setItem('sf_gh_repo',   document.getElementById('set-gh-repo').value || s.repo);
+  localStorage.setItem('sf_gh_branch', document.getElementById('set-gh-branch').value || s.branch);
+  localStorage.setItem('sf_netlify_hook', document.getElementById('set-netlify-hook').value || s.netlify);
+  updateGhStatus();
+  const ok = document.getElementById('settings-ok');
+  ok.style.display = 'inline';
+  setTimeout(() => ok.style.display = 'none', 2500);
+}
+
+function openGithubModal() {
+  const s = getSettings();
+  document.getElementById('modal-gh-token').value = s.token;
+  document.getElementById('modal-gh-repo').value = s.repo;
+  document.getElementById('modal-gh-branch').value = s.branch;
+  document.getElementById('gh-modal').classList.add('open');
+}
+function closeGithubModal() { document.getElementById('gh-modal').classList.remove('open'); }
+function saveGithubModal() {
+  localStorage.setItem('sf_gh_token',  document.getElementById('modal-gh-token').value);
+  localStorage.setItem('sf_gh_repo',   document.getElementById('modal-gh-repo').value);
+  localStorage.setItem('sf_gh_branch', document.getElementById('modal-gh-branch').value || 'main');
+  updateGhStatus();
+  closeGithubModal();
+  toast('GitHub-Einstellungen gespeichert', 'success');
+}
+
+function updateGhStatus() {
+  const s = getSettings();
+  const el = document.getElementById('gh-status');
+  el.className = 'github-status' + (s.token && s.repo ? ' ok' : '');
+  el.textContent = s.token && s.repo ? `✓ ${s.repo}` : '⚙ GitHub einrichten';
+}
+
+// ═══════════════════════════════════════════════════════
+// GITHUB API
+// ═══════════════════════════════════════════════════════
+async function ghGetFile(path) {
+  const s = getSettings();
+  if (!s.token || !s.repo) throw new Error('GitHub nicht konfiguriert');
+  const res = await fetch(`https://api.github.com/repos/${s.repo}/contents/${path}?ref=${s.branch}`, {
+    headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' }
+  });
+  if (!res.ok) throw new Error(`GitHub Fehler: ${res.status}`);
+  return res.json();
+}
+
+async function ghPutFile(path, content, message, sha) {
+  const s = getSettings();
+  if (!s.token || !s.repo) throw new Error('GitHub nicht konfiguriert. Bitte zuerst Token und Repo unter Einstellungen eintragen.');
+  const body = {
+    message,
+    content: btoa(unescape(encodeURIComponent(content))),
+    branch: s.branch
+  };
+  if (sha) body.sha = sha;
+  const res = await fetch(`https://api.github.com/repos/${s.repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${s.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || `GitHub Fehler: ${res.status}`);
+  }
+  return res.json();
+}
+
+async function publishData(message = 'Admin: data.json aktualisiert') {
+  try {
+    const file = await ghGetFile('data.json');
+    const content = JSON.stringify(DATA, null, 2);
+    await ghPutFile('data.json', content, message, file.sha);
+    const s = getSettings();
+    if (s.netlify) await fetch(s.netlify, { method: 'POST' });
+    toast('Gespeichert & publiziert ✓', 'success');
+  } catch(e) {
+    toast('Fehler: ' + e.message, 'error');
+  }
+}
+
+async function publishGalerie(message = 'Admin: galerie.json aktualisiert') {
+  try {
+    const file = await ghGetFile('galerie.json');
+    const content = JSON.stringify(GALERIE, null, 2);
+    await ghPutFile('galerie.json', content, message, file.sha);
+    const s = getSettings();
+    if (s.netlify) await fetch(s.netlify, { method: 'POST' });
+    toast('Galerie gespeichert & publiziert ✓', 'success');
+  } catch(e) {
+    toast('Fehler: ' + e.message, 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT: DATEN LADEN
+// ═══════════════════════════════════════════════════════
+async function loadData() {
+  try {
+    const [dataRes, galerieRes] = await Promise.all([
+      fetch('data.json').then(r => r.json()),
+      fetch('galerie.json').then(r => r.json())
+    ]);
+    DATA = dataRes;
+    GALERIE = galerieRes;
+    GALERIE_SLOTS = GALERIE.slots.map(s => ({
+      werk_id: s.werk_id,
+      abstand_vor: s.abstand_vor,
+      versatz_px: s.versatz_px || 0,
+      zoom: s.zoom || 100,
+      stapel: s.reihe > 1
+    }));
+    updateBadges();
+    loadSettingsForm();
+  } catch(e) {
+    toast('Fehler beim Laden der Daten: ' + e.message, 'error');
+  }
+}
+
+function updateBadges() {
+  if (!DATA) return;
+  document.getElementById('badge-werke').textContent = DATA.werke.length;
+  document.getElementById('badge-news').textContent  = DATA.news.length;
+}
+
+function loadSettingsForm() {
+  const s = getSettings();
+  document.getElementById('set-gh-token').value   = s.token;
+  document.getElementById('set-gh-repo').value    = s.repo;
+  document.getElementById('set-gh-branch').value  = s.branch;
+  document.getElementById('set-netlify-hook').value = s.netlify;
+  document.getElementById('cld-preset').value     = s.cldPreset;
+  document.getElementById('cld-folder').value     = s.cldFolder;
+  updateGhStatus();
+  renderHeroBilder();
+}
+
+// ═══════════════════════════════════════════════════════
+// PANELS
+// ═══════════════════════════════════════════════════════
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(b => {
+    if (b.getAttribute('onclick').includes("'"+name+"'")) b.classList.add('active');
+  });
+  if (name === 'werke')        renderWerkeList();
+  if (name === 'news')         renderNewsList();
+  if (name === 'katalog')      renderKatalogFields();
+  if (name === 'vita')         renderVitaFields();
+  if (name === 'galerie')      renderGalerieEditor();
+  if (name === 'einstellungen') loadSettingsForm();
+}
+
+function switchTab(panel, tab) {
+  document.querySelectorAll(`#panel-${panel} .tab-btn`).forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`#panel-${panel} .tab-pane`).forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`tab-${panel}-${tab}`).classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+// WERK-FELD-DEFINITION
+// ═══════════════════════════════════════════════════════
+function werkFields(w = {}) {
+  return `
+    <div class="form-section"><h3>Basics</h3>
+      <div class="form-row">
+        <div class="field"><label>ID (slug)</label><input id="wf-id" value="${esc(w.id||'')}" placeholder="z.B. perseus-2025"></div>
+        <div class="field"><label>Titel</label><input id="wf-titel" value="${esc(w.titel||'')}"></div>
+      </div>
+      <div class="form-row triple">
+        <div class="field"><label>Jahr</label><input id="wf-jahr" type="number" value="${w.jahr||new Date().getFullYear()}"></div>
+        <div class="field"><label>Maße (H × B cm)</label><input id="wf-masse" value="${esc(w.masse||'')}" placeholder="150 × 120 cm"></div>
+        <div class="field"><label>Größe (xs/s/m/l)</label>
+          <select id="wf-groesse">
+            ${['xs','s','m','l'].map(g=>`<option value="${g}" ${w.groesse===g?'selected':''}>${g}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Medium (DE)</label><input id="wf-medium" value="${esc(w.medium||'')}"></div>
+        <div class="field"><label>Medium (EN)</label><input id="wf-medium-en" value="${esc(w.medium_en||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Serie</label><input id="wf-serie" value="${esc(w.serie||'')}"></div>
+        <div class="field"><label>Reihe</label><input id="wf-reihe" value="${esc(w.reihe||'')}"></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Bild & Status</h3>
+      <div class="form-row">
+        <div class="field"><label>Bild-URL (Cloudinary)</label><input id="wf-bild" value="${esc(w.bild||'')}" placeholder="https://res.cloudinary.com/def9qgwtw/...">
+          <img id="wf-bild-preview" class="field-img-preview" src="${w.bild||''}" style="${w.bild?'display:block':''}">
+        </div>
+      </div>
+      <div class="form-row triple">
+        <div class="field"><label><input type="checkbox" id="wf-portraet" ${w.portraet?'checked':''}> Hochformat</label></div>
+        <div class="field"><label><input type="checkbox" id="wf-verfuegbar" ${w.verfuegbar?'checked':''}> Verfügbar</label></div>
+        <div class="field"><label><input type="checkbox" id="wf-neu" ${w.neu?'checked':''}> Neu</label></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Preis (leer = auf Anfrage)</label><input id="wf-preis" value="${esc(w.preis||'')}"></div>
+      </div>
+    </div>
+  `;
+}
+
+function werkFromFields() {
+  return {
+    id:         document.getElementById('wf-id').value.trim(),
+    titel:      document.getElementById('wf-titel').value.trim(),
+    jahr:       parseInt(document.getElementById('wf-jahr').value) || new Date().getFullYear(),
+    masse:      document.getElementById('wf-masse').value.trim(),
+    medium:     document.getElementById('wf-medium').value.trim(),
+    medium_en:  document.getElementById('wf-medium-en').value.trim(),
+    gerahmt:    false,
+    serie:      document.getElementById('wf-serie').value.trim() || null,
+    reihe:      document.getElementById('wf-reihe').value.trim() || null,
+    portraet:   document.getElementById('wf-portraet').checked,
+    verfuegbar: document.getElementById('wf-verfuegbar').checked,
+    preis:      document.getElementById('wf-preis').value.trim() || null,
+    neu:        document.getElementById('wf-neu').checked,
+    bild:       document.getElementById('wf-bild').value.trim(),
+    groesse:    document.getElementById('wf-groesse').value
+  };
+}
+
+// ═══════════════════════════════════════════════════════
+// WERKE LIST
+// ═══════════════════════════════════════════════════════
+function renderWerkeList() {
+  if (!DATA) return;
+  const sorted = [...DATA.werke].sort((a,b) => b.jahr - a.jahr || a.titel.localeCompare(b.titel));
+  const el = document.getElementById('werke-list');
+  el.innerHTML = sorted.map(w => `
+    <div class="item-card" onclick="openEditModal('werk','${esc(w.id)}')">
+      <img class="item-thumb" src="${w.bild||''}" alt="${esc(w.titel)}" onerror="this.style.display='none'">
+      <div class="item-info">
+        <div class="item-title">${esc(w.titel)}</div>
+        <div class="item-meta">${w.jahr} · ${esc(w.masse)} · ${esc(w.medium)}</div>
+      </div>
+      <div class="item-actions">
+        ${w.verfuegbar ? '<span style="font-size:11px;color:var(--success)">● verfügbar</span>' : ''}
+        ${w.neu ? '<span style="font-size:11px;color:var(--warn)">● neu</span>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function openNewWerkForm() {
+  const form = document.getElementById('new-werk-form');
+  document.getElementById('new-werk-fields').innerHTML = werkFields();
+  form.classList.add('open');
+  form.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('wf-bild').addEventListener('change', e => {
+    const p = document.getElementById('wf-bild-preview');
+    p.src = e.target.value; p.style.display = 'block';
+  });
+}
+function closeNewWerkForm() { document.getElementById('new-werk-form').classList.remove('open'); }
+
+function saveNewWerk() {
+  const w = werkFromFields();
+  if (!w.id || !w.titel) { toast('ID und Titel sind Pflichtfelder', 'error'); return; }
+  if (DATA.werke.find(x => x.id === w.id)) { toast('ID bereits vorhanden', 'error'); return; }
+  DATA.werke.push(w);
+  updateBadges();
+  closeNewWerkForm();
+  renderWerkeList();
+  publishData(`Admin: Werk "${w.titel}" hinzugefügt`);
+}
+
+// ═══════════════════════════════════════════════════════
+// NEWS LIST
+// ═══════════════════════════════════════════════════════
+function newsFields(n = {}) {
+  return `
+    <div class="form-section"><h3>Allgemein</h3>
+      <div class="form-row">
+        <div class="field"><label>ID (slug)</label><input id="nf-id" value="${esc(n.id||'')}"></div>
+        <div class="field"><label>Datum (YYYY-MM-DD)</label><input id="nf-datum" value="${esc(n.datum||'')}" type="date"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Titel (DE)</label><input id="nf-titel" value="${esc(n.titel||'')}"></div>
+        <div class="field"><label>Titel (EN)</label><input id="nf-titel-en" value="${esc(n.titel_en||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Kategorie (DE)</label><input id="nf-kat" value="${esc(n.kategorie||'')}"></div>
+        <div class="field"><label>Kategorie (EN)</label><input id="nf-kat-en" value="${esc(n.kategorie_en||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Ort</label><input id="nf-ort" value="${esc(n.ort||'')}"></div>
+        <div class="field"><label>Veranstalter</label><input id="nf-veranstalter" value="${esc(n.veranstalter||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Zeitraum (DE)</label><input id="nf-zeitraum" value="${esc(n.zeitraum||'')}"></div>
+        <div class="field"><label>Zeitraum (EN)</label><input id="nf-zeitraum-en" value="${esc(n.zeitraum_en||'')}"></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Text</h3>
+      <div class="form-row single">
+        <div class="field"><label>Text (DE)</label><textarea id="nf-text" rows="5">${esc(n.text||'')}</textarea></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Text (EN)</label><textarea id="nf-text-en" rows="5">${esc(n.text_en||'')}</textarea></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Medien & Links</h3>
+      <div class="form-row">
+        <div class="field"><label>Titelbild-URL</label><input id="nf-titelbild" value="${esc(n.titelbild||'')}"></div>
+        <div class="field"><label>PDF-URL</label><input id="nf-pdf" value="${esc(n.pdf||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Link-URL</label><input id="nf-url" value="${esc(n.url||'')}"></div>
+        <div class="field"><label>Link-Label (DE)</label><input id="nf-url-label" value="${esc(n.url_label||'')}"></div>
+      </div>
+    </div>
+  `;
+}
+
+function newsFromFields() {
+  const id = document.getElementById('nf-id').value.trim();
+  const datumVal = document.getElementById('nf-datum').value;
+  return {
+    id,
+    datum: datumVal,
+    jahr: datumVal ? parseInt(datumVal.split('-')[0]) : new Date().getFullYear(),
+    kategorie:    document.getElementById('nf-kat').value.trim(),
+    kategorie_en: document.getElementById('nf-kat-en').value.trim(),
+    titel:        document.getElementById('nf-titel').value.trim(),
+    titel_en:     document.getElementById('nf-titel-en').value.trim(),
+    ort:          document.getElementById('nf-ort').value.trim(),
+    veranstalter: document.getElementById('nf-veranstalter').value.trim(),
+    zeitraum:     document.getElementById('nf-zeitraum').value.trim(),
+    zeitraum_en:  document.getElementById('nf-zeitraum-en').value.trim(),
+    text:         document.getElementById('nf-text').value.trim(),
+    text_en:      document.getElementById('nf-text-en').value.trim(),
+    titelbild:    document.getElementById('nf-titelbild').value.trim(),
+    bilder:       [],
+    pdf:          document.getElementById('nf-pdf').value.trim(),
+    url:          document.getElementById('nf-url').value.trim(),
+    url_label:    document.getElementById('nf-url-label').value.trim(),
+    tags: [], tags_en: []
+  };
+}
+
+function renderNewsList() {
+  if (!DATA) return;
+  const sorted = [...DATA.news].sort((a,b) => (b.datum||'').localeCompare(a.datum||''));
+  const el = document.getElementById('news-list');
+  el.innerHTML = sorted.map(n => `
+    <div class="item-card" onclick="openEditModal('news','${esc(n.id)}')">
+      <img class="item-thumb" src="${n.titelbild||''}" alt="${esc(n.titel)}" onerror="this.style.display='none'">
+      <div class="item-info">
+        <div class="item-title">${esc(n.titel)}</div>
+        <div class="item-meta">${n.datum||''} · ${esc(n.kategorie||'')} · ${esc(n.ort||'')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openNewNewsForm() {
+  const form = document.getElementById('new-news-form');
+  document.getElementById('new-news-fields').innerHTML = newsFields();
+  form.classList.add('open');
+  form.scrollIntoView({ behavior: 'smooth' });
+}
+
+function saveNewNews() {
+  const n = newsFromFields();
+  if (!n.id || !n.titel) { toast('ID und Titel sind Pflichtfelder', 'error'); return; }
+  if (DATA.news.find(x => x.id === n.id)) { toast('ID bereits vorhanden', 'error'); return; }
+  DATA.news.unshift(n);
+  updateBadges();
+  document.getElementById('new-news-form').classList.remove('open');
+  renderNewsList();
+  publishData(`Admin: News "${n.titel}" hinzugefügt`);
+}
+
+// ═══════════════════════════════════════════════════════
+// EDIT MODAL (Werke + News)
+// ═══════════════════════════════════════════════════════
+function openEditModal(type, id) {
+  EDIT_TYPE = type;
+  EDIT_ID = id;
+  const modal = document.getElementById('edit-modal');
+  const fields = document.getElementById('edit-modal-fields');
+  if (type === 'werk') {
+    const w = DATA.werke.find(x => x.id === id);
+    document.getElementById('edit-modal-title').textContent = w.titel;
+    fields.innerHTML = werkFields(w);
+    document.getElementById('wf-id').disabled = true; // ID nicht änderbar
+    document.getElementById('wf-bild').addEventListener('change', e => {
+      const p = document.getElementById('wf-bild-preview');
+      p.src = e.target.value; p.style.display = 'block';
+    });
+  } else if (type === 'news') {
+    const n = DATA.news.find(x => x.id === id);
+    document.getElementById('edit-modal-title').textContent = n.titel;
+    fields.innerHTML = newsFields(n);
+    document.getElementById('nf-id').disabled = true;
+  }
+  modal.classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  EDIT_TYPE = null; EDIT_ID = null;
+}
+
+function saveEditModal() {
+  if (EDIT_TYPE === 'werk') {
+    const idx = DATA.werke.findIndex(x => x.id === EDIT_ID);
+    if (idx === -1) return;
+    const updated = werkFromFields();
+    updated.id = EDIT_ID; // ID nie ändern
+    DATA.werke[idx] = updated;
+    renderWerkeList();
+    publishData(`Admin: Werk "${updated.titel}" aktualisiert`);
+  } else if (EDIT_TYPE === 'news') {
+    const idx = DATA.news.findIndex(x => x.id === EDIT_ID);
+    if (idx === -1) return;
+    const updated = newsFromFields();
+    updated.id = EDIT_ID;
+    DATA.news[idx] = { ...DATA.news[idx], ...updated };
+    renderNewsList();
+    publishData(`Admin: News "${updated.titel}" aktualisiert`);
+  }
+  closeEditModal();
+}
+
+function deleteCurrentItem() {
+  if (!confirm('Wirklich löschen? Dies kann nicht rückgängig gemacht werden.')) return;
+  if (EDIT_TYPE === 'werk') {
+    const w = DATA.werke.find(x => x.id === EDIT_ID);
+    DATA.werke = DATA.werke.filter(x => x.id !== EDIT_ID);
+    renderWerkeList();
+    updateBadges();
+    publishData(`Admin: Werk "${w?.titel}" gelöscht`);
+  } else if (EDIT_TYPE === 'news') {
+    const n = DATA.news.find(x => x.id === EDIT_ID);
+    DATA.news = DATA.news.filter(x => x.id !== EDIT_ID);
+    renderNewsList();
+    updateBadges();
+    publishData(`Admin: News "${n?.titel}" gelöscht`);
+  }
+  closeEditModal();
+}
+
+// ═══════════════════════════════════════════════════════
+// KATALOG
+// ═══════════════════════════════════════════════════════
+function renderKatalogFields() {
+  if (!DATA?.katalog?.[0]) return;
+  const k = DATA.katalog[0];
+  document.getElementById('katalog-fields').innerHTML = `
+    <div class="form-section"><h3>Bibliografie</h3>
+      <div class="form-row">
+        <div class="field"><label>Titel (DE)</label><input id="kf-titel" value="${esc(k.titel||'')}"></div>
+        <div class="field"><label>Titel (EN)</label><input id="kf-titel-en" value="${esc(k.titel_en||'')}"></div>
+      </div>
+      <div class="form-row triple">
+        <div class="field"><label>Jahr</label><input id="kf-jahr" type="number" value="${k.jahr||2026}"></div>
+        <div class="field"><label>Preis</label><input id="kf-preis" value="${esc(k.preis||'')}"></div>
+        <div class="field"><label>ISBN</label><input id="kf-isbn" value="${esc(k.isbn||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Verlag</label><input id="kf-verlag" value="${esc(k.verlag||'')}"></div>
+        <div class="field"><label>Reihe</label><input id="kf-reihe" value="${esc(k.reihe||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Herausgeber (DE)</label><input id="kf-hrsg" value="${esc(k.herausgeber||'')}"></div>
+        <div class="field"><label>Herausgeber (EN)</label><input id="kf-hrsg-en" value="${esc(k.herausgeber_en||'')}"></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Ausstellung</h3>
+      <div class="form-row">
+        <div class="field"><label>Ausstellungstitel</label><input id="kf-ausst" value="${esc(k.ausstellung||'')}"></div>
+        <div class="field"><label>Ort</label><input id="kf-ausst-ort" value="${esc(k.ausstellung_ort||'')}"></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Zeitraum</label><input id="kf-ausst-zeit" value="${esc(k.ausstellung_zeitraum||'')}"></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Texte</h3>
+      <div class="form-row single">
+        <div class="field"><label>Beschreibungstext (DE)</label><textarea id="kf-text-de" rows="4">${esc(k.text_de||'')}</textarea></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Beschreibungstext (EN)</label><textarea id="kf-text-en" rows="4">${esc(k.text_en||'')}</textarea></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Cover & Reader</h3>
+      <div class="form-row">
+        <div class="field"><label>Cover-URL</label><input id="kf-cover" value="${esc(k.cover||'')}"></div>
+        <div class="field"><label>Reader Base URL</label><input id="kf-reader-url" value="${esc(k.reader_base_url||'')}"></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Anzahl Reader-Seiten</label><input id="kf-reader-pages" type="number" value="${k.reader_total_pages||0}"></div>
+      </div>
+    </div>
+  `;
+  // Aufsatz-Blocks
+  renderAufsatzFields(k.aufsatz || {});
+}
+
+function renderAufsatzFields(aufsatz) {
+  const blocks = aufsatz.blocks || [];
+  const textBlocks = blocks.filter(b => b.type === 'p');
+  document.getElementById('aufsatz-fields').innerHTML = `
+    <div class="form-section"><h3>Aufsatztitel</h3>
+      <div class="form-row">
+        <div class="field"><label>Titel (DE)</label><input id="af-titel" value="${esc(aufsatz.titel||'')}"></div>
+        <div class="field"><label>Titel (EN)</label><input id="af-titel-en" value="${esc(aufsatz.titel_en||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Untertitel (DE)</label><input id="af-untertitel" value="${esc(aufsatz.untertitel||'')}"></div>
+        <div class="field"><label>Untertitel (EN)</label><input id="af-untertitel-en" value="${esc(aufsatz.untertitel_en||'')}"></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Absätze (${textBlocks.length})</h3>
+      <p style="font-size:11px;color:var(--gray-dark);margin-bottom:16px">Nur Textblöcke werden hier angezeigt. Bildreferenzen bleiben unverändert.</p>
+      ${textBlocks.map((b, i) => `
+        <div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--gray-light)">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--gray-dark);margin-bottom:8px;text-transform:uppercase">Absatz ${i+1}</div>
+          <div class="field" style="margin-bottom:10px"><label>Text (DE)</label>
+            <textarea id="af-p-de-${i}" rows="4">${esc(b.text||'')}</textarea></div>
+          <div class="field"><label>Text (EN)</label>
+            <textarea id="af-p-en-${i}" rows="4">${esc(b.text_en||'')}</textarea></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function saveKatalog() {
+  if (!DATA?.katalog?.[0]) return;
+  const k = DATA.katalog[0];
+  k.titel          = document.getElementById('kf-titel')?.value.trim() || k.titel;
+  k.titel_en       = document.getElementById('kf-titel-en')?.value.trim() || k.titel_en;
+  k.jahr           = parseInt(document.getElementById('kf-jahr')?.value) || k.jahr;
+  k.preis          = document.getElementById('kf-preis')?.value.trim() || k.preis;
+  k.isbn           = document.getElementById('kf-isbn')?.value.trim() || k.isbn;
+  k.verlag         = document.getElementById('kf-verlag')?.value.trim() || k.verlag;
+  k.reihe          = document.getElementById('kf-reihe')?.value.trim() || k.reihe;
+  k.herausgeber    = document.getElementById('kf-hrsg')?.value.trim() || k.herausgeber;
+  k.herausgeber_en = document.getElementById('kf-hrsg-en')?.value.trim() || k.herausgeber_en;
+  k.ausstellung    = document.getElementById('kf-ausst')?.value.trim() || k.ausstellung;
+  k.ausstellung_ort= document.getElementById('kf-ausst-ort')?.value.trim() || k.ausstellung_ort;
+  k.ausstellung_zeitraum = document.getElementById('kf-ausst-zeit')?.value.trim() || k.ausstellung_zeitraum;
+  k.text_de        = document.getElementById('kf-text-de')?.value.trim() || k.text_de;
+  k.text_en        = document.getElementById('kf-text-en')?.value.trim() || k.text_en;
+  k.cover          = document.getElementById('kf-cover')?.value.trim() || k.cover;
+  k.reader_base_url= document.getElementById('kf-reader-url')?.value.trim() || k.reader_base_url;
+  k.reader_total_pages = parseInt(document.getElementById('kf-reader-pages')?.value) || k.reader_total_pages;
+  // Aufsatz titel/untertitel
+  if (!k.aufsatz) k.aufsatz = {};
+  k.aufsatz.titel         = document.getElementById('af-titel')?.value.trim() || k.aufsatz.titel;
+  k.aufsatz.titel_en      = document.getElementById('af-titel-en')?.value.trim() || k.aufsatz.titel_en;
+  k.aufsatz.untertitel    = document.getElementById('af-untertitel')?.value.trim() || k.aufsatz.untertitel;
+  k.aufsatz.untertitel_en = document.getElementById('af-untertitel-en')?.value.trim() || k.aufsatz.untertitel_en;
+  // Aufsatz Textblöcke
+  const textBlocks = (k.aufsatz.blocks || []).filter(b => b.type === 'p');
+  textBlocks.forEach((b, i) => {
+    const deEl = document.getElementById(`af-p-de-${i}`);
+    const enEl = document.getElementById(`af-p-en-${i}`);
+    if (deEl) b.text    = deEl.value.trim();
+    if (enEl) b.text_en = enEl.value.trim();
+  });
+  publishData('Admin: Katalog aktualisiert');
+  document.getElementById('katalog-save-status').textContent = 'Wird publiziert…';
+  setTimeout(() => document.getElementById('katalog-save-status').textContent = '', 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// VITA
+// ═══════════════════════════════════════════════════════
+function renderVitaFields() {
+  if (!DATA?.meta?.vita) return;
+  const v = DATA.meta.vita;
+  const ausst = (v.ausstellungen || []).join('\n');
+  const ausstEn = (v.ausstellungen_en || []).join('\n');
+  document.getElementById('vita-fields').innerHTML = `
+    <div class="form-section"><h3>Fließtext</h3>
+      <div class="form-row single">
+        <div class="field"><label>Biografietext (DE)</label><textarea id="vf-text" rows="6">${esc(v.text||'')}</textarea></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Biografietext (EN)</label><textarea id="vf-text-en" rows="6">${esc(v.text_en||'')}</textarea></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Steckbrief</h3>
+      <div class="form-row">
+        <div class="field"><label>Geboren</label><input id="vf-geboren" value="${esc(v.geboren||'')}"></div>
+        <div class="field"><label>Lebt und arbeitet in</label><input id="vf-lebt" value="${esc(v.lebt_arbeitet||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Ausbildung (DE)</label><input id="vf-ausbildung" value="${esc(v.ausbildung||'')}"></div>
+        <div class="field"><label>Ausbildung (EN)</label><input id="vf-ausbildung-en" value="${esc(v.ausbildung_en||'')}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Ausstellungen (DE, je eine pro Zeile)</label>
+          <textarea id="vf-ausstellungen" rows="6">${esc(ausst)}</textarea></div>
+        <div class="field"><label>Ausstellungen (EN, je eine pro Zeile)</label>
+          <textarea id="vf-ausstellungen-en" rows="6">${esc(ausstEn)}</textarea></div>
+      </div>
+    </div>
+    <div class="form-section"><h3>Tagline (Startseite)</h3>
+      <div class="form-row single">
+        <div class="field"><label>Tagline (DE)</label><textarea id="vf-tagline" rows="4">${esc(DATA.meta.tagline||'')}</textarea></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>Tagline (EN)</label><textarea id="vf-tagline-en" rows="4">${esc(DATA.meta.tagline_en||'')}</textarea></div>
+      </div>
+    </div>
+  `;
+}
+
+function saveVita() {
+  if (!DATA?.meta?.vita) return;
+  const v = DATA.meta.vita;
+  v.text          = document.getElementById('vf-text').value.trim();
+  v.text_en       = document.getElementById('vf-text-en').value.trim();
+  v.geboren       = document.getElementById('vf-geboren').value.trim();
+  v.lebt_arbeitet = document.getElementById('vf-lebt').value.trim();
+  v.lebt_arbeitet_en = v.lebt_arbeitet;
+  v.ausbildung    = document.getElementById('vf-ausbildung').value.trim();
+  v.ausbildung_en = document.getElementById('vf-ausbildung-en').value.trim();
+  v.ausstellungen    = document.getElementById('vf-ausstellungen').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  v.ausstellungen_en = document.getElementById('vf-ausstellungen-en').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  DATA.meta.tagline    = document.getElementById('vf-tagline').value.trim();
+  DATA.meta.tagline_en = document.getElementById('vf-tagline-en').value.trim();
+  publishData('Admin: Vita aktualisiert');
+  document.getElementById('vita-save-status').textContent = 'Wird publiziert…';
+  setTimeout(() => document.getElementById('vita-save-status').textContent = '', 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// GALERIE EDITOR
+// ═══════════════════════════════════════════════════════
+function galerieResetToSaved() {
+  if (!GALERIE) return;
+  GALERIE_SLOTS = GALERIE.slots.map(s => ({
+    werk_id: s.werk_id,
+    abstand_vor: s.abstand_vor,
+    versatz_px: s.versatz_px || 0,
+    zoom: s.zoom || 100,
+    stapel: s.reihe > 1
+  }));
+  renderGalerieEditor();
+}
+
+function getWerkForGalerie(id) {
+  return DATA?.werke.find(w => w.id === id);
+}
+
+function galeMarseHBcm(masse) {
+  if (!masse) return 0;
+  const m = masse.replace(',','.').match(/(\d+\.?\d*)\s*[×x]\s*(\d+\.?\d*)/);
+  return m ? parseFloat(m[1]) : 0;
+}
+
+function galerieStapelInfo(gruppe) {
+  const gap = GALERIE?.config?.stapel_gap_px || 16;
+  let total = 0;
+  gruppe.forEach((idx, pos) => {
+    const w = getWerkForGalerie(GALERIE_SLOTS[idx].werk_id);
+    if (w) total += galeMarseHBcm(w.masse);
+    if (pos > 0) total += gap;
+  });
+  return `Stapel · Gesamthöhe ca. ${total} cm · Mitte bei ${(total/2).toFixed(0)} cm`;
+}
+
+function galeGruppen() {
+  const gruppen = [];
+  for (let i = 0; i < GALERIE_SLOTS.length; i++) {
+    if (GALERIE_SLOTS[i].stapel && gruppen.length > 0) {
+      gruppen[gruppen.length-1].push(i);
+    } else {
+      gruppen.push([i]);
+    }
+  }
+  return gruppen;
+}
+
+function galeMoveUp(i) {
+  if (i === 0) return;
+  [GALERIE_SLOTS[i-1], GALERIE_SLOTS[i]] = [GALERIE_SLOTS[i], GALERIE_SLOTS[i-1]];
+  if (GALERIE_SLOTS[0].stapel) GALERIE_SLOTS[0].stapel = false;
+  renderGalerieEditor();
+}
+function galeMoveDown(i) {
+  if (i >= GALERIE_SLOTS.length-1) return;
+  [GALERIE_SLOTS[i], GALERIE_SLOTS[i+1]] = [GALERIE_SLOTS[i+1], GALERIE_SLOTS[i]];
+  if (GALERIE_SLOTS[0].stapel) GALERIE_SLOTS[0].stapel = false;
+  renderGalerieEditor();
+}
+function galeToggleStapel(i) {
+  if (i === 0) return;
+  GALERIE_SLOTS[i].stapel = !GALERIE_SLOTS[i].stapel;
+  renderGalerieEditor();
+}
+
+function renderGalerieEditor() {
+  if (!DATA || !GALERIE_SLOTS.length) return;
+  const list = document.getElementById('galerie-slot-list');
+  list.innerHTML = '';
+  const gruppen = galeGruppen();
+  let slotNr = 0;
+
+  gruppen.forEach(gruppe => {
+    const isStapel = gruppe.length > 1;
+    const div = document.createElement('div');
+    div.className = 'galerie-gruppe' + (isStapel ? ' stapel' : '');
+    if (isStapel) {
+      const hdr = document.createElement('div');
+      hdr.className = 'galerie-gruppe-header';
+      hdr.textContent = galerieStapelInfo(gruppe);
+      div.appendChild(hdr);
+    }
+    gruppe.forEach(idx => {
+      slotNr++;
+      const s = GALERIE_SLOTS[idx];
+      const w = getWerkForGalerie(s.werk_id);
+      if (!w) return;
+      const isFirst = idx === 0;
+      const row = document.createElement('div');
+      row.className = 'galerie-slot-row';
+      row.innerHTML =
+        `<div class="slot-num">${slotNr}</div>` +
+        `<div class="orient ${w.portraet?'p':'q'}">${w.portraet?'↑':'↔'}</div>` +
+        `<div class="gal-werk-info"><div class="gal-werk-titel">${esc(w.titel)}</div><div class="gal-werk-meta">${w.jahr} · ${esc(w.masse)}</div></div>` +
+        `<div class="gal-field"><label>Abstand</label><input type="number" value="${s.abstand_vor}" min="0" max="500" step="10" onchange="GALERIE_SLOTS[${idx}].abstand_vor=+this.value"></div>` +
+        `<div class="gal-field"><label>Versatz</label><input type="number" value="${s.versatz_px}" min="-200" max="200" step="10" ${s.stapel?'disabled':''} onchange="GALERIE_SLOTS[${idx}].versatz_px=+this.value"></div>` +
+        `<div class="gal-field"><label>Zoom %</label><input type="number" value="${s.zoom}" min="50" max="150" step="5" onchange="GALERIE_SLOTS[${idx}].zoom=+this.value"></div>` +
+        `<div class="gal-field"><label>Stapel</label><div class="stapel-toggle ${s.stapel?'aktiv':''} ${isFirst?'disabled':''}" ${isFirst?'':' onclick="galeToggleStapel('+idx+')"'}>${s.stapel?'▣ an':'□ aus'}</div></div>` +
+        `<div class="gal-move-btns"><button class="gal-move-btn" onclick="galeMoveUp(${idx})" ${idx===0?'disabled':''}>↑</button><button class="gal-move-btn" onclick="galeMoveDown(${idx})" ${idx===GALERIE_SLOTS.length-1?'disabled':''}>↓</button></div>`;
+      div.appendChild(row);
+    });
+    list.appendChild(div);
+  });
+}
+
+function galeriePublish() {
+  let reihe = 1;
+  GALERIE.slots = GALERIE_SLOTS.map((s, i) => {
+    if (s.stapel) { reihe++; } else { reihe = 1; }
+    const obj = { slot: i+1, abstand_vor: s.abstand_vor, werk_id: s.werk_id, reihe };
+    if (!s.stapel && s.versatz_px !== 0) obj.versatz_px = s.versatz_px;
+    if (s.zoom !== 100) obj.zoom = s.zoom;
+    return obj;
+  });
+  publishGalerie();
+}
+
+// ═══════════════════════════════════════════════════════
+// CLOUDINARY UPLOAD
+// ═══════════════════════════════════════════════════════
+let uploadFiles = [];
+
+const uploadZone = document.getElementById('upload-zone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  handleFileSelect(e.dataTransfer.files);
+});
+
+function handleFileSelect(files) {
+  uploadFiles = Array.from(files);
+  const preview = document.getElementById('upload-preview');
+  preview.innerHTML = uploadFiles.map((f,i) => `
+    <div class="upload-preview-item" id="upl-item-${i}">
+      <img src="${URL.createObjectURL(f)}" alt="">
+      <div class="upl-name">${esc(f.name)}</div>
+      <div class="upl-status pending" id="upl-status-${i}">Bereit</div>
+    </div>
+  `).join('');
+  document.getElementById('upload-btn').style.display = uploadFiles.length ? 'block' : 'none';
+}
+
+async function startUpload() {
+  const s = getSettings();
+  const preset = document.getElementById('cld-preset').value.trim();
+  const folder = document.getElementById('cld-folder').value.trim();
+  if (!preset) { toast('Bitte Upload Preset eingeben', 'error'); return; }
+  localStorage.setItem('sf_cld_preset', preset);
+  localStorage.setItem('sf_cld_folder', folder);
+
+  for (let i = 0; i < uploadFiles.length; i++) {
+    const statusEl = document.getElementById(`upl-status-${i}`);
+    statusEl.className = 'upl-status pending';
+    statusEl.textContent = 'Lädt…';
+    try {
+      const fd = new FormData();
+      fd.append('file', uploadFiles[i]);
+      fd.append('upload_preset', preset);
+      if (folder) fd.append('folder', folder);
+      const res = await fetch(`https://api.cloudinary.com/v1_1/def9qgwtw/image/upload`, { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.secure_url) {
+        statusEl.className = 'upl-status ok';
+        statusEl.textContent = '✓ OK';
+        const urlDiv = document.createElement('div');
+        urlDiv.className = 'upl-url';
+        urlDiv.textContent = data.secure_url;
+        document.getElementById(`upl-item-${i}`).appendChild(urlDiv);
+        // URL in Zwischenablage-Button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn btn-sm';
+        copyBtn.style.fontSize = '9px';
+        copyBtn.style.marginTop = '3px';
+        copyBtn.style.width = '100%';
+        copyBtn.textContent = 'URL kopieren';
+        copyBtn.onclick = () => { navigator.clipboard.writeText(data.secure_url); copyBtn.textContent = '✓'; };
+        document.getElementById(`upl-item-${i}`).appendChild(copyBtn);
+      } else {
+        throw new Error(data.error?.message || 'Unbekannter Fehler');
+      }
+    } catch(e) {
+      statusEl.className = 'upl-status err';
+      statusEl.textContent = '✗ ' + e.message;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// HERO-BILDER
+// ═══════════════════════════════════════════════════════
+function renderHeroBilder() {
+  if (!DATA?.meta) return;
+  const bilder = DATA.meta.hero_bilder || [];
+  document.getElementById('hero-bilder-list').innerHTML = bilder.map((url, i) => `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <img src="${esc(url)}" style="width:80px;height:52px;object-fit:cover;border:1px solid var(--gray-mid)" onerror="this.style.display='none'">
+      <span style="flex:1;font-size:12px;word-break:break-all;color:var(--gray-dark)">${esc(url)}</span>
+      <button class="btn-icon btn-sm" onclick="removeHeroBild(${i})" title="Entfernen">✕</button>
+    </div>
+  `).join('') || '<p style="font-size:12px;color:var(--gray-dark)">Keine Hero-Bilder eingetragen.</p>';
+}
+
+function addHeroBild() {
+  const url = document.getElementById('new-hero-url').value.trim();
+  if (!url) return;
+  if (!DATA.meta.hero_bilder) DATA.meta.hero_bilder = [];
+  DATA.meta.hero_bilder.push(url);
+  document.getElementById('new-hero-url').value = '';
+  renderHeroBilder();
+}
+
+function removeHeroBild(i) {
+  DATA.meta.hero_bilder.splice(i, 1);
+  renderHeroBilder();
+}
+
+function saveHeroBilder() {
+  publishData('Admin: Hero-Bilder aktualisiert');
+}
+
+// ═══════════════════════════════════════════════════════
+// PASSWORT ÄNDERN
+// ═══════════════════════════════════════════════════════
+async function changePassword() {
+  const pw1 = document.getElementById('new-pw').value;
+  const pw2 = document.getElementById('new-pw2').value;
+  const statusEl = document.getElementById('pw-change-status');
+  if (!pw1) { statusEl.style.color = 'var(--danger)'; statusEl.style.display = 'inline'; statusEl.textContent = 'Bitte Passwort eingeben.'; return; }
+  if (pw1 !== pw2) { statusEl.style.color = 'var(--danger)'; statusEl.style.display = 'inline'; statusEl.textContent = 'Passwörter stimmen nicht überein.'; return; }
+  const hash = await sha256(pw1);
+  DATA.meta.admin.passwordHash = hash;
+  document.getElementById('new-pw').value = '';
+  document.getElementById('new-pw2').value = '';
+  publishData('Admin: Passwort geändert');
+  statusEl.style.color = 'var(--success)';
+  statusEl.style.display = 'inline';
+  statusEl.textContent = '✓ Passwort gespeichert & publiziert';
+  setTimeout(() => statusEl.style.display = 'none', 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = type;
+  el.style.display = 'block';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.style.display = 'none', type === 'error' ? 6000 : 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════
+loadData().then(() => {
+  // Login-Screen bleibt – Benutzer gibt Passwort ein
+  // Prüfen ob schon eingeloggt wäre hier möglich (Session), 
+  // aber für Einfachheit: immer Passwort verlangen
+});
+</script>
+</body>
+</html>

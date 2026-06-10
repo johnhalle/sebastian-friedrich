@@ -233,9 +233,48 @@ document.addEventListener('DOMContentLoaded', () => {
 // Hero-Seiten: transparent/hell ueber dem Hero, weiss/schwarz nach dem Hero.
 // Unterseiten: immer weiss/schwarz sichtbar.
 function initNav(hasHero) {
-  const nav = document.querySelector('nav');
-  if (!nav) return;
+  // Nav-HTML einmalig injizieren falls noch nicht vorhanden
+  if (!document.querySelector('nav')) {
+    document.body.insertAdjacentHTML('afterbegin', `
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="galerie.html" data-i18n="nav.galerie">Galerie</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>`);
+  }
 
+  // Overlay-HTML einmalig injizieren
+  if (!document.getElementById('nav-overlay')) {
+    document.querySelector('nav').insertAdjacentHTML('afterend', `
+<div class="nav-overlay" id="nav-overlay">
+  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
+  <a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a>
+  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
+  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
+  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
+  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
+  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+</div>`);
+  }
+
+  // Aktiven Link automatisch per URL erkennen
+  const page = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('nav .nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === page);
+  });
+
+  const nav = document.querySelector('nav');
   nav.classList.remove('always-visible', 'over-hero', 'scrolled');
 
   if (!hasHero) {
@@ -249,7 +288,6 @@ function initNav(hasHero) {
       ? Math.max(0, hero.offsetTop + hero.offsetHeight - nav.offsetHeight)
       : Math.max(0, window.innerHeight - nav.offsetHeight);
     const pastHero = window.scrollY >= threshold;
-
     nav.classList.toggle('scrolled', pastHero);
     nav.classList.toggle('over-hero', !pastHero);
   };
@@ -260,15 +298,58 @@ function initNav(hasHero) {
 }
 
 /* ── FOOTER ─────────────────────────────────────────────── */
-function renderFooter(data) {
-  const yearEl = document.getElementById('footer-year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+function initFooter(data) {
+  // Footer-HTML einmalig injizieren – einzige Quelle
+  // Galerie hat keinen Footer (wird dort nicht aufgerufen)
+  if (!document.querySelector('footer')) {
+    document.body.insertAdjacentHTML('beforeend', `
+<footer>
+  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  <ul class="footer-links">
+    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+    <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</footer>`);
+  }
+
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
   const insta = data?.meta?.kontakt?.instagram;
   if (insta) {
     const el = document.getElementById('footer-instagram');
     if (el) el.href = insta.startsWith('http') ? insta : 'https://instagram.com/' + insta;
   }
+
+  // Newsletter-Sektion vor dem Footer einfügen, falls noch nicht vorhanden
+  if (!document.getElementById('newsletter')) {
+    document.querySelector('footer').insertAdjacentHTML('beforebegin', `
+<section id="newsletter">
+  <div class="section newsletter-inner">
+    <p class="newsletter-titel" data-i18n="newsletter.titel">Neue Werke und Ausstellungen</p>
+    <p class="newsletter-sub" data-i18n="newsletter.sub">Gelegentliche Post — kein Spam.</p>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" id="nl-email"
+        placeholder="E-Mail-Adresse" data-i18n-placeholder="newsletter.placeholder">
+      <button class="btn" onclick="nlSubmit()" data-i18n="newsletter.btn">Anmelden</button>
+    </div>
+    <p class="newsletter-dsgvo" data-i18n="newsletter.dsgvo">
+      Mit der Anmeldung stimmst du der Speicherung deiner E-Mail-Adresse zu.
+    </p>
+  </div>
+</section>`);
+  }
 }
+
+function nlSubmit() {
+  const email = document.getElementById('nl-email').value.trim();
+  if (!email || !email.includes('@')) return;
+  alert(LANG === 'en'
+    ? 'Thank you! Newsletter integration coming soon.'
+    : 'Danke! Newsletter-Integration folgt in Kürze.');
+}
+
+function renderFooter(data) { initFooter(data); }
 
 /* ── LIGHTBOX ───────────────────────────────────────────── */
 let LB_CONTEXT = [];

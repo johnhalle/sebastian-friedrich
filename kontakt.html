@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontakt – Sebastian Friedrich</title>
-  <meta name="description" content="Kontakt zu Sebastian Friedrich. Anfragen zu Werken, Ausstellungen und Kooperationen.">
+  <title>Sebastian Friedrich – Katalogreader</title>
+  <meta name="description" content="Online-Reader zum Katalog Sebastian Friedrich: ON STAGE. Malerei.">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -13,142 +13,394 @@
 
   <link rel="stylesheet" href="sf-base.css?v=50">
   <style>
-    /* Unterseitenkopf zentral in sf-base.css. */
-    .kontakt-intro {
-      max-width: 660px;
-      font-size: clamp(1rem, 1.5vw, 1.25rem);
-      font-weight: 300;
-      line-height: 1.6;
-      margin-bottom: 28px;
-    }
-    .kontakt-social {
+    body.reader-page { height: 100dvh; overflow: hidden; }
+    .reader-shell {
+      height: 100dvh;
+      padding-top: var(--nav-h);
       display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: clamp(32px, 5vw, 48px);
+      flex-direction: column;
+      background: var(--white);
     }
-    .kontakt-form-wrap {
-      max-width: 900px;
+    .book-info {
+      flex: 0 0 auto;
+      max-width: var(--max-w);
+      width: 100%;
+      margin: 0 auto;
+      padding: 14px clamp(16px, 3vw, 48px);
+      border-bottom: 1px solid var(--gray-mid);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .book-title {
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      line-height: 1.2;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+    .book-meta, .page-counter {
+      font-size: 0.6875rem;
+      color: var(--gray-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .viewer-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(16px, 2.5vw, 36px);
+      background: #24211e;
+    }
+    .book-stage { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .book {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      user-select: none;
+      perspective: 4000px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.55), 0 3px 12px rgba(0,0,0,0.35);
+    }
+    .page-left, .page-right {
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fbfaf7;
+      cursor: pointer;
+      position: relative;
+    }
+    .page-left:hover::before, .page-right:hover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.035);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .page-left img, .page-right img { display: block; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.2s; }
+    .page-left.blank { display: none; }
+    .book-shadow {
+      position: absolute; inset: 0; pointer-events: none; z-index: 30;
+      background: linear-gradient(to left, rgba(0,0,0,0.18), rgba(0,0,0,0.04) 18%, transparent 48%) left/50% 100% no-repeat,
+                  linear-gradient(to right, rgba(0,0,0,0.18), rgba(0,0,0,0.04) 18%, transparent 48%) right/50% 100% no-repeat;
+    }
+    .book.single-page .book-shadow { opacity: 0; }
+    .book-spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,0.18); z-index: 4; transform: translateX(-50%); pointer-events: none; }
+    .book.single-page .book-spine { display: none; }
+    .book:not(.single-page)::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; right: -10px; width: 10px;
+      background: repeating-linear-gradient(to right, #d8d0c5, #d8d0c5 0.5px, #e8e1d8 0.5px, #e8e1d8 1.5px);
+      z-index: -1;
+    }
+    @keyframes flipForward { from { transform: rotateY(0deg); } to { transform: rotateY(-180deg); } }
+    @keyframes flipBackwardR { from { transform: rotateY(0deg); } to { transform: rotateY(180deg); } }
+    .reader-controls {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+    .reader-arrow {
+      pointer-events: auto;
+      width: 46px; height: 46px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .reader-arrow:hover { color: #fff; background: rgba(255,255,255,0.1); }
+    .reader-arrow.hidden { opacity: 0; pointer-events: none; }
+    .thumbs-wrap {
+      flex: 0 0 82px;
       border-top: 1px solid var(--gray-mid);
-      padding-top: clamp(24px, 3vw, 36px);
-      padding-bottom: clamp(28px, 5vw, 48px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 8px clamp(16px, 2.5vw, 36px);
+      background: #24211e;
+      scrollbar-width: thin;
     }
-    @media (max-width: 640px) {
-      .kontakt-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
+    .thumb-pair { display: flex; align-items: center; flex-shrink: 0; margin-right: 10px; cursor: pointer; }
+    .thumb { height: 60px; width: auto; object-fit: contain; background: #f5f5f5; opacity: 0.45; border: 1px solid transparent; transition: opacity 0.15s, border-color 0.15s; }
+    .thumb-pair:hover .thumb { opacity: 0.75; }
+    .thumb-pair.active .thumb { opacity: 1; border-color: var(--black); }
+    .thumb-pair .thumb + .thumb { border-left: none; }
+    #status { color: rgba(255,255,255,0.72); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    body.reader-page.reader-embedded nav,
+    body.reader-page.reader-embedded .nav-overlay { display: none !important; }
+    body.reader-page.reader-embedded .reader-shell {
+      padding-top: 0 !important;
+      height: 100dvh !important;
+    }
+    body.reader-page.reader-embedded .book-info,
+    body.reader-page.reader-embedded .viewer-wrap,
+    body.reader-page.reader-embedded .thumbs-wrap {
+      width: 100% !important;
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    body.reader-page.reader-embedded .book-info {
+      padding-right: 72px !important;
+    }
+
+    @media (max-width: 700px) {
+      .book-info { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .viewer-wrap { padding: 10px 0; }
+      .reader-controls { display: none; }
+      .thumbs-wrap { flex-basis: 56px; padding-top: 6px; padding-bottom: 6px; }
+      .thumb { height: 40px; }
+
+      /* V42 mobile embedded offset */
+      body.reader-page.reader-embedded .reader-shell {
+        padding-top: max(72px, env(safe-area-inset-top)) !important;
+      }
+      body.reader-page.reader-embedded .book-info {
+        padding-top: 10px !important;
+        padding-right: 72px !important;
+      }
     }
   </style>
 </head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
-    <ul class="nav-links">
-      <li><a href="galerie.html" data-i18n="nav.galerie">Galerie</a></li>
-      <li><a href="news.html" data-i18n="nav.news">News</a></li>
-      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
-      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
-      <li><a href="kontakt.html" data-i18n="nav.kontakt" class="active">Kontakt</a></li>
-      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
+<body class="reader-page">
+<script>if (new URLSearchParams(location.search).get('embed') === '1') document.body.classList.add('reader-embedded');</script>
+<div class="reader-shell">
+  <div class="book-info">
+    <div>
+      <div class="book-title" id="book-title">Sebastian Friedrich: ON STAGE. Malerei</div>
+      <div class="book-meta" id="book-meta"></div>
+    </div>
+    <div class="page-counter" id="page-counter"></div>
   </div>
-</nav>
-
-<!-- MOBILE OVERLAY -->
-<div class="nav-overlay" id="nav-overlay">
-  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
-  <a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a>
-  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
-  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
-  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
-  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
-  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
+  <div class="viewer-wrap" id="viewerWrap">
+    <div id="status"></div>
+    <div class="book-stage" id="bookStage" style="display:none">
+      <div class="book" id="theBook">
+        <div class="book-shadow"></div>
+        <div class="page-left" id="pageLeft"><img id="imgLeft" src="" alt=""></div>
+        <div class="book-spine"></div>
+        <div class="page-right" id="pageRight"><img id="imgRight" src="" alt=""></div>
+      </div>
+    </div>
+    <div class="reader-controls">
+      <button class="reader-arrow" id="readerPrev" type="button" aria-label="Vorherige Seite" data-i18n-aria="reader.prev">‹</button>
+      <button class="reader-arrow" id="readerNext" type="button" aria-label="Nächste Seite" data-i18n-aria="reader.next">›</button>
+    </div>
+  </div>
+  <div class="thumbs-wrap" id="thumbsWrap" style="display:none"></div>
 </div>
-
-<main class="kontakt-page">
-  <div class="kontakt-inner">
-    <h1 class="kontakt-title" data-i18n="contact.titel">Kontakt</h1>
-    <p class="kontakt-intro" data-i18n="contact.intro">
-      Für Anfragen, Kooperationen und Informationen zu verfügbaren Werken nutzen Sie bitte das Formular.
-    </p>
-    <div class="kontakt-social">
-      <a class="contact-link" id="kontakt-instagram" href="https://www.instagram.com/sebastiano_friedrich/" target="_blank" rel="noopener" data-i18n="contact.instagram">Instagram</a>
-    </div>
-    <div class="kontakt-form-wrap">
-      <form class="contact-form" id="contact-page-form" name="kontakt" method="POST" action="/danke.html" data-netlify="true" novalidate>
-        <input type="hidden" name="form-name" value="kontakt">
-        <input type="hidden" name="work_id" value="">
-        <input type="hidden" name="work_title" value="">
-        <input type="hidden" name="work_year" value="">
-        <input type="hidden" name="page" value="">
-        <div class="contact-form-grid">
-          <label class="contact-field">
-            <span class="contact-label" data-i18n="contact.name">Name</span>
-            <input class="contact-input" type="text" name="name" autocomplete="name" required>
-          </label>
-          <label class="contact-field">
-            <span class="contact-label" data-i18n="contact.email">E-Mail</span>
-            <input class="contact-input" type="email" name="email" autocomplete="email" required>
-          </label>
-          <label class="contact-field contact-field-full">
-            <span class="contact-label" data-i18n="contact.subject">Betreff</span>
-            <input class="contact-input" type="text" name="subject" required>
-          </label>
-          <label class="contact-field contact-field-full contact-field-message">
-            <span class="contact-label" data-i18n="contact.message">Nachricht</span>
-            <textarea class="contact-textarea" name="message" required></textarea>
-          </label>
-        </div>
-        <div class="contact-form-actions">
-          <button class="btn" type="submit" data-i18n="contact.send">Nachricht senden</button>
-          <span class="contact-status" data-contact-status aria-live="polite"></span>
-        </div>
-      </form>
-    </div>
-  </div>
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
-  <ul class="footer-links">
-    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
-    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
-    <li><a href="https://www.instagram.com/sebastiano_friedrich/" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
-  </ul>
-</footer>
-
 <script src="sf-base.js?v=50"></script>
 <script>
+let pages = [];
+let current = 0;
+let pageRatio = 1;
+let imageCache = [];
+let bookData = null;
+const pad = n => String(n).padStart(3, '0');
+const isMobile = () => window.innerWidth <= 700;
+
+function pagesForSpread(spread) {
+  if (spread === 0) return { left: null, right: 0 };
+  const right = spread * 2;
+  const left = right - 1;
+  return { left: left < pages.length ? left : null, right: right < pages.length ? right : null };
+}
+function totalSpreads() { return 1 + Math.ceil((pages.length - 1) / 2); }
+function preload(index) {
+  if (index == null || index < 0 || index >= pages.length || imageCache[index]) return;
+  const img = new Image();
+  imageCache[index] = 'loading';
+  img.onload = () => imageCache[index] = true;
+  img.onerror = () => imageCache[index] = false;
+  img.src = pages[index];
+}
+function preloadAround(spread) {
+  const pr = pagesForSpread(spread);
+  const base = pr.right ?? pr.left ?? 0;
+  for (let i = Math.max(0, base - 3); i <= Math.min(pages.length - 1, base + 8); i++) preload(i);
+}
+function setImg(img, index) {
+  if (index == null) { img.src = ''; img.alt = ''; return; }
+  img.style.opacity = imageCache[index] === true ? '1' : '0';
+  img.onload = () => { imageCache[index] = true; img.style.opacity = '1'; };
+  img.src = pages[index];
+  img.alt = index === 0 ? 'Cover' : (LANG === 'en' ? `Page ${index + 1}` : `Seite ${index + 1}`);
+}
+function applySpread(spread) {
+  const book = document.getElementById('theBook');
+  const pLeft = document.getElementById('pageLeft');
+  const pRight = document.getElementById('pageRight');
+  const iLeft = document.getElementById('imgLeft');
+  const iRight = document.getElementById('imgRight');
+  const wrap = document.getElementById('viewerWrap');
+  const availW = wrap.clientWidth - 28;
+  const availH = wrap.clientHeight - 28;
+  const isCover = spread === 0;
+  const numP = isCover ? 1 : 2;
+  const pageW = Math.min(availW / numP, availH * pageRatio);
+  const pageH = pageW / pageRatio;
+  [pLeft, pRight].forEach(p => { p.style.width = pageW + 'px'; p.style.height = pageH + 'px'; p.style.minWidth = pageW + 'px'; });
+  if (spread === 0) {
+    book.classList.add('single-page');
+    pLeft.classList.add('blank');
+    setImg(iRight, 0);
+  } else {
+    book.classList.remove('single-page');
+    const { left, right } = pagesForSpread(spread);
+    pLeft.classList.remove('blank');
+    setImg(iLeft, left);
+    setImg(iRight, right);
+  }
+  pLeft.onclick = () => turn(-1);
+  pRight.onclick = () => turn(1);
+  updateCounter();
+  updateArrows();
+  setActiveThumb();
+  scrollThumbIntoView(spread);
+  preloadAround(spread);
+}
+function showSpread(spread, animate=false) {
+  if (spread < 0 || spread >= totalSpreads()) return;
+  const old = current;
+  current = spread;
+  const book = document.getElementById('theBook');
+  if (!animate || old === spread || old === 0 || spread === 0) {
+    if (animate && old !== spread) {
+      book.style.transition = 'opacity 0.2s ease';
+      book.style.opacity = '0';
+      setTimeout(() => { applySpread(spread); book.style.opacity = '1'; setTimeout(() => book.style.transition = '', 220); }, 180);
+    } else applySpread(spread);
+    return;
+  }
+  const direction = spread > old ? 1 : -1;
+  const oldPages = pagesForSpread(old);
+  const newPages = pagesForSpread(spread);
+  const pageRight = document.getElementById('pageRight');
+  const pageLeft = document.getElementById('pageLeft');
+  const imgRight = document.getElementById('imgRight');
+  const imgLeft = document.getElementById('imgLeft');
+  const pageW = pageRight.offsetWidth;
+  const pageH = pageRight.offsetHeight;
+  const flip = document.createElement('div');
+  flip.style.cssText = `position:absolute;top:0;width:${pageW}px;height:${pageH}px;transform-style:preserve-3d;z-index:20;pointer-events:none;`;
+  const face = (src, rot) => `<div style="position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;background:#fbfaf7;${rot ? 'transform:'+rot+';' : ''}"><img src="${src}" style="width:100%;height:100%;object-fit:contain;display:block"></div>`;
+  if (direction > 0) {
+    flip.style.left = '50%'; flip.style.transformOrigin = 'left center';
+    flip.innerHTML = face(pages[oldPages.right], '') + face(pages[newPages.left], 'rotateY(180deg)');
+    if (newPages.right != null) imgRight.src = pages[newPages.right];
+    flip.style.animation = 'flipForward 0.65s cubic-bezier(0.4,0,0.2,1) forwards';
+  } else {
+    flip.style.left = '0'; flip.style.transformOrigin = 'right center';
+    flip.innerHTML = face(pages[oldPages.left], '') + face(pages[newPages.right], 'rotateY(-180deg)');
+    if (newPages.left != null) imgLeft.src = pages[newPages.left];
+    flip.style.animation = 'flipBackwardR 0.65s cubic-bezier(0.4,0,0.2,1) forwards';
+  }
+  book.appendChild(flip);
+  flip.addEventListener('animationend', () => { flip.remove(); applySpread(spread); });
+  updateCounter(); updateArrows(); setActiveThumb();
+}
+function turn(dir) { showSpread(current + dir, true); }
+function updateCounter() {
+  const { left, right } = pagesForSpread(current);
+  const nums = [left, right].filter(x => x != null).map(x => x + 1).join('–');
+  const label = current === 0
+    ? (LANG === 'en' ? 'Cover' : 'Umschlag')
+    : (LANG === 'en' ? 'Pages ' + nums + ' of ' + pages.length : 'Seiten ' + nums + ' von ' + pages.length);
+  document.getElementById('page-counter').textContent = label;
+}
+function updateArrows() {
+  document.getElementById('readerPrev').classList.toggle('hidden', current <= 0);
+  document.getElementById('readerNext').classList.toggle('hidden', current >= totalSpreads() - 1);
+}
+function buildThumbs() {
+  const wrap = document.getElementById('thumbsWrap');
+  wrap.innerHTML = '';
+  for (let s = 0; s < totalSpreads(); s++) {
+    const pair = document.createElement('div');
+    pair.className = 'thumb-pair';
+    pair.dataset.spread = s;
+    pair.onclick = () => showSpread(s, true);
+    const { left, right } = pagesForSpread(s);
+    const indices = s === 0 ? [0] : [left, right].filter(x => x != null);
+    indices.forEach(i => {
+      const img = document.createElement('img');
+      img.className = 'thumb';
+      img.src = pages[i];
+      img.alt = i === 0 ? 'Cover' : (LANG === 'en' ? `Page ${i + 1}` : `Seite ${i + 1}`);
+      pair.appendChild(img);
+    });
+    wrap.appendChild(pair);
+  }
+}
+function setActiveThumb() {
+  document.querySelectorAll('.thumb-pair').forEach(p => p.classList.toggle('active', Number(p.dataset.spread) === current));
+}
+function scrollThumbIntoView(spread) {
+  document.querySelector(`.thumb-pair[data-spread="${spread}"]`)?.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+}
+async function measureCover(url) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => { if (img.naturalHeight) pageRatio = img.naturalWidth / img.naturalHeight; imageCache[0] = true; resolve(true); };
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+}
+function renderBookInfo() {
+  if (!bookData) return;
+  document.getElementById('book-title').textContent = LANG === 'en' ? (bookData.titel_en || bookData.titel) : bookData.titel;
+  document.getElementById('book-meta').textContent = LANG === 'en'
+    ? `${bookData.jahr} · Ed. by ${bookData.herausgeber_en || bookData.herausgeber || 'John Palatini'}`
+    : `${bookData.jahr} · Hrsg. v. ${bookData.herausgeber || 'John Palatini'}`;
+  document.title = `${LANG === 'en' ? (bookData.titel_en || bookData.titel) : bookData.titel} – Reader`;
+}
+function onLangChange() { renderBookInfo(); updateCounter(); }
 async function init() {
   applyI18n();
   initNav(false);
   const params = new URLSearchParams(location.search);
-  const werkId = params.get('werk');
-  try {
-    const res = await fetch('data.json');
-    DATA = await res.json();
-    renderFooter(DATA);
-    const insta = DATA?.meta?.kontakt?.instagram;
-    if (insta) {
-      document.getElementById('kontakt-instagram').href = insta;
-    }
-    initContactPageForm('contact-page-form', werkId);
-  } catch(e) {
-    console.error('data.json konnte nicht geladen werden:', e);
-    initContactPageForm('contact-page-form', werkId);
-  }
+  const bookId = params.get('buch') || 'sebastian-katalog';
+  document.getElementById('status').textContent = LANG === 'en' ? 'Loading …' : 'Lade …';
+  const res = await fetch('data.json');
+  DATA = await res.json();
+  bookData = (DATA.katalog || []).find(k => k.id === bookId) || (DATA.katalog || [])[0];
+  if (!bookData) { document.getElementById('status').textContent = LANG === 'en' ? 'No catalogue found.' : 'Kein Katalog gefunden.'; return; }
+  renderBookInfo();
+  const base = bookData.reader_base_url || '';
+  const total = bookData.reader_total_pages || 25;
+  pages = Array.from({ length: total }, (_, i) => base + pad(i + 1) + '.jpg');
+  imageCache = Array(pages.length).fill(undefined);
+  const ok = await measureCover(pages[0]);
+  if (!ok) { document.getElementById('status').textContent = LANG === 'en' ? 'The reader images could not be loaded.' : 'Die Reader-Bilder konnten nicht geladen werden.'; return; }
+  document.getElementById('status').style.display = 'none';
+  document.getElementById('bookStage').style.display = 'flex';
+  document.getElementById('thumbsWrap').style.display = 'flex';
+  buildThumbs();
+  showSpread(0);
 }
-
-function onLangChange() {
-  const params = new URLSearchParams(location.search);
-  initContactPageForm('contact-page-form', params.get('werk'));
-}
-
+document.getElementById('readerPrev').onclick = () => turn(-1);
+document.getElementById('readerNext').onclick = () => turn(1);
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowDown') turn(1); if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') turn(-1); });
+window.addEventListener('resize', () => applySpread(current), { passive: true });
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>

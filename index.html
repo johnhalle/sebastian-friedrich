@@ -436,34 +436,11 @@
       .katalog-cover img { max-width: 200px; }
     }
 
-    /* ── NEWSLETTER ─────────────────────────────────────────── */
-    #newsletter { background: var(--gray-light); border-bottom: 1px solid var(--gray-mid); }
-    .newsletter-inner { max-width: 560px; text-align: center; margin: 0 auto; }
-    .newsletter-titel { font-size: 1.125rem; font-weight: 300; margin-bottom: 8px; }
-    .newsletter-sub { font-size: 0.8125rem; color: var(--gray-dark); margin-bottom: 24px; }
-    .newsletter-form { display: flex; gap: 8px; width: 100%; max-width: 400px; margin: 0 auto 12px; }
-    .newsletter-input {
-      flex: 1; font-family: 'Inter', system-ui, sans-serif;
-      font-size: 0.875rem; font-weight: 400; padding: 10px 14px;
-      border: 1px solid var(--gray-mid); border-radius: 2px; outline: none; transition: border-color 0.15s;
-    }
-    .newsletter-input:focus { border-color: var(--black); }
-    .newsletter-dsgvo { font-size: 0.6875rem; color: var(--gray-dark); }
-
-
     @media (max-width: 760px) {
       #neueste .werke-header {
         margin-top: clamp(32px, 9vw, 48px);
         margin-bottom: 10px;
       }
-      .newsletter-form {
-        width: 100%;
-        max-width: none;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-      }
-      .newsletter-input { min-width: 0; }
-      .newsletter-form .btn { white-space: nowrap; }
     }
 
     /* V27: Mobile Startseite - konsistente Abstände und zentrierte Werkbeschriftung */
@@ -526,33 +503,8 @@
 <body>
 
 <!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
-    <ul class="nav-links">
-      <li><a href="galerie.html" data-i18n="nav.galerie">Galerie</a></li>
-      <li><a href="news.html" data-i18n="nav.news">News</a></li>
-      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
-      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
-      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
-      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
-    </ul>
-    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
 
 <!-- MOBILE OVERLAY -->
-<div class="nav-overlay" id="nav-overlay">
-  <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
-  <a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a>
-  <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
-  <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
-  <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
-  <a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a>
-  <button class="overlay-lang" onclick="toggleLang(); closeMenu();" id="overlay-lang-btn">EN</button>
-</div>
 
 <main>
 
@@ -600,32 +552,9 @@
   </section>
 
   <!-- NEWSLETTER -->
-  <section id="newsletter">
-    <div class="section newsletter-inner">
-      <p class="newsletter-titel" data-i18n="newsletter.titel">Neue Werke und Ausstellungen</p>
-      <p class="newsletter-sub" data-i18n="newsletter.sub">Gelegentliche Post — kein Spam.</p>
-      <div class="newsletter-form">
-        <input type="email" class="newsletter-input" id="nl-email"
-          placeholder="E-Mail-Adresse" data-i18n-placeholder="newsletter.placeholder">
-        <button class="btn" onclick="nlSubmit()" data-i18n="newsletter.btn">Anmelden</button>
-      </div>
-      <p class="newsletter-dsgvo" data-i18n="newsletter.dsgvo">
-        Mit der Anmeldung stimmst du der Speicherung deiner E-Mail-Adresse zu.
-      </p>
-    </div>
-  </section>
-
+  
 </main>
 
-<!-- FOOTER -->
-<footer>
-  <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
-  <ul class="footer-links">
-    <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
-    <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
-    <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
-  </ul>
-</footer>
 
 <script src="sf-base.js?v=50"></script>
 <script>
@@ -991,14 +920,6 @@ function renderKatalog(data) {
       </div>
     </div>
   `;
-}
-
-function nlSubmit() {
-  const email = document.getElementById('nl-email').value.trim();
-  if (!email || !email.includes('@')) return;
-  alert(LANG === 'en'
-    ? 'Thank you! Newsletter integration coming soon.'
-    : 'Danke! Newsletter-Integration folgt in Kürze.');
 }
 
 function onLangChange() {
