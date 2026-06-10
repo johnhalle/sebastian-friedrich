@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebastian Friedrich · Galerie</title>
+  <link rel="stylesheet" href="sf-base.css?v=50">
+  <style>
+    /* ── GALERIE: Vollbild-Layout, kein vertikales Scrollen ── */
+
+    /* Seite füllt exakt den Viewport, kleiner Abstand unten */
+    html, body {
+      height: 100dvh;
+      overflow: hidden;
+    }
+    body {
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    /* Body als vertikaler Flex-Container */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nav: feste Höhe oben */
+    nav {
+      flex: 0 0 auto;
+    }
+
+    /* Main: füllt den gesamten Rest zwischen Nav und Footer */
+    main {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Footer: ausgeblendet auf der Galerie-Seite (kein Platz) */
+    footer {
+      display: none;
+    }
+
+    /* Seitenheader mit Titel */
+    .galerie-page-header {
+      flex: 0 0 auto;
+    }
+    .galerie-page-header .page-header-inner {
+      max-width: 1400px !important;
+      width: calc(100vw - 80px) !important;
+    }
+    /* Titelgröße: zusätzlich nach Höhe begrenzt damit Wand genug Platz hat */
+    .galerie-page-header .page-title {
+      padding-bottom: clamp(12px, 2vw, 20px) !important;
+    }
+
+    /* Galerie-Wrap: füllt den Rest unterhalb des Titels */
+    .galerie-wrap {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Wandbereich: füllt den Raum zwischen Titel und Scrollbar */
+    .galerie-wand-outer {
+      flex: 1 1 0;
+      min-height: 0;
+      width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      cursor: grab;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      user-select: none;
+      padding-left: max(40px, calc((100vw - 1400px) / 2));
+      padding-right: max(40px, calc((100vw - 1400px) / 2));
+      padding-top: 24px;
+      padding-bottom: 24px;
+      box-sizing: border-box;
+    }
+    .galerie-wand-outer:active { cursor: grabbing; }
+    .galerie-wand-outer::-webkit-scrollbar { display: none; }
+
+    /* Die eigentliche Wand – Höhe und Breite per JS */
+    .galerie-wand {
+      position: relative;
+      flex-shrink: 0;
+      height: 100%;
+    }
+
+    .galerie-haengelinie { display: none; }
+
+    /* Einzelnes Bild */
+    .galerie-bild {
+      position: absolute;
+      overflow: hidden;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .galerie-bild:hover { opacity: 0.88; }
+    .galerie-bild img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      draggable: false;
+    }
+
+    /* Scrollbar: fixiert am unteren Rand */
+    .galerie-scrollbar-wrap {
+      flex: 0 0 20px;
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--black);
+      border-bottom: 1px solid var(--black);
+      position: relative;
+      cursor: grab;
+      overflow: hidden;
+    }
+    .galerie-scrollbar-wrap:active { cursor: grabbing; }
+    .galerie-scrollbar-track {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: max(40px, calc((100vw - 1400px) / 2));
+      right: max(40px, calc((100vw - 1400px) / 2));
+    }
+    .galerie-scrollbar-thumb {
+      position: absolute;
+      top: 0; bottom: 0;
+      min-width: 44px;
+      background: var(--black);
+      cursor: grab;
+    }
+    .galerie-scrollbar-thumb:active { cursor: grabbing; }
+
+    /* Galerie: breiteres Layout für Desktop */
+    .nav-inner {
+      max-width: 1400px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
+    <ul class="nav-links">
+      <li><a href="galerie.html" class="active" data-i18n="nav.galerie">Galerie</a></li>
+      <li><a href="news.html" data-i18n="nav.news">News</a></li>
+      <li><a href="katalog.html" data-i18n="nav.katalog">Katalog</a></li>
+      <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
+      <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
+      <li><button class="nav-lang" id="nav-lang-btn" onclick="toggleLang()">EN</button></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" onclick="openMenu()" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-overlay" id="nav-overlay">
+  <button class="nav-overlay-close" onclick="closeMenu()" aria-label="Menü schließen">✕</button>
+  <ul class="nav-overlay-links">
+    <li><a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a></li>
+    <li><a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a></li>
+    <li><a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a></li>
+    <li><a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a></li>
+    <li><a href="kontakt.html" onclick="closeMenu()" data-i18n="nav.kontakt">Kontakt</a></li>
+  </ul>
+</div>
+
+<main>
+  <div class="page-header galerie-page-header">
+    <div class="page-header-inner">
+      <h1 class="page-title" data-i18n="galerie.titel">Galerie</h1>
+    </div>
+  </div>
+
+  <div class="galerie-wrap">
+    <div class="galerie-wand-outer" id="wand-outer">
+      <div class="galerie-wand" id="wand">
+        <div class="galerie-haengelinie"></div>
+        <!-- Bilder werden per JS eingesetzt -->
+      </div>
+    </div>
+
+    <div class="galerie-scrollbar-wrap">
+      <div class="galerie-scrollbar-track" id="scrollbar-track">
+        <div class="galerie-scrollbar-thumb" id="scrollbar-thumb"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="section footer-inner">
+    <div class="footer-links">
+      <a href="impressum.html" data-i18n="footer.impressum">Impressum</a>
+      <a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a>
+    </div>
+    <span class="footer-copy">© <span id="footer-year"></span> Sebastian Friedrich</span>
+  </div>
+</footer>
+
+<script src="sf-base.js?v=50"></script>
+<script>
+// ── HILFSFUNKTIONEN ───────────────────────────────────────
+
+// Masse-String ("90 × 80 cm") → {h, b} in cm (Kommazahlen werden unterstützt)
+function parseMasse(masse) {
+  const m = (masse || '').match(/([\d,.]+)\s*[×x]\s*([\d,.]+)/);
+  if (!m) return {h: 50, b: 50};
+  return {
+    h: parseFloat(m[1].replace(',','.')),
+    b: parseFloat(m[2].replace(',','.'))
+  };
+}
+
+// ── VIEWPORT-BERECHNUNG ──────────────────────────────────
+// Perseus (maxHCm) darf maximal 80% der tatsächlichen Wandhöhe einnehmen.
+// Die Wandhöhe wird direkt aus dem gerenderten wand-outer gemessen –
+// das ist der exakte verfügbare Raum nach Nav, Titel und Scrollbar.
+function berechnePxProCm(galerie, maxHCm) {
+  const outer = document.getElementById('wand-outer');
+  const verfuegbar = outer.clientHeight;
+  const berechnet = (verfuegbar * 0.80) / maxHCm;
+  return galerie.config.px_pro_cm || berechnet;
+}
+
+// ── WAND AUFBAUEN ─────────────────────────────────────────
+function buildWand(werkData, galerie) {
+  const cfg = galerie.config;
+  const gap = cfg.stapel_gap_px;
+
+  const werkeById = {};
+  werkData.werke.forEach(w => werkeById[w.id] = w);
+
+  // Größtes Werk im Slot-Set ermitteln (in cm)
+  let maxHCm = 1;
+  galerie.slots.forEach(s => {
+    const w = werkeById[s.werk_id];
+    if (!w) return;
+    maxHCm = Math.max(maxHCm, parseMasse(w.masse).h * ((s.zoom || 100) / 100));
+  });
+
+  // px_pro_cm aus Viewport berechnen
+  const pxPerCm = berechnePxProCm(galerie, maxHCm);
+
+  // Pixelmaße je Werk aus echten cm-Werten berechnen
+  // Optionaler zoom-Wert im Slot (z.B. 110 = 10% größer, 85 = 15% kleiner)
+  function getPx(werk, slot) {
+    const {h, b} = parseMasse(werk.masse);
+    const faktor = pxPerCm * ((slot.zoom || 100) / 100);
+    return {
+      hPx: Math.round(h * faktor),
+      wPx: Math.round(b * faktor)
+    };
+  }
+
+  // Wandhöhe = tatsächlich verfügbarer Raum im wand-outer (nach padding)
+  const outer   = document.getElementById('wand-outer');
+  const wandH   = outer.clientHeight;
+  const haengeY = Math.round(wandH * (cfg.haenge_prozent / 100));
+
+  const wand = document.getElementById('wand');
+  wand.style.height = wandH + 'px';
+
+  // Slots gruppieren: reihe > 1 → zum vorherigen Slot stapeln
+  const groups = [];
+  galerie.slots.forEach(s => {
+    const w = werkeById[s.werk_id];
+    if (!w) return;
+    const entry = { ...s, _werk: w };
+    const {hPx, wPx} = getPx(w, entry);
+    entry._hPx = hPx; entry._wPx = wPx;
+    if (s.reihe > 1 && groups.length) {
+      groups[groups.length - 1].push(entry);
+    } else {
+      groups.push([entry]);
+    }
+  });
+
+  // Alle Werk-IDs für Lightbox-Navigation
+  const alleIds = [];
+  groups.forEach(g => g.forEach(s => alleIds.push(s.werk_id)));
+
+  // Bilder positionieren
+  let x = 0;
+
+  groups.forEach(group => {
+    x += group[0].abstand_vor;
+    // versatz_px ist am ersten Slot des Blocks definiert (gilt für den ganzen Block)
+    const versatz = group[0].versatz_px || 0;
+
+    if (group.length === 1) {
+      const s = group[0];
+      const top = Math.round(haengeY - s._hPx / 2 + versatz);
+      addBild(wand, s._werk, x, top, s._wPx, s._hPx, alleIds);
+      x += s._wPx;
+    } else {
+      // Stapelblock: Gesamthöhe berechnen, dann zentriert + versetzt hängen
+      const totalH = group.reduce((sum, s) => sum + s._hPx, 0) + gap * (group.length - 1);
+      const blockTop = Math.round(haengeY - totalH / 2 + versatz);
+      const maxW = Math.max(...group.map(s => s._wPx));
+      let yy = blockTop;
+      group.forEach(s => {
+        const xOffset = Math.round((maxW - s._wPx) / 2);
+        addBild(wand, s._werk, x + xOffset, yy, s._wPx, s._hPx, alleIds);
+        yy += s._hPx + gap;
+      });
+      x += maxW;
+    }
+  });
+
+  // Wandbreite setzen und Scrollbar initialisieren
+  const finalW = x + 80;
+  wand.style.width = finalW + 'px';
+  initScrollbar(finalW);
+}
+
+function addBild(wand, werk, x, y, w, h, alleIds) {
+  const div = document.createElement('div');
+  div.className = 'galerie-bild';
+  div.style.left = x + 'px';
+  div.style.top = y + 'px';
+  div.style.width = w + 'px';
+  div.style.height = h + 'px';
+  div.dataset.id = werk.id;
+
+  const img = document.createElement('img');
+  img.src = werk.bild;
+  img.alt = werk.titel;
+  img.loading = 'lazy';
+  img.draggable = false;
+  div.appendChild(img);
+
+  let clickStartX = 0;
+  div.addEventListener('mousedown', e => { clickStartX = e.clientX; });
+  div.addEventListener('click', e => {
+    if (Math.abs(e.clientX - clickStartX) > 5) return; // war ein Drag
+    openDetail(werk.id, alleIds);
+  });
+  wand.appendChild(div);
+}
+
+// ── CUSTOM SCROLLBAR ──────────────────────────────────────
+function initScrollbar(totalW) {
+  const outer = document.getElementById('wand-outer');
+  const track = document.getElementById('scrollbar-track');
+  const thumb = document.getElementById('scrollbar-thumb');
+
+  function updateThumb() {
+    const tW_available = track.clientWidth;
+    if (tW_available === 0) return; // noch nicht gerendert
+    const viewW     = outer.clientWidth;
+    const maxScroll = Math.max(totalW - viewW, 1);
+    const ratio     = viewW / totalW;
+    const tW        = Math.max(Math.round(tW_available * ratio), 44);
+    const tX        = maxScroll > 0
+      ? Math.round((outer.scrollLeft / maxScroll) * (tW_available - tW))
+      : 0;
+    thumb.style.width = tW + 'px';
+    thumb.style.left  = tX + 'px';
+  }
+
+  outer.addEventListener('scroll', updateThumb, {passive: true});
+  window.addEventListener('resize', updateThumb);
+  // Mehrfach aufrufen bis Track gerendert ist
+  requestAnimationFrame(() => {
+    updateThumb();
+    // Fallback: nochmal nach 200ms falls RAF noch zu früh war
+    setTimeout(updateThumb, 200);
+  });
+
+  // ── SCROLLBAR-STREIFEN: Maus-Drag ────────────────────────
+  // Gesamte Wrap-Fläche ist Drag-Zone
+  const wrap = document.querySelector('.galerie-scrollbar-wrap');
+  let sbDragging = false, sbStartX = 0, sbStartScroll = 0;
+
+  function scrollRatio() {
+    const tW = track.clientWidth;
+    const thumbW = thumb.offsetWidth;
+    return (totalW - outer.clientWidth) / Math.max(tW - thumbW, 1);
+  }
+
+  wrap.addEventListener('mousedown', e => {
+    sbDragging    = true;
+    sbStartX      = e.clientX;
+    sbStartScroll = outer.scrollLeft;
+    wrap.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if (!sbDragging) return;
+    outer.scrollLeft = sbStartScroll + (e.clientX - sbStartX) * scrollRatio();
+  });
+  window.addEventListener('mouseup', () => {
+    if (sbDragging) { sbDragging = false; wrap.style.cursor = 'grab'; }
+  });
+
+  // ── SCROLLBAR-STREIFEN: Touch ─────────────────────────────
+  let sbTouchStartX = 0, sbTouchStartScroll = 0;
+  wrap.addEventListener('touchstart', e => {
+    sbTouchStartX      = e.touches[0].clientX;
+    sbTouchStartScroll = outer.scrollLeft;
+    e.stopPropagation();
+  }, {passive: true});
+  wrap.addEventListener('touchmove', e => {
+    outer.scrollLeft = sbTouchStartScroll + (e.touches[0].clientX - sbTouchStartX) * scrollRatio();
+    e.stopPropagation();
+  }, {passive: true});
+
+  // ── WAND: Maus-Drag ───────────────────────────────────────
+  let wandDragging = false, wandStartX = 0, wandStartScroll = 0;
+  outer.addEventListener('mousedown', e => {
+    if (e.target.closest('.galerie-bild')) return;
+    wandDragging    = true;
+    wandStartX      = e.clientX;
+    wandStartScroll = outer.scrollLeft;
+    outer.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!wandDragging) return;
+    outer.scrollLeft = wandStartScroll - (e.clientX - wandStartX);
+  });
+  window.addEventListener('mouseup', () => {
+    if (wandDragging) {
+      wandDragging = false;
+      outer.style.cursor = 'grab';
+    }
+  });
+
+  // ── WAND: Touch ───────────────────────────────────────────
+  let touchStartX = 0, touchStartScroll = 0;
+  outer.addEventListener('touchstart', e => {
+    touchStartX      = e.touches[0].clientX;
+    touchStartScroll = outer.scrollLeft;
+  }, {passive: true});
+  outer.addEventListener('touchmove', e => {
+    outer.scrollLeft = touchStartScroll - (e.touches[0].clientX - touchStartX);
+  }, {passive: true});
+}
+
+// ── INIT ─────────────────────────────────────────────────
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+initNav(false);
+initLightbox();
+initContactInteractions();
+
+Promise.all([
+  fetch('data.json').then(r => r.json()),
+  fetch('galerie.json').then(r => r.json())
+]).then(([werkData, galerie]) => {
+  DATA = werkData;
+  buildWand(werkData, galerie);
+  applyLang();
+
+  // Bei Orientierungswechsel / Resize Wand neu skalieren
+  // 400ms Verzögerung damit das CSS-Layout sich neu berechnet hat
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const wand = document.getElementById('wand');
+      wand.innerHTML = '';
+      wand.style.height = '';
+      wand.style.width  = '';
+      buildWand(werkData, galerie);
+    }, 400);
+  });
+}).catch(err => console.error('Fehler beim Laden:', err));
+</script>
+</body>
+</html>

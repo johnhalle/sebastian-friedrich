@@ -33,7 +33,11 @@
     },
     "admin": {
       "passwordHash": ""
-    }
+    },
+    "hero_bilder": [
+      "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024_ausschnitt.jpg",
+      "https://res.cloudinary.com/def9qgwtw/image/upload/v1780985883/perseus-2025_ausschnitt.jpg"
+    ]
   },
   "werke": [
     {

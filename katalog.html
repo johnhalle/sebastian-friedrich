@@ -16,14 +16,14 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="sf-base.css?v=46">
+  <link rel="stylesheet" href="sf-base.css?v=50">
   <style>
 
     .page-section {
       width: var(--site-width);
       max-width: var(--max-w);
       margin: 0 auto;
-      padding: clamp(56px, 8vw, 104px) 0;
+      padding: clamp(40px, 5vw, 72px) 0;
     }
     /* Unterseitenkopf zentral in sf-base.css. */
     .katalog-hero {
@@ -42,12 +42,12 @@
       box-shadow: 4px 4px 28px rgba(0,0,0,0.14);
     }
     .katalog-hero-title {
-      font-size: clamp(2rem, 4.3vw, 4rem);
+      font-size: clamp(1.75rem, 3.2vw, 3rem);
       line-height: 1.05;
       letter-spacing: -0.045em;
       font-weight: 300;
       margin: -0.1em 0 18px;
-      max-width: 780px;
+      max-width: 1100px;
     }
     .katalog-biblio {
       list-style: none;
@@ -74,7 +74,7 @@
       width: var(--site-width);
       max-width: var(--max-w);
       margin: 0 auto;
-      padding: clamp(56px, 8vw, 104px) 0;
+      padding: clamp(40px, 5vw, 72px) 0;
     }
     .essay-head {
       max-width: 760px;
@@ -256,7 +256,7 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">Sebastian Friedrich</a>
     <ul class="nav-links">
-      <li><a href="werke.html" data-i18n="nav.werke">Werke</a></li>
+      <li><a href="galerie.html" data-i18n="nav.galerie">Galerie</a></li>
       <li><a href="news.html" data-i18n="nav.news">News</a></li>
       <li><a href="katalog.html" class="active" data-i18n="nav.katalog">Katalog</a></li>
       <li><a href="vita.html" data-i18n="nav.vita">Vita</a></li>
@@ -268,7 +268,7 @@
 </nav>
 <div class="nav-overlay" id="nav-overlay">
   <button class="overlay-close" onclick="closeMenu()" aria-label="Menü schließen">×</button>
-  <a href="werke.html" onclick="closeMenu()" data-i18n="nav.werke">Werke</a>
+  <a href="galerie.html" onclick="closeMenu()" data-i18n="nav.galerie">Galerie</a>
   <a href="news.html" onclick="closeMenu()" data-i18n="nav.news">News</a>
   <a href="katalog.html" onclick="closeMenu()" data-i18n="nav.katalog">Katalog</a>
   <a href="vita.html" onclick="closeMenu()" data-i18n="nav.vita">Vita</a>
@@ -280,22 +280,6 @@
   <section class="page-section katalog-hero" id="katalog-hero"><div class="loading">Lädt…</div></section>
   <article class="essay-wrap" id="essay-wrap"><div class="loading">Lädt…</div></article>
 </main>
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-arrow" id="lb-prev" aria-label="Vorheriges Werk">‹</button>
-  <div class="lightbox-card">
-    <div class="lightbox-img-wrap">
-      <img class="lightbox-img" id="lb-img" src="" alt="">
-    </div>
-    <div class="lightbox-info">
-      <button class="lightbox-close" id="lb-close" aria-label="Schließen">✕</button>
-      <p class="lightbox-counter" id="lb-counter"></p>
-      <h2 class="lightbox-titel" id="lb-titel"></h2>
-      <ul class="lightbox-meta-list" id="lb-meta"></ul>
-      <div id="lb-action"></div>
-    </div>
-  </div>
-  <button class="lightbox-arrow" id="lb-next" aria-label="Nächstes Werk">›</button>
-</div>
 <div class="reader-modal" id="reader-modal" aria-hidden="true">
   <button class="reader-modal-close" type="button" id="reader-modal-close" aria-label="Reader schließen">×</button>
   <iframe id="reader-frame" title="Katalogreader" src="about:blank"></iframe>
@@ -309,7 +293,7 @@
     <li><a href="#" id="footer-instagram" target="_blank" rel="noopener">Instagram</a></li>
   </ul>
 </footer>
-<script src="sf-base.js?v=46"></script>
+<script src="sf-base.js?v=50"></script>
 <script>
 
 function openReaderOverlay(url) {

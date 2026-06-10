@@ -6,6 +6,8 @@
 /* ── ÜBERSETZUNGEN ──────────────────────────────────────── */
 const I18N = {
   de: {
+    'nav.galerie':       'Galerie',
+    'galerie.titel':     'Galerie',
     'nav.werke':         'Werke',
     'nav.news':          'News',
     'nav.katalog':       'Katalog',
@@ -68,6 +70,8 @@ const I18N = {
     'reader.next':      'Nächste Seite',
   },
   en: {
+    'nav.galerie':       'Gallery',
+    'galerie.titel':     'Gallery',
     'nav.werke':         'Works',
     'nav.news':          'News',
     'nav.katalog':       'Catalogue',
@@ -325,8 +329,10 @@ function renderLightbox() {
     { label: ui('detail.jahr'),   val: w.jahr },
     { label: ui('detail.medium'), val: medium },
     { label: ui('detail.masse'),  val: w.masse },
-    ...(w.serie ? [{ label: ui('detail.serie'), val: w.serie }] : [])
-  ].filter(m => m.val).map(m => `<li><span class="lightbox-meta-label">${m.label}</span><span>${m.val}</span></li>`).join('');
+    { label: ui('detail.serie'),  val: w.serie || '', hidden: !w.serie }
+  ].filter(m => m.val !== undefined).map(m =>
+    `<li${m.hidden ? ' style="visibility:hidden"' : ''}><span class="lightbox-meta-label">${m.label}</span><span>${m.val}</span></li>`
+  ).join('');
   document.getElementById('lb-action').innerHTML = w.verfuegbar
     ? `<button type="button" class="btn" data-contact-work="${w.id}">${ui('detail.anfrage')}</button>` : '';
   document.getElementById('lb-prev').classList.toggle('hidden', LB_INDEX === 0);
@@ -341,6 +347,26 @@ function closeLightbox() {
 }
 
 function initLightbox() {
+  // HTML einmalig ins DOM schreiben – einzige Quelle der Lightbox-Struktur
+  if (!document.getElementById('lightbox')) {
+    document.body.insertAdjacentHTML('beforeend', `
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-arrow" id="lb-prev" aria-label="Vorheriges Werk">‹</button>
+  <div class="lightbox-card">
+    <div class="lightbox-img-wrap">
+      <img class="lightbox-img" id="lb-img" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <button class="lightbox-close" id="lb-close" aria-label="Schließen">✕</button>
+      <p class="lightbox-counter" id="lb-counter"></p>
+      <h2 class="lightbox-titel" id="lb-titel"></h2>
+      <ul class="lightbox-meta-list" id="lb-meta"></ul>
+      <div id="lb-action"></div>
+    </div>
+  </div>
+  <button class="lightbox-arrow" id="lb-next" aria-label="Nächstes Werk">›</button>
+</div>`);
+  }
   document.getElementById('lb-close').onclick = closeLightbox;
   document.getElementById('lb-prev').onclick = () => {
     if (LB_INDEX > 0) { LB_INDEX--; renderLightbox(); }
