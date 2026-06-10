@@ -18,7 +18,7 @@
     },
     {
       "slot": 3,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "shams-2025",
       "reihe": 1
     },
@@ -30,7 +30,7 @@
     },
     {
       "slot": 5,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "atelier-2-2025",
       "reihe": 1
     },
@@ -54,7 +54,7 @@
     },
     {
       "slot": 9,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "zwischenphase-2-2026",
       "reihe": 1
     },
@@ -72,42 +72,42 @@
     },
     {
       "slot": 12,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "weiblicher-ruecken-2025",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 13,
       "abstand_vor": 30,
       "werk_id": "maennlicher-ruecken-2025",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 14,
       "abstand_vor": 30,
       "werk_id": "marco-2026",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 15,
       "abstand_vor": 100,
       "werk_id": "senhora-rodriguez-3-2024",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 16,
       "abstand_vor": 30,
       "werk_id": "senhora-rodriguez-4-2024",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 17,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "perseus-2025",
       "reihe": 1
     },
@@ -119,70 +119,70 @@
     },
     {
       "slot": 19,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "erato-2024",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 20,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "therpsichore-2024",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 21,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "euterpe-2024",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 22,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "melpomene-2023",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 23,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "kalliope-2023",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 24,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "thalia-2023",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 25,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "clio-2023",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 26,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "polyhymnia-2023",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 27,
-      "abstand_vor": 20,
+      "abstand_vor": 15,
       "werk_id": "urania-2022",
       "reihe": 1,
-      "versatz_px": 15
+      "versatz_px": -20
     },
     {
       "slot": 28,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "die-nachricht-2022",
       "reihe": 1
     },
@@ -195,21 +195,22 @@
     },
     {
       "slot": 30,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "moana-2023",
       "reihe": 1
     },
     {
       "slot": 31,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "susi-2016",
       "reihe": 1
     },
     {
       "slot": 32,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "girls-2018",
-      "reihe": 1
+      "reihe": 1,
+      "versatz_px": -10
     },
     {
       "slot": 33,
@@ -225,7 +226,7 @@
     },
     {
       "slot": 35,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "elise-3-2016",
       "reihe": 1
     },
@@ -243,13 +244,13 @@
     },
     {
       "slot": 38,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "maske-2016",
       "reihe": 1
     },
     {
       "slot": 39,
-      "abstand_vor": 100,
+      "abstand_vor": 150,
       "werk_id": "elise-1-2016",
       "reihe": 1
     },
