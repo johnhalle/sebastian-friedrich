@@ -3,38 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontakt – Sebastian Friedrich</title>
-  <meta name="description" content="Kontakt zu Sebastian Friedrich. Anfragen zu Werken, Ausstellungen und Kooperationen.">
+  <title>Vita – Sebastian Friedrich</title>
+  <meta name="description" content="Vita von Sebastian Friedrich: Maler, geboren 1987, Studium an der Burg Giebichenstein Kunsthochschule Halle, lebt und arbeitet in Leipzig.">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="sf-base.css?v=50">
+  <link rel="stylesheet" href="sf-base.css?v=52">
   <style>
     /* Unterseitenkopf zentral in sf-base.css. */
-    .kontakt-intro {
-      max-width: 660px;
-      font-size: clamp(1rem, 1.5vw, 1.25rem);
-      font-weight: 300;
-      line-height: 1.6;
-      margin-bottom: 28px;
+    .vita-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      gap: clamp(40px, 7vw, 96px);
+      align-items: start;
     }
-    .kontakt-social {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: clamp(32px, 5vw, 48px);
-    }
-    .kontakt-form-wrap {
+    .vita-text {
       max-width: 900px;
-      border-top: 1px solid var(--gray-mid);
-      padding-top: clamp(24px, 3vw, 36px);
-      padding-bottom: clamp(28px, 5vw, 48px);
+      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+      font-weight: 300;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
     }
-    @media (max-width: 640px) {
-      .kontakt-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
+    .vita-facts {
+      border-top: 1px solid var(--gray-mid);
+    }
+    .vita-fact {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.55fr) minmax(0, 1fr);
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .vita-fact:last-child { border-bottom: none; }
+    .vita-fact dt {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-dark);
+      line-height: 1.45;
+    }
+    .vita-fact dd {
+      font-size: 0.9375rem;
+      font-weight: 300;
+      line-height: 1.55;
+    }
+    .vita-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .vita-list li { line-height: 1.45; }
+
+    @media (max-width: 820px) {
+
+      .vita-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
+      .vita-grid { grid-template-columns: 1fr; }
+      .vita-fact { grid-template-columns: 1fr; gap: 6px; }
     }
   </style>
 </head>
@@ -44,75 +73,90 @@
 
 <!-- MOBILE OVERLAY -->
 
-<main class="kontakt-page">
-  <div class="kontakt-inner">
-    <h1 class="kontakt-title" data-i18n="contact.titel">Kontakt</h1>
-    <p class="kontakt-intro" data-i18n="contact.intro">
-      Für Anfragen, Kooperationen und Informationen zu verfügbaren Werken nutzen Sie bitte das Formular.
-    </p>
-    <div class="kontakt-social">
-      <a class="contact-link" id="kontakt-instagram" href="https://www.instagram.com/sebastiano_friedrich/" target="_blank" rel="noopener" data-i18n="contact.instagram">Instagram</a>
-    </div>
-    <div class="kontakt-form-wrap">
-      <form class="contact-form" id="contact-page-form" name="kontakt" method="POST" action="/danke.html" data-netlify="true" novalidate>
-        <input type="hidden" name="form-name" value="kontakt">
-        <input type="hidden" name="work_id" value="">
-        <input type="hidden" name="work_title" value="">
-        <input type="hidden" name="work_year" value="">
-        <input type="hidden" name="page" value="">
-        <div class="contact-form-grid">
-          <label class="contact-field">
-            <span class="contact-label" data-i18n="contact.name">Name</span>
-            <input class="contact-input" type="text" name="name" autocomplete="name" required>
-          </label>
-          <label class="contact-field">
-            <span class="contact-label" data-i18n="contact.email">E-Mail</span>
-            <input class="contact-input" type="email" name="email" autocomplete="email" required>
-          </label>
-          <label class="contact-field contact-field-full">
-            <span class="contact-label" data-i18n="contact.subject">Betreff</span>
-            <input class="contact-input" type="text" name="subject" required>
-          </label>
-          <label class="contact-field contact-field-full contact-field-message">
-            <span class="contact-label" data-i18n="contact.message">Nachricht</span>
-            <textarea class="contact-textarea" name="message" required></textarea>
-          </label>
-        </div>
-        <div class="contact-form-actions">
-          <button class="btn" type="submit" data-i18n="contact.send">Nachricht senden</button>
-          <span class="contact-status" data-contact-status aria-live="polite"></span>
-        </div>
-      </form>
+<main class="vita-page">
+  <div class="vita-inner">
+    <h1 class="vita-title" data-i18n="vita.titel">Vita</h1>
+    <div class="vita-grid">
+      <section>
+        <p class="vita-text" id="vita-text">
+          Sebastian Friedrich, * 1987, entdeckte früh seine Leidenschaft für die Kunst. Von 2009 bis 2018 studierte er an der Burg Giebichenstein Kunsthochschule Halle (Saale). Seitdem lebt und arbeitet er in Leipzig, wo er seine Arbeit kontinuierlich weiterentwickelt. Seine Werke waren bislang in Einzel- und Gruppenausstellungen unter anderem in der Galerie Irrgang, Galerie Westphal Berlin, Galerie X23, auf der Art Karlsruhe sowie im Halleschen Kunstverein zu sehen.
+        </p>
+      </section>
+
+      <aside aria-label="Kurzvita">
+        <dl class="vita-facts">
+          <div class="vita-fact">
+            <dt data-i18n="vita.ort">Lebt und arbeitet in</dt>
+            <dd id="vita-place">Leipzig</dd>
+          </div>
+          <div class="vita-fact">
+            <dt data-i18n="vita.ausstellungen">Ausstellungen u. a.</dt>
+            <dd>
+              <ul class="vita-list" id="vita-exhibitions">
+                <li>Hallescher Kunstverein</li>
+                <li>Art Karlsruhe</li>
+                <li>Galerie X23</li>
+                <li>Galerie Westphal Berlin</li>
+                <li>Galerie Irrgang</li>
+              </ul>
+            </dd>
+          </div>
+          <div class="vita-fact">
+            <dt data-i18n="vita.ausbildung">Ausbildung</dt>
+            <dd id="vita-education">2009–2018 Studium an der Burg Giebichenstein Kunsthochschule Halle (Saale)</dd>
+          </div>
+          <div class="vita-fact">
+            <dt data-i18n="vita.geboren">Geboren</dt>
+            <dd id="vita-born">1987</dd>
+          </div>
+        </dl>
+      </aside>
     </div>
   </div>
 </main>
 
 
-<script src="sf-base.js?v=50"></script>
+<script src="sf-base.js?v=52"></script>
 <script>
+function renderVita() {
+  const vita = DATA?.meta?.vita || {};
+  const isEn = LANG === 'en';
+  const text = isEn ? (vita.text_en || vita.text) : vita.text;
+  const education = isEn ? (vita.ausbildung_en || vita.ausbildung) : vita.ausbildung;
+  const place = isEn ? (vita.lebt_arbeitet_en || vita.lebt_arbeitet) : vita.lebt_arbeitet;
+  const exhibitions = isEn ? (vita.ausstellungen_en || vita.ausstellungen) : vita.ausstellungen;
+
+  const textEl = document.getElementById('vita-text');
+  const bornEl = document.getElementById('vita-born');
+  const placeEl = document.getElementById('vita-place');
+  const educationEl = document.getElementById('vita-education');
+  const exhibitionEl = document.getElementById('vita-exhibitions');
+
+  if (textEl && text) textEl.textContent = text;
+  if (bornEl && vita.geboren) bornEl.textContent = vita.geboren;
+  if (placeEl && place) placeEl.textContent = place;
+  if (educationEl && education) educationEl.textContent = education;
+  if (exhibitionEl && Array.isArray(exhibitions)) {
+    exhibitionEl.innerHTML = exhibitions.map(item => `<li>${item}</li>`).join('');
+  }
+}
+
 async function init() {
   applyI18n();
   initNav(false);
-  const params = new URLSearchParams(location.search);
-  const werkId = params.get('werk');
   try {
     const res = await fetch('data.json');
     DATA = await res.json();
     renderFooter(DATA);
-    const insta = DATA?.meta?.kontakt?.instagram;
-    if (insta) {
-      document.getElementById('kontakt-instagram').href = insta;
-    }
-    initContactPageForm('contact-page-form', werkId);
+    renderVita();
   } catch(e) {
     console.error('data.json konnte nicht geladen werden:', e);
-    initContactPageForm('contact-page-form', werkId);
+    renderFooter(DATA);
   }
 }
 
 function onLangChange() {
-  const params = new URLSearchParams(location.search);
-  initContactPageForm('contact-page-form', params.get('werk'));
+  renderVita();
 }
 
 document.addEventListener('DOMContentLoaded', init);

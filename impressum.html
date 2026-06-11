@@ -3,67 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vita – Sebastian Friedrich</title>
-  <meta name="description" content="Vita von Sebastian Friedrich: Maler, geboren 1987, Studium an der Burg Giebichenstein Kunsthochschule Halle, lebt und arbeitet in Leipzig.">
+  <title>Impressum – Sebastian Friedrich</title>
+  <meta name="description" content="Impressum der Website von Sebastian Friedrich.">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="sf-base.css?v=50">
+  <link rel="stylesheet" href="sf-base.css?v=52">
   <style>
-    /* Unterseitenkopf zentral in sf-base.css. */
-    .vita-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
-      gap: clamp(40px, 7vw, 96px);
-      align-items: start;
+    .legal-content {
+      width: var(--site-width);
+      max-width: 720px;
+      margin: var(--subpage-content-gap) auto 0;
+      padding-bottom: clamp(64px, 9vw, 112px);
     }
-    .vita-text {
-      max-width: 900px;
-      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+    .legal-section {
+      margin-bottom: clamp(34px, 5vw, 52px);
+    }
+    .legal-content h2 {
+      font-size: clamp(1.25rem, 2.4vw, 1.65rem);
       font-weight: 300;
-      line-height: 1.65;
-      letter-spacing: -0.01em;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      margin-bottom: 14px;
     }
-    .vita-facts {
-      border-top: 1px solid var(--gray-mid);
-    }
-    .vita-fact {
-      display: grid;
-      grid-template-columns: minmax(110px, 0.55fr) minmax(0, 1fr);
-      gap: 20px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--gray-mid);
-    }
-    .vita-fact:last-child { border-bottom: none; }
-    .vita-fact dt {
-      font-size: 0.6875rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray-dark);
-      line-height: 1.45;
-    }
-    .vita-fact dd {
+    .legal-content p,
+    .legal-content li,
+    .legal-address {
       font-size: 0.9375rem;
       font-weight: 300;
-      line-height: 1.55;
+      line-height: 1.7;
+      color: var(--black);
     }
-    .vita-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .legal-content ul {
+      margin: 10px 0 0 1.1em;
     }
-    .vita-list li { line-height: 1.45; }
-
-    @media (max-width: 820px) {
-
-      .vita-inner { width: auto; max-width: none; padding-left: clamp(16px, 5vw, 24px); padding-right: clamp(16px, 5vw, 24px); }
-      .vita-grid { grid-template-columns: 1fr; }
-      .vita-fact { grid-template-columns: 1fr; gap: 6px; }
+    .legal-content a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .legal-address {
+      font-style: normal;
+      margin-top: 4px;
+    }
+    .legal-updated {
+      color: var(--gray-dark);
+      font-size: 0.8125rem;
+      margin-top: clamp(40px, 6vw, 64px);
+    }
+    @media (max-width: 760px) {
+      .legal-content {
+        width: auto;
+        max-width: none;
+        margin-top: var(--subpage-content-gap-mobile);
+        padding-left: clamp(16px, 5vw, 24px);
+        padding-right: clamp(16px, 5vw, 24px);
+        padding-bottom: clamp(56px, 12vw, 96px);
+      }
     }
   </style>
 </head>
@@ -73,93 +71,75 @@
 
 <!-- MOBILE OVERLAY -->
 
-<main class="vita-page">
-  <div class="vita-inner">
-    <h1 class="vita-title" data-i18n="vita.titel">Vita</h1>
-    <div class="vita-grid">
-      <section>
-        <p class="vita-text" id="vita-text">
-          Sebastian Friedrich, * 1987, entdeckte früh seine Leidenschaft für die Kunst. Von 2009 bis 2018 studierte er an der Burg Giebichenstein Kunsthochschule Halle (Saale). Seitdem lebt und arbeitet er in Leipzig, wo er seine Arbeit kontinuierlich weiterentwickelt. Seine Werke waren bislang in Einzel- und Gruppenausstellungen unter anderem in der Galerie Irrgang, Galerie Westphal Berlin, Galerie X23, auf der Art Karlsruhe sowie im Halleschen Kunstverein zu sehen.
-        </p>
-      </section>
 
-      <aside aria-label="Kurzvita">
-        <dl class="vita-facts">
-          <div class="vita-fact">
-            <dt data-i18n="vita.ort">Lebt und arbeitet in</dt>
-            <dd id="vita-place">Leipzig</dd>
-          </div>
-          <div class="vita-fact">
-            <dt data-i18n="vita.ausstellungen">Ausstellungen u. a.</dt>
-            <dd>
-              <ul class="vita-list" id="vita-exhibitions">
-                <li>Hallescher Kunstverein</li>
-                <li>Art Karlsruhe</li>
-                <li>Galerie X23</li>
-                <li>Galerie Westphal Berlin</li>
-                <li>Galerie Irrgang</li>
-              </ul>
-            </dd>
-          </div>
-          <div class="vita-fact">
-            <dt data-i18n="vita.ausbildung">Ausbildung</dt>
-            <dd id="vita-education">2009–2018 Studium an der Burg Giebichenstein Kunsthochschule Halle (Saale)</dd>
-          </div>
-          <div class="vita-fact">
-            <dt data-i18n="vita.geboren">Geboren</dt>
-            <dd id="vita-born">1987</dd>
-          </div>
-        </dl>
-      </aside>
+<main>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1 class="page-title">Impressum</h1>
     </div>
+  </header>
+
+  <div class="legal-content">
+    <section class="legal-section">
+      <h2>Angaben gemäß § 5 DDG und § 18 MStV</h2>
+      <address class="legal-address">
+        Sebastian Friedrich<br>
+        Atelierhaus Ehemalige Farbenfabrik<br>
+        Franz-Flemming-Straße 15<br>
+        04179 Leipzig<br>
+        Deutschland
+      </address>
+      <p>Elektronische Kontaktaufnahme: über das <a href="kontakt.html">Kontaktformular</a> dieser Website.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <address class="legal-address">
+        Sebastian Friedrich<br>
+        Atelierhaus Ehemalige Farbenfabrik<br>
+        Franz-Flemming-Straße 15<br>
+        04179 Leipzig<br>
+        Deutschland
+      </address>
+    </section>
+
+    <section class="legal-section">
+      <h2>Haftung für Inhalte</h2>
+      <p>Die Inhalte dieser Website wurden sorgfältig erstellt. Für Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird jedoch keine Gewähr übernommen.</p>
+      <p>Als Diensteanbieter ist Sebastian Friedrich für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Eine Verpflichtung zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht nur im Rahmen der gesetzlichen Vorschriften.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Haftung für Links</h2>
+      <p>Diese Website enthält Links zu externen Websites Dritter. Auf deren Inhalte besteht kein Einfluss. Für fremde Inhalte wird daher keine Gewähr übernommen. Verantwortlich ist jeweils der Anbieter oder Betreiber der verlinkten Seite.</p>
+    </section>
+
+    <section class="legal-section">
+      <h2>Urheberrecht</h2>
+      <p>Die auf dieser Website veröffentlichten Inhalte, Texte und Abbildungen unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung oder sonstige Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der vorherigen Zustimmung der jeweiligen Rechteinhaber.</p>
+      <p>Werkabbildungen und künstlerische Inhalte bleiben, soweit nicht anders angegeben, Sebastian Friedrich vorbehalten.</p>
+    </section>
+
+    <p class="legal-updated">Stand: Juni 2026</p>
+
   </div>
 </main>
 
 
-<script src="sf-base.js?v=50"></script>
+<script src="sf-base.js?v=52"></script>
 <script>
-function renderVita() {
-  const vita = DATA?.meta?.vita || {};
-  const isEn = LANG === 'en';
-  const text = isEn ? (vita.text_en || vita.text) : vita.text;
-  const education = isEn ? (vita.ausbildung_en || vita.ausbildung) : vita.ausbildung;
-  const place = isEn ? (vita.lebt_arbeitet_en || vita.lebt_arbeitet) : vita.lebt_arbeitet;
-  const exhibitions = isEn ? (vita.ausstellungen_en || vita.ausstellungen) : vita.ausstellungen;
-
-  const textEl = document.getElementById('vita-text');
-  const bornEl = document.getElementById('vita-born');
-  const placeEl = document.getElementById('vita-place');
-  const educationEl = document.getElementById('vita-education');
-  const exhibitionEl = document.getElementById('vita-exhibitions');
-
-  if (textEl && text) textEl.textContent = text;
-  if (bornEl && vita.geboren) bornEl.textContent = vita.geboren;
-  if (placeEl && place) placeEl.textContent = place;
-  if (educationEl && education) educationEl.textContent = education;
-  if (exhibitionEl && Array.isArray(exhibitions)) {
-    exhibitionEl.innerHTML = exhibitions.map(item => `<li>${item}</li>`).join('');
-  }
-}
-
-async function init() {
+document.addEventListener('DOMContentLoaded', async () => {
   applyI18n();
   initNav(false);
   try {
     const res = await fetch('data.json');
     DATA = await res.json();
     renderFooter(DATA);
-    renderVita();
-  } catch(e) {
-    console.error('data.json konnte nicht geladen werden:', e);
-    renderFooter(DATA);
+  } catch (e) {
+    const yearEl = document.getElementById('footer-year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
   }
-}
-
-function onLangChange() {
-  renderVita();
-}
-
-document.addEventListener('DOMContentLoaded', init);
+});
 </script>
 </body>
 </html>

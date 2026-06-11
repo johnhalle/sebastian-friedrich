@@ -19,7 +19,7 @@ Kataloge:  1
 ```
 
 ```text
-CSS/JS Cache-Busting: v=50  ← vor nächstem Deployment auf v=52 erhöhen
+CSS/JS Cache-Busting: v=52
 Lokale Fonts:         Inter 300, 400, 500 als WOFF2
 Datenquellen:         data.json, galerie.json
 Bildhosting:          Cloudinary (cloud: def9qgwtw)
@@ -316,7 +316,7 @@ sf-base.css?v=52
 sf-base.js?v=52
 ```
 
-**Aktuell steht noch `v=50` in den HTML-Dateien – vor dem nächsten Deployment auf `v=52` erhöhen.**
+Cache-Busting auf v=52 gesetzt (Stand: 10. Juni 2026).
 
 ---
 
