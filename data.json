@@ -55,7 +55,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/urania-2022.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "melpomene-2023",
@@ -72,7 +74,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/melpomene-2023.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "kalliope-2023",
@@ -89,7 +93,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/kalliope-2023.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "thalia-2023",
@@ -106,7 +112,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/thalia-2023.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "clio-2023",
@@ -123,7 +131,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/clio-2023.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "polyhymnia-2023",
@@ -140,7 +150,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/polyhymnia-2023.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "erato-2024",
@@ -157,7 +169,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/erato-2024.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "therpsichore-2024",
@@ -174,7 +188,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/v1780737299/therpsichore-20.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "euterpe-2024",
@@ -191,7 +207,9 @@
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/euterpe-2024.jpg",
       "reihe": "Die neun Musen",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "ot-lotta-auf-sofa-2014",
@@ -207,7 +225,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/ot-lotta-auf-sofa-2014.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 35.0
     },
     {
       "id": "maskiert-2019",
@@ -223,7 +243,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maskiert-2019.jpg",
-      "groesse": "m"
+      "groesse": "m",
+      "hoehe_cm": 50.0,
+      "breite_cm": 60.0
     },
     {
       "id": "die-nachricht-2022",
@@ -239,7 +261,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-nachricht-2022.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 100.0,
+      "breite_cm": 80.0
     },
     {
       "id": "girls-3-2022",
@@ -255,7 +279,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-3-2022.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 80.0,
+      "breite_cm": 100.0
     },
     {
       "id": "die-naeherin-2025",
@@ -271,7 +297,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/die-naeherin-2025.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 90.0,
+      "breite_cm": 80.0
     },
     {
       "id": "sketching-2024",
@@ -287,7 +315,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/sketching-2024.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 100.0,
+      "breite_cm": 140.0
     },
     {
       "id": "girls-2018",
@@ -303,7 +333,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2018.jpg",
-      "groesse": "m"
+      "groesse": "m",
+      "hoehe_cm": 60.0,
+      "breite_cm": 50.0
     },
     {
       "id": "girls-2-2020",
@@ -319,7 +351,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/girls-2-2020.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 100.0,
+      "breite_cm": 80.0
     },
     {
       "id": "medusa-2025",
@@ -335,7 +369,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/medusa-2025.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 120.0,
+      "breite_cm": 100.0
     },
     {
       "id": "perseus-2025",
@@ -351,7 +387,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/perseus-2025.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 150.0,
+      "breite_cm": 120.0
     },
     {
       "id": "zwischenphase-2025",
@@ -367,7 +405,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2025.jpg",
-      "groesse": "m"
+      "groesse": "m",
+      "hoehe_cm": 50.0,
+      "breite_cm": 60.0
     },
     {
       "id": "susi-2016",
@@ -383,7 +423,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/susi-2016.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 43.5,
+      "breite_cm": 35.0
     },
     {
       "id": "montag-0830-uhr-2025",
@@ -399,7 +441,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/montag-0830-uhr-2025.jpg",
-      "groesse": "l"
+      "groesse": "l",
+      "hoehe_cm": 120.0,
+      "breite_cm": 100.0
     },
     {
       "id": "shams-2025",
@@ -415,7 +459,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/shams-2025.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "jennif-2015",
@@ -431,7 +477,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/jennif-2015.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 32.0,
+      "breite_cm": 30.0
     },
     {
       "id": "maedchen-auf-sofa-2014",
@@ -447,7 +495,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maedchen-auf-sofa-2014.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 32.0
     },
     {
       "id": "elise-3-2016",
@@ -463,7 +513,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-3-2016.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 32.0,
+      "breite_cm": 30.0
     },
     {
       "id": "lotta-2018",
@@ -479,7 +531,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/lotta-2018.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 35.0
     },
     {
       "id": "senhora-rodriguez-3-2024",
@@ -495,13 +549,15 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-3-2024.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "senhora-rodriguez-4-2024",
       "titel": "Senhora Rodriguez 4",
       "jahr": 2024,
-      "masse": "40 × 30 cm",
+      "masse": "30 × 40 cm",
       "medium": "Öl auf MDF",
       "medium_en": "Oil on MDF",
       "gerahmt": false,
@@ -511,7 +567,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/senhora-rodriguez-4-2024.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "atelier-1-2025",
@@ -527,7 +585,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-1-2025.jpg",
-      "groesse": "xs"
+      "groesse": "xs",
+      "hoehe_cm": 24.0,
+      "breite_cm": 18.0
     },
     {
       "id": "atelier-2-2025",
@@ -543,7 +603,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-2-2025.jpg",
-      "groesse": "xs"
+      "groesse": "xs",
+      "hoehe_cm": 18.0,
+      "breite_cm": 24.0
     },
     {
       "id": "atelier-3-2025",
@@ -559,7 +621,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-3-2025.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "atelier-4-2025",
@@ -575,7 +639,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/atelier-4-2025.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 24.0,
+      "breite_cm": 30.0
     },
     {
       "id": "nachtschicht-2026",
@@ -591,7 +657,9 @@
       "preis": null,
       "neu": true,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2026.jpg",
-      "groesse": "xs"
+      "groesse": "xs",
+      "hoehe_cm": 18.0,
+      "breite_cm": 24.0
     },
     {
       "id": "nachtschicht-2-2026",
@@ -607,7 +675,9 @@
       "preis": null,
       "neu": true,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/nachtschicht-2-2026.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "weiblicher-ruecken-2025",
@@ -623,7 +693,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/weiblicher-ruecken-2025.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "maennlicher-ruecken-2025",
@@ -639,7 +711,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maennlicher-ruecken-2025.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "zwischenphase-2-2026",
@@ -655,7 +729,9 @@
       "preis": null,
       "neu": true,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/zwischenphase-2-2026.jpg",
-      "groesse": "m"
+      "groesse": "m",
+      "hoehe_cm": 60.0,
+      "breite_cm": 60.0
     },
     {
       "id": "marco-2026",
@@ -671,7 +747,9 @@
       "preis": null,
       "neu": true,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/marco-2026.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 40.0
     },
     {
       "id": "maske-2016",
@@ -687,7 +765,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/maske-2016.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 27.5
     },
     {
       "id": "moana-2023",
@@ -703,7 +783,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/moana-2023.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 40.0,
+      "breite_cm": 30.0
     },
     {
       "id": "fraeulein-schmidt-2016",
@@ -719,7 +801,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/fraeulein-schmidt-2016.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 30.0,
+      "breite_cm": 24.0
     },
     {
       "id": "anna-2011",
@@ -735,7 +819,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/anna-2011.jpg",
-      "groesse": "xs"
+      "groesse": "xs",
+      "hoehe_cm": 20.0,
+      "breite_cm": 14.5
     },
     {
       "id": "elise-1-2016",
@@ -751,7 +837,9 @@
       "preis": null,
       "neu": false,
       "bild": "https://res.cloudinary.com/def9qgwtw/image/upload/elise-1-2016.jpg",
-      "groesse": "s"
+      "groesse": "s",
+      "hoehe_cm": 31.5,
+      "breite_cm": 28.0
     }
   ],
   "katalog": [
