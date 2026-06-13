@@ -130,6 +130,10 @@ main{margin-left:var(--sidebar-w);margin-top:var(--nav-h);padding:32px;min-heigh
 .stapel-toggle:hover{background:#f0f0f0}
 .stapel-toggle.aktiv{background:var(--black);color:var(--white);font-weight:600}
 .stapel-toggle.disabled{opacity:.2;cursor:default;pointer-events:none}
+.gal-modus-btn{border-radius:0;border-right-width:0;font-size:12px;padding:5px 14px}
+.gal-modus-btn:first-of-type{border-radius:4px 0 0 4px}
+.gal-modus-btn:last-of-type{border-radius:0 4px 4px 0;border-right-width:1px}
+.gal-modus-btn.gal-modus-aktiv{background:var(--black);color:var(--white);font-weight:600}
 .gal-move-btns{display:flex;gap:4px;justify-content:center}
 .gal-move-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--gray-mid);font-size:13px;cursor:pointer;background:#fafafa;color:#666}
 .gal-move-btn:hover:not(:disabled){background:#eee}
@@ -418,7 +422,11 @@ main{margin-left:var(--sidebar-w);margin-top:var(--nav-h);padding:32px;min-heigh
         <button class="btn" onclick="galerieResetToSaved()">↺ Letzter Stand</button>
         <button class="btn btn-primary" onclick="galeriePublish()">Speichern & publizieren</button>
       </div>
-      <p style="font-size:12px;color:var(--gray-dark);margin-bottom:16px">Reihenfolge per ↑↓, Abstand / Versatz / Zoom pro Slot, Stapel-Toggle. Änderungen erst nach „Speichern & publizieren" live.</p>
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:16px">
+        <button id="gal-modus-desktop" class="btn gal-modus-btn gal-modus-aktiv" onclick="galeSetModus('desktop')">Desktop</button>
+        <button id="gal-modus-mobil"   class="btn gal-modus-btn"                 onclick="galeSetModus('mobil')">Mobil</button>
+        <span style="font-size:12px;color:var(--gray-dark);margin-left:16px" id="gal-modus-hint">Abstand / Versatz / Zoom / Stapel für Desktop. Reihenfolge gilt für beide.</span>
+      </div>
       <div class="col-header">
         <div>#</div><div></div><div>Werk</div>
         <div style="text-align:right">Abstand px</div>
@@ -857,9 +865,13 @@ async function ghGetFile(path) {
 async function ghPutFile(path, content, message, sha) {
   const s = getSettings();
   if (!s.token || !s.repo) throw new Error('GitHub nicht konfiguriert. Bitte zuerst Token und Repo unter Einstellungen eintragen.');
+  // UTF-8-sicheres Base64-Encoding via TextEncoder
+  const bytes = new TextEncoder().encode(content);
+  let binary = '';
+  bytes.forEach(b => binary += String.fromCharCode(b));
   const body = {
     message,
-    content: btoa(unescape(encodeURIComponent(content))),
+    content: btoa(binary),
     branch: s.branch
   };
   if (sha) body.sha = sha;
@@ -893,6 +905,8 @@ async function publishGalerie(message = 'Admin: galerie.json aktualisiert') {
     const file = await ghGetFile('galerie.json');
     const content = JSON.stringify(GALERIE, null, 2);
     await ghPutFile('galerie.json', content, message, file.sha);
+    // GALERIE ist jetzt identisch mit dem gespeicherten Stand – deep-copy für Reset
+    GALERIE = JSON.parse(content);
     const s = getSettings();
     if (s.netlify) await fetch(s.netlify, { method: 'POST' });
     toast('Galerie gespeichert & publiziert ✓', 'success');
@@ -914,10 +928,9 @@ async function loadData() {
     GALERIE = galerieRes;
     GALERIE_SLOTS = GALERIE.slots.map(s => ({
       werk_id: s.werk_id,
-      abstand_vor: s.abstand_vor,
-      versatz_px: s.versatz_px || 0,
-      zoom: s.zoom || 100,
-      stapel: s.reihe > 1
+      reihe: s.reihe || 1,
+      desktop: { abstand_vor: s.desktop.abstand_vor, versatz_px: s.desktop.versatz_px, zoom: s.desktop.zoom, stapel: s.desktop.stapel },
+      mobil:   { abstand_vor: s.mobil.abstand_vor,   versatz_px: s.mobil.versatz_px,   zoom: s.mobil.zoom,   stapel: s.mobil.stapel }
     }));
     updateBadges();
     loadSettingsForm();
@@ -960,7 +973,7 @@ function showPanel(name) {
   if (name === 'news')         renderNewsList();
   if (name === 'katalog')      renderKatalogFields();
   if (name === 'vita')         renderVitaFields();
-  if (name === 'galerie')      renderGalerieEditor();
+  if (name === 'galerie')      { galeSetModus(GALERIE_MODUS); }
   if (name === 'einstellungen') loadSettingsForm();
 }
 
@@ -1457,10 +1470,9 @@ function galerieResetToSaved() {
   if (!GALERIE) return;
   GALERIE_SLOTS = GALERIE.slots.map(s => ({
     werk_id: s.werk_id,
-    abstand_vor: s.abstand_vor,
-    versatz_px: s.versatz_px || 0,
-    zoom: s.zoom || 100,
-    stapel: s.reihe > 1
+    reihe: s.reihe || 1,
+    desktop: { abstand_vor: s.desktop.abstand_vor, versatz_px: s.desktop.versatz_px, zoom: s.desktop.zoom, stapel: s.desktop.stapel },
+    mobil:   { abstand_vor: s.mobil.abstand_vor,   versatz_px: s.mobil.versatz_px,   zoom: s.mobil.zoom,   stapel: s.mobil.stapel }
   }));
   renderGalerieEditor();
 }
@@ -1488,10 +1500,14 @@ function galerieStapelInfo(gruppe) {
   return `Stapel · Gesamthöhe ca. ${total} cm · Mitte bei ${(total/2).toFixed(0)} cm`;
 }
 
+// Aktiver Kontext: 'desktop' oder 'mobil'
+let GALERIE_MODUS = 'desktop';
+function galCtx(s) { return s[GALERIE_MODUS]; }
+
 function galeGruppen() {
   const gruppen = [];
   for (let i = 0; i < GALERIE_SLOTS.length; i++) {
-    if (GALERIE_SLOTS[i].stapel && gruppen.length > 0) {
+    if (galCtx(GALERIE_SLOTS[i]).stapel && gruppen.length > 0) {
       gruppen[gruppen.length-1].push(i);
     } else {
       gruppen.push([i]);
@@ -1503,18 +1519,29 @@ function galeGruppen() {
 function galeMoveUp(i) {
   if (i === 0) return;
   [GALERIE_SLOTS[i-1], GALERIE_SLOTS[i]] = [GALERIE_SLOTS[i], GALERIE_SLOTS[i-1]];
-  if (GALERIE_SLOTS[0].stapel) GALERIE_SLOTS[0].stapel = false;
+  if (galCtx(GALERIE_SLOTS[0]).stapel) GALERIE_SLOTS[0].desktop.stapel = GALERIE_SLOTS[0].mobil.stapel = false;
   renderGalerieEditor();
 }
 function galeMoveDown(i) {
   if (i >= GALERIE_SLOTS.length-1) return;
   [GALERIE_SLOTS[i], GALERIE_SLOTS[i+1]] = [GALERIE_SLOTS[i+1], GALERIE_SLOTS[i]];
-  if (GALERIE_SLOTS[0].stapel) GALERIE_SLOTS[0].stapel = false;
+  if (galCtx(GALERIE_SLOTS[0]).stapel) GALERIE_SLOTS[0].desktop.stapel = GALERIE_SLOTS[0].mobil.stapel = false;
   renderGalerieEditor();
 }
 function galeToggleStapel(i) {
   if (i === 0) return;
-  GALERIE_SLOTS[i].stapel = !GALERIE_SLOTS[i].stapel;
+  GALERIE_SLOTS[i][GALERIE_MODUS].stapel = !GALERIE_SLOTS[i][GALERIE_MODUS].stapel;
+  renderGalerieEditor();
+}
+
+function galeSetModus(modus) {
+  GALERIE_MODUS = modus;
+  document.getElementById('gal-modus-desktop').classList.toggle('gal-modus-aktiv', modus === 'desktop');
+  document.getElementById('gal-modus-mobil').classList.toggle('gal-modus-aktiv', modus === 'mobil');
+  document.getElementById('gal-modus-hint').textContent =
+    modus === 'mobil'
+      ? 'Abstand / Versatz / Zoom / Stapel für Mobil (≤760 px). Reihenfolge gilt für beide.'
+      : 'Abstand / Versatz / Zoom / Stapel für Desktop. Reihenfolge gilt für beide.';
   renderGalerieEditor();
 }
 
@@ -1538,6 +1565,7 @@ function renderGalerieEditor() {
     gruppe.forEach(idx => {
       slotNr++;
       const s = GALERIE_SLOTS[idx];
+      const c = galCtx(s);
       const w = getWerkForGalerie(s.werk_id);
       if (!w) return;
       const isFirst = idx === 0;
@@ -1547,10 +1575,10 @@ function renderGalerieEditor() {
         `<div class="slot-num">${slotNr}</div>` +
         `<div class="orient ${w.portraet?'p':'q'}">${w.portraet?'↑':'↔'}</div>` +
         `<div class="gal-werk-info"><div class="gal-werk-titel">${esc(w.titel)}</div><div class="gal-werk-meta">${w.jahr} · ${esc(w.masse)}</div></div>` +
-        `<div class="gal-field"><label>Abstand</label><input type="number" value="${s.abstand_vor}" min="0" max="500" step="10" onchange="GALERIE_SLOTS[${idx}].abstand_vor=+this.value"></div>` +
-        `<div class="gal-field"><label>Versatz</label><input type="number" value="${s.versatz_px}" min="-200" max="200" step="10" ${s.stapel?'disabled':''} onchange="GALERIE_SLOTS[${idx}].versatz_px=+this.value"></div>` +
-        `<div class="gal-field"><label>Zoom %</label><input type="number" value="${s.zoom}" min="50" max="150" step="5" onchange="GALERIE_SLOTS[${idx}].zoom=+this.value"></div>` +
-        `<div class="gal-field"><label>Stapel</label><div class="stapel-toggle ${s.stapel?'aktiv':''} ${isFirst?'disabled':''}" ${isFirst?'':' onclick="galeToggleStapel('+idx+')"'}>${s.stapel?'▣ an':'□ aus'}</div></div>` +
+        `<div class="gal-field"><label>Abstand</label><input type="number" value="${c.abstand_vor}" min="0" max="500" step="10" oninput="GALERIE_SLOTS[${idx}][GALERIE_MODUS].abstand_vor=+this.value"></div>` +
+        `<div class="gal-field"><label>Versatz</label><input type="number" value="${c.versatz_px}" min="-200" max="200" step="10" ${c.stapel?'disabled':''} oninput="GALERIE_SLOTS[${idx}][GALERIE_MODUS].versatz_px=+this.value"></div>` +
+        `<div class="gal-field"><label>Zoom %</label><input type="number" value="${c.zoom}" min="50" max="150" step="5" oninput="GALERIE_SLOTS[${idx}][GALERIE_MODUS].zoom=+this.value"></div>` +
+        `<div class="gal-field"><label>Stapel</label><div class="stapel-toggle ${c.stapel?'aktiv':''} ${isFirst?'disabled':''}" ${isFirst?'':' onclick="galeToggleStapel('+idx+')"'}>${c.stapel?'▣ an':'□ aus'}</div></div>` +
         `<div class="gal-move-btns"><button class="gal-move-btn" onclick="galeMoveUp(${idx})" ${idx===0?'disabled':''}>↑</button><button class="gal-move-btn" onclick="galeMoveDown(${idx})" ${idx===GALERIE_SLOTS.length-1?'disabled':''}>↓</button></div>`;
       div.appendChild(row);
     });
@@ -1559,14 +1587,20 @@ function renderGalerieEditor() {
 }
 
 function galeriePublish() {
+  // reihe aus desktop.stapel ableiten (Reihenfolge ist kontextunabhängig)
   let reihe = 1;
   GALERIE.slots = GALERIE_SLOTS.map((s, i) => {
-    if (s.stapel) { reihe++; } else { reihe = 1; }
-    const obj = { slot: i+1, abstand_vor: s.abstand_vor, werk_id: s.werk_id, reihe };
-    if (!s.stapel && s.versatz_px !== 0) obj.versatz_px = s.versatz_px;
-    if (s.zoom !== 100) obj.zoom = s.zoom;
-    return obj;
+    if (s.desktop.stapel) { reihe++; } else { reihe = 1; }
+    return {
+      slot: i + 1,
+      werk_id: s.werk_id,
+      reihe,
+      desktop: { abstand_vor: s.desktop.abstand_vor, versatz_px: s.desktop.versatz_px, zoom: s.desktop.zoom, stapel: s.desktop.stapel },
+      mobil:   { abstand_vor: s.mobil.abstand_vor,   versatz_px: s.mobil.versatz_px,   zoom: s.mobil.zoom,   stapel: s.mobil.stapel }
+    };
   });
+  // Diagnose: Slot 3 (Shams) mobil-Abstand in Konsole ausgeben
+  console.log('[galeriePublish] Slot 3 mobil.abstand_vor:', GALERIE.slots[2]?.mobil?.abstand_vor);
   publishGalerie();
 }
 

@@ -196,6 +196,10 @@ function buildWand(werkData, galerie) {
   const cfg = galerie.config;
   const gap = cfg.stapel_gap_px;
 
+  // Kontext: mobil (≤760px) oder desktop
+  const isMobil = window.innerWidth <= 760;
+  function ctx(s) { return isMobil ? s.mobil : s.desktop; }
+
   const werkeById = {};
   werkData.werke.forEach(w => werkeById[w.id] = w);
 
@@ -204,17 +208,16 @@ function buildWand(werkData, galerie) {
   galerie.slots.forEach(s => {
     const w = werkeById[s.werk_id];
     if (!w) return;
-    maxHCm = Math.max(maxHCm, parseMasse(w.masse).h * ((s.zoom || 100) / 100));
+    maxHCm = Math.max(maxHCm, parseMasse(w.masse).h * (ctx(s).zoom / 100));
   });
 
   // px_pro_cm aus Viewport berechnen
   const pxPerCm = berechnePxProCm(galerie, maxHCm);
 
   // Pixelmaße je Werk aus echten cm-Werten berechnen
-  // Optionaler zoom-Wert im Slot (z.B. 110 = 10% größer, 85 = 15% kleiner)
-  function getPx(werk, slot) {
+  function getPx(werk, slotCtx) {
     const {h, b} = parseMasse(werk.masse);
-    const faktor = pxPerCm * ((slot.zoom || 100) / 100);
+    const faktor = pxPerCm * (slotCtx.zoom / 100);
     return {
       hPx: Math.round(h * faktor),
       wPx: Math.round(b * faktor)
@@ -229,15 +232,16 @@ function buildWand(werkData, galerie) {
   const wand = document.getElementById('wand');
   wand.style.height = wandH + 'px';
 
-  // Slots gruppieren: reihe > 1 → zum vorherigen Slot stapeln
+  // Slots gruppieren: stapel:true im jeweiligen Kontext → zum vorherigen Slot stapeln
   const groups = [];
   galerie.slots.forEach(s => {
     const w = werkeById[s.werk_id];
     if (!w) return;
-    const entry = { ...s, _werk: w };
-    const {hPx, wPx} = getPx(w, entry);
+    const c = ctx(s);
+    const entry = { ...s, _ctx: c, _werk: w };
+    const {hPx, wPx} = getPx(w, c);
     entry._hPx = hPx; entry._wPx = wPx;
-    if (s.reihe > 1 && groups.length) {
+    if (c.stapel && groups.length) {
       groups[groups.length - 1].push(entry);
     } else {
       groups.push([entry]);
@@ -252,9 +256,9 @@ function buildWand(werkData, galerie) {
   let x = 0;
 
   groups.forEach(group => {
-    x += group[0].abstand_vor;
+    x += group[0]._ctx.abstand_vor;
     // versatz_px ist am ersten Slot des Blocks definiert (gilt für den ganzen Block)
-    const versatz = group[0].versatz_px || 0;
+    const versatz = group[0]._ctx.versatz_px || 0;
 
     if (group.length === 1) {
       const s = group[0];
@@ -412,18 +416,24 @@ initContactInteractions();
 
 Promise.all([
   fetch('data.json').then(r => r.json()),
-  fetch('galerie.json').then(r => r.json())
+  fetch('galerie.json?v=' + Date.now()).then(r => r.json())
 ]).then(([werkData, galerie]) => {
   DATA = werkData;
   buildWand(werkData, galerie);
-  applyLang();
 
   // Bei Orientierungswechsel / Resize Wand neu skalieren
-  // 400ms Verzögerung damit das CSS-Layout sich neu berechnet hat
+  // Bei Breakpoint-Wechsel (760px): Seite neu laden damit mobil/desktop-Werte korrekt geladen werden.
+  // Bei Resize innerhalb derselben Seite: Wand neu aufbauen.
+  let wasMobil = window.innerWidth <= 760;
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
+      const istMobil = window.innerWidth <= 760;
+      if (istMobil !== wasMobil) {
+        location.reload();
+        return;
+      }
       const wand = document.getElementById('wand');
       wand.innerHTML = '';
       wand.style.height = '';
