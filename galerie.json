@@ -83,7 +83,7 @@
         "stapel": false
       },
       "mobil": {
-        "abstand_vor": 150,
+        "abstand_vor": 100,
         "versatz_px": 0,
         "zoom": 100,
         "stapel": false
