@@ -43,13 +43,13 @@
       "werk_id": "shams-2025",
       "reihe": 1,
       "desktop": {
-        "abstand_vor": 100,
+        "abstand_vor": 150,
         "versatz_px": 0,
         "zoom": 100,
         "stapel": false
       },
       "mobil": {
-        "abstand_vor": 150,
+        "abstand_vor": 100,
         "versatz_px": 0,
         "zoom": 100,
         "stapel": false
